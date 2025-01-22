@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "svga",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}
