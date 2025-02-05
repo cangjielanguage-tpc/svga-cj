@@ -24,8 +24,8 @@ public class AVPlayerClass {
             let player = this.player.getOrThrow()
 
             //缓存后 播放状态不对
-            player.on(SeekDone.SeekDone, Callback1Argument<Float64>())
-            player.on(StateChange.StateChange, Callback2Argument<AVPlayerState, StateChangeReason>())
+//            player.on(SeekDone.SeekDone, Callback1Argument<Float64>())
+//            player.on(StateChange.StateChange, Callback2Argument<AVPlayerState, StateChangeReason>())
             //                (state) => {
             //                    switch (state) {
             //                      case 'initialized':
@@ -116,6 +116,3 @@ public class AVPlayerClass {
     }
 }
 
-class callback1 <: Callback1Argument<Float64> {
-    public func invok(arg1: Float64) {}
-}
