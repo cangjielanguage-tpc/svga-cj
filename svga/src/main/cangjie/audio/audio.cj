@@ -14,18 +14,18 @@ public class AVPlayerClass {
     var id: String = "";
     private var seekPlay: Bool = false
 
-    init() {
+    public init() {
         // this.id = utils.generateRandomUUID()
     }
 
-    func initPlayer(url: String): Bool {
+    public func initPlayer(url: String): Bool {
         try {
             createAVPlayer({exception: ?BusinessException, avplayer: ?AVPlayer => this.player = avplayer.getOrThrow()})
             let player = this.player.getOrThrow()
 
             //缓存后 播放状态不对
-//            player.on(SeekDone.SeekDone, Callback1Argument<Float64>())
-//            player.on(StateChange.StateChange, Callback2Argument<AVPlayerState, StateChangeReason>())
+            //            player.on(SeekDone.SeekDone, Callback1Argument<Float64>())
+            //            player.on(StateChange.StateChange, Callback2Argument<AVPlayerState, StateChangeReason>())
             //                (state) => {
             //                    switch (state) {
             //                      case 'initialized':
@@ -49,7 +49,7 @@ public class AVPlayerClass {
     }
 
     // 单曲播放
-    func play() {
+    public func play() {
         var states: Array<AVPlayerState> = [AVPlayerState.PREPARED, AVPlayerState.PAUSED, AVPlayerState.COMPLETED]
         if (this.player.isSome()) {
             match (this.player.getOrThrow().state) {
@@ -65,7 +65,7 @@ public class AVPlayerClass {
     }
 
     // 设置进度
-    func seek(seek: Int32, autoplay!: Bool = true) {
+    public func seek(seek: Int32, autoplay!: Bool = true) {
         if (this.player.isSome()) {
             match (this.player.getOrThrow().state) {
                 case AVPlayerState.PREPARED =>
@@ -86,7 +86,7 @@ public class AVPlayerClass {
     }
 
     // 播放 暂停
-    func pause() {
+    public func pause() {
         if (this.player.isSome()) {
             match (this.player.getOrThrow().state) {
                 case AVPlayerState.PLAYING => this.player.getOrThrow().pause({a: ?BusinessException, b: ?Unit =>})
@@ -96,7 +96,7 @@ public class AVPlayerClass {
     }
 
     // 停止
-    func stop() {
+    public func stop() {
         if (this.player.isSome()) {
             match (this.player.getOrThrow().state) {
                 case AVPlayerState.COMPLETED => this.player.getOrThrow().stop({a: ?BusinessException, b: ?Unit =>})
@@ -109,10 +109,9 @@ public class AVPlayerClass {
     }
 
     // 删除
-    func release() {
+    public func release() {
         if (let Some(player) <- this.player) {
             player.release
         }
     }
 }
-
