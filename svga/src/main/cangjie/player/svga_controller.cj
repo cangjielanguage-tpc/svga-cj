@@ -157,9 +157,9 @@ public class SvgaController {
     }
 
     func sfunctartAnimation(reverse!: Bool = false) {
-//        if (this._player.isNone() || this._player.getOrThrow().videoItem.isNone()) {
-//            throw Exception('请在资源加载后调用')
-//        }
+        //        if (this._player.isNone() || this._player.getOrThrow().videoItem.isNone()) {
+        //            throw Exception('请在资源加载后调用')
+        //        }
         //this._player.getOrThrow().startAnimation(reverse)
     }
 }
