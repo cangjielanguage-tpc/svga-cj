@@ -27,7 +27,7 @@ public class ValueAnimator {
     private var uicontext: ?UIContext = None
     private var resetFlag: Bool = false
 
-    init(uicontext: UIContext) {
+    public init(uicontext: ?UIContext) {
         this.uicontext = uicontext
     }
 
@@ -48,38 +48,41 @@ public class ValueAnimator {
         if (this._animator.isNone()) {
             this.resetFlag = (frame.isSome() && frame.getOrThrow() != this.startValue && frame.getOrThrow() <= this
                 .endValue)
-            this._animator = this.uicontext.getOrThrow().createAnimator(
-            //this._animator = this.uicontext!.createAnimator(
-                AnimatorOptions(
-                    {
-                        => if (frame.isSome() && frame.getOrThrow() < this.endValue && frame.getOrThrow() > this
-                            .startValue) {
-                            return this.duration * (this.endValue - frame.getOrThrow()) / (this.endValue - this
-                                .startValue)
-                        } else {
-                            this.duration
-                        }
-                    }(),
-                    "linear",
-                    0.0,
-                    this.fillRule,
-                    AnimatorDirection.Normal,
-                    this.loops,
-                    {
-                        => if (let Some(v) <- frame) {
-                            return v
-                        } else {
-                            this.startValue
-                        }
-                    }(),
-                    this.endValue
+            this._animator = this
+                .uicontext
+                .getOrThrow()
+                .createAnimator(
+                    //this._animator = this.uicontext!.createAnimator(
+                    AnimatorOptions(
+                        {
+                            => if (frame.isSome() && frame.getOrThrow() < this.endValue && frame.getOrThrow() > this
+                                .startValue) {
+                                return this.duration * (this.endValue - frame.getOrThrow()) / (this.endValue - this
+                                    .startValue)
+                            } else {
+                                this.duration
+                            }
+                        }(),
+                        "linear",
+                        0.0,
+                        this.fillRule,
+                        AnimatorDirection.Normal,
+                        this.loops,
+                        {
+                            => if (let Some(v) <- frame) {
+                                return v
+                            } else {
+                                this.startValue
+                            }
+                        }(),
+                        this.endValue
+                    )
                 )
-            )
-//            this._animator.getOrThrow().setExpectedFrameRateRange(
-//                0,
-//                120,
-//                this.FPS
-//            )
+            //            this._animator.getOrThrow().setExpectedFrameRateRange(
+            //                0,
+            //                120,
+            //                this.FPS
+            //            )
             if (reverse) {
                 this._animator.getOrThrow().reverse()
             } else {
@@ -102,9 +105,9 @@ public class ValueAnimator {
                     .getOrThrow()
                     .reset(
                         AnimatorOptions(
-                        this.duration,
+                            this.duration,
                             "linear",
-                             0.0,
+                            0.0,
                             this.fillRule,
                             AnimatorDirection.Normal,
                             this.loops,
