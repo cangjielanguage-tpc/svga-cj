@@ -1,0 +1,24 @@
+{
+  "module": {
+    "abilities": [
+      {
+        "name": "EntryBackAbility",
+        "srcEntry": "ohos_app_cangjie_entry.entryAbility.EntryBackAbility",
+        "description": "$string:EntryBackAbility_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:EntryBackAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "Entry_Ability",
+        "srcEntry": "ohos_app_cangjie_entry.entryAbility.Entry_Ability",
+        "description": "$string:Entry_Ability_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:Entry_Ability_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background"
+      }
+    ]
+  }
+}
