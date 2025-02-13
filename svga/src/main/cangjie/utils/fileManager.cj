@@ -11,7 +11,7 @@ import std.random.*
 import std.time.DateTime
 
 public class FileManager {
-    static func saveAudio(src: String, fileDir: String): Int32 {
+    public static func saveAudio(src: String, fileDir: String): Int32 {
         try {
             if (!access(fileDir)) {
                 mkdir(fileDir)

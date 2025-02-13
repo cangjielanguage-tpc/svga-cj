@@ -14,6 +14,7 @@ import svga.parser.RectPath
 import svga.audio.*
 import std.collection.*
 import std.convert.*
+import svga.parser.MockWorker
 
 var validMethods = 'MLHVCSQAZmlhvcsqaz'
 
@@ -56,7 +57,7 @@ public class Renderer {
             data: MockWorkerDecodeResponseData =>
             let key: String = data.key
             let bitmap: ?PixelMap = data.bitmap
-            let fd: ?Float64 = data.fd
+            let fd: ?Int32 = data.fd
             // 处理图片
             if (bitmap.isSome()) {
                 this.bitmapCache.put(key, ImageBitmap(bitmap.getOrThrow(), LengthMetricsUnit.PX))
@@ -67,7 +68,7 @@ public class Renderer {
                 this.handleDynamicImage(dynamicImage, key)
             }
             // 处理音频
-            if (fd.isSome() && fd.getOrThrow() > -1.0) {
+            if (fd.isSome() && fd.getOrThrow() > 0) {
                 var player = AVPlayerClass()
                 //                        this.bitmapCache.put(key, player)
                 //                        promiseArr.append(player(`fd://${fd}`))
@@ -98,7 +99,7 @@ public class Renderer {
                 //                              this.unDrawFrame = undefined;
                 //                            }
                 //                          })
-                } else{
+                } else {
                     this._prepared = true
                     //console.timeLog('准备资源总耗时', '准备资源 end')
 
@@ -129,7 +130,7 @@ public class Renderer {
                     .toString()
                 if (src.indexOf("iVBO") == 0 || src.indexOf("/9j/2w") == 0) {
                     let bitmapKey = key.replace('.matte', '')
-                //actions.decode(bitmapKey, src, 'img', "", decodeCb)
+                    MockWorker.decode(bitmapKey, src, "img", "", decodeCb, Option<FailureFn>.None)
                 } else if (src.indexOf('SUQz') == 0) {
                     // 音频
                     //actions.decode(key, src, 'audio', this.owner.sourceManager.basePath, decodeCb)

@@ -25,9 +25,12 @@ public class Parser {
     }
 
     public func loadViaWorker(url: ResourceStr, success: SuccessFn, failure: FailureFn) {
-        //        MockWorker(url, (data: MockWorkerResponseData) => {
-        //          success(data.movie);
-        //        }, failure)
+        MockWorker.load(
+            url,
+            {
+                MockWorkerResponseData => success(MockWorkerResponseData.movie);
+            },
+            failure
+        )
     }
 }
-
