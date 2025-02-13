@@ -26,6 +26,8 @@
   [dependencies.cj_res_entry]
     path = "./cj_res"
     version = "1.0.0"
+  [dependencies.svga]
+      path = "../../../../svga/src/main/cangjie"
 
 [package]
   cjc-version = "0.48.2"

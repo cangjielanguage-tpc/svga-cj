@@ -28,33 +28,33 @@ public class CanvasSizeAndTrans {
 }
 
 public class SvgaController {
-    init(props: SvgaPlayerProps) {
-        if (let Some(val) <- props.pageUpdateMode) {
-            this._pageUpdateMode = val
+    public init(props!: ?SvgaPlayerProps = None) {
+        if (let Some(val) <- props?.pageUpdateMode) {
+            this._pageUpdateMode = val.getOrThrow()
         } else {
             this._pageUpdateMode = PageUpdateMode.pause
         }
 
-        if (let Some(val) <- props.loops) {
-            this._loops = val
+        if (let Some(val) <- props?.loops) {
+            this._loops = val.getOrThrow()
         } else {
             this._loops = Float64.Inf
         }
 
-        if (let Some(val) <- props.autoRelease) {
-            this._autoRelease = val
+        if (let Some(val) <- props?.autoRelease) {
+            this._autoRelease = val.getOrThrow()
         } else {
             this._autoRelease = true
         }
 
-        if (let Some(val) <- props.clearsAfterStop) {
-            this._clearsAfterStop = val
+        if (let Some(val) <- props?.clearsAfterStop) {
+            this._clearsAfterStop = val.getOrThrow()
         } else {
             this._clearsAfterStop = true
         }
 
-        if (let Some(val) <- props.fillMode) {
-            this._fillMode = val
+        if (let Some(val) <- props?.fillMode) {
+            this._fillMode = val.getOrThrow()
         } else {
             this._fillMode = AnimatorFill.Forwards
         }
@@ -114,7 +114,7 @@ public class SvgaController {
         return this._pageUpdateMode;
     }
 
-    func load(source: ResourceStr, success: ?SuccessFn, failure: ?FailureFn, autoPlay!: Bool = true) {
+    public func load(source: ResourceStr, success!: ?SuccessFn = None, failure!: ?FailureFn = None, autoPlay!: Bool = true) {
         var _success = success
         var _failure = failure
         if (this._player.isNone() || this._parser.isNone()) {

@@ -1,5 +1,7 @@
 {
   "src": [
-    "pages/index"
+    "pages/index",
+    "pages/navigation_page",
+    "pages/test_page2"
   ]
 }

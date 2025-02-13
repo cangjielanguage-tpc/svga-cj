@@ -14,7 +14,7 @@ import tpc.UIKit.window.Size as Sizes
 import tpc.UIKit.animator.*
 import std.collection.*
 import std.math.*
-import svga.*
+import svga.valueAnimator.*
 import svga.proto.*
 import svga.parser.*
 import svga.model.*

@@ -1,7 +1,7 @@
 /**
  * Created on 2025/1/14
  */
-package svga
+package svga.valueAnimator
 
 import tpc.UIKit.animator.*
 import tpc.UIKit.UIContext.*
@@ -40,7 +40,7 @@ public class ValueAnimator {
     var onStart: () -> Unit = {
         =>
     }
-    var onEnd: () -> Unit = {
+    public var onEnd: () -> Unit = {
         =>
     }
 
