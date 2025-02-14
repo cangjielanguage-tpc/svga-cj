@@ -162,4 +162,6 @@ public class SvgaController {
         //        }
         //this._player.getOrThrow().startAnimation(reverse)
     }
+
+    public func stopAnimation(clears: ?Bool) {}
 }

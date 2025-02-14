@@ -13,7 +13,7 @@ public type SuccessFn = (MovieEntity) -> Unit
 public type FailureFn = (Object) -> Unit
 
 public class Parser {
-    init() {
+    public init() {
     }
 
     /**
