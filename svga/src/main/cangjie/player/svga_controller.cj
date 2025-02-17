@@ -114,7 +114,7 @@ public class SvgaController {
         return this._pageUpdateMode;
     }
 
-    public func load(source: ResourceStr, success!: ?SuccessFn = None, failure!: ?FailureFn = None, autoPlay!: Bool = true) {
+    public func load(source: String, success!: ?SuccessFn = None, failure!: ?FailureFn = None, autoPlay!: Bool = true) {
         var _success = success
         var _failure = failure
         if (this._player.isNone() || this._parser.isNone()) {

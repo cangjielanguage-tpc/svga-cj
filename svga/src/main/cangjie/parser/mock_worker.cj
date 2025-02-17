@@ -5,9 +5,11 @@ package svga.parser
 
 import svga.proto.*
 import svga.utils.*
-import std.io.ByteArrayStream
-import tpc.UIKit.ResourceStr
+
+import ohos.resource_manager.*
 import ohos.base.AppResource
+
+import std.io.ByteArrayStream
 import std.collection.HashMap
 import std.unittest.UnitTestCase
 import encoding.base64.*
@@ -16,13 +18,15 @@ public type CbFn = (MockWorkerResponseData) -> Unit
 
 public type DecodeCbFn = (MockWorkerDecodeResponseData) -> Unit
 
-public var context: Option<UIAbilityContext> = Option<UIAbilityContext>.None
+public var context: Option<AbilityContext> = Option<AbilityContext>.None
 
 public class MockWorker {
-    public static func load(url: ResourceStr, cb: CbFn, fn: FailureFn) {
+    public static func load(url: String, cb: CbFn, fn: FailureFn) {
         try {
-            let rm = context.getOrThrow().resourceManager
-            let buffer: Array<UInt8> = rm.getMediaContent((url as AppResource).getOrThrow())
+            let stageContext = getStageContext(context.getOrThrow())
+            let rm = ResourceManager.getResourceManager(stageContext)
+            //todo
+            let buffer: Array<UInt8> = rm.getRawFileContent(url)
             MockWorker.load_viaProto(buffer, cb)
         } catch (e: Exception) {
             //console.error("read file error " + e)

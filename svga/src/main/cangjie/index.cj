@@ -23,7 +23,7 @@ public class SvgaPlayer {
 //  @Require
 //    @Watch[updateSource]
     @State
-    var url: ResourceStr = ""
+    var url: String = ""
     public var controller: ?SvgaController = None
     var setting: RenderingContextSettings = RenderingContextSettings(antialias:true)
     var context: CanvasRenderingContext2D = CanvasRenderingContext2D(settings:this.setting, unit:LengthMetricsUnits.PX)
