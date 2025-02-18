@@ -18,12 +18,12 @@ public type CbFn = (MockWorkerResponseData) -> Unit
 
 public type DecodeCbFn = (MockWorkerDecodeResponseData) -> Unit
 
-public var context: Option<AbilityContext> = Option<AbilityContext>.None
+public var globalcontext: Option<AbilityContext> = Option<AbilityContext>.None
 
 public class MockWorker {
     public static func load(url: String, cb: CbFn, fn: FailureFn) {
         try {
-            let stageContext = getStageContext(context.getOrThrow())
+            let stageContext = getStageContext(globalcontext.getOrThrow())
             let rm = ResourceManager.getResourceManager(stageContext)
             //todo
             let buffer: Array<UInt8> = rm.getRawFileContent(url)

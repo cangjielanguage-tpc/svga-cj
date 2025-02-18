@@ -12,9 +12,9 @@ import svga.parser.*
 import svga.parser.EllipsePath
 import svga.parser.RectPath
 import svga.audio.*
+import svga.parser.MockWorker
 import std.collection.*
 import std.convert.*
-import svga.parser.MockWorker
 
 var validMethods = 'MLHVCSQAZmlhvcsqaz'
 

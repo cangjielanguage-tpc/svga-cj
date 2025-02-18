@@ -3,10 +3,10 @@
  */
 package svga.workers
 
-import tpc.ImageKit.image.*
-import tpc.UIKit.component_interop.ImageBitmap
-import tpc.UIKit.component_interop.LengthMetricsUnit
-
+//import tpc.ImageKit.image.*
+//import tpc.UIKit.component_interop.ImageBitmap
+//import tpc.UIKit.component_interop.LengthMetricsUnit
+import ohos.image.*
 import ohos.base.BusinessException
 
 import encoding.base64.*
@@ -26,10 +26,10 @@ func workerPort(data: MessageEvents) {
           var pixelMap: ?PixelMap= None
 //          if (img) {
             //DecodingOptions
-                pixelMap = img.createPixelMap(options: DecodingOptions(editable: false, desiredSize: Size (info.size.width,info.size.height)))
-                img.release({a: ?BusinessException, b: ?Unit =>})
-                var bitmap = ImageBitmap(pixelMap.getOrThrow(), LengthMetricsUnit.PX)
-                pixelMap?.release({a: ?BusinessException, b: ?Unit =>})
+                pixelMap = img.createPixelMap(options: DecodingOptions(editable: false, desiredSize: Size (height:info.size.width,width:info.size.height)))
+                img.Release()
+//                var bitmap = ImageBitmap(pixelMap.getOrThrow(), LengthMetricsUnit.PX)
+                pixelMap?.Release()
                 pixelMap = None
 //                workerPort.postMessage({
 //                  key,

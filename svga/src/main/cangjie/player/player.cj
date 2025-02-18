@@ -3,8 +3,8 @@
  */
 package svga.player
 
-import tpc.UIKit.UIContext.*
-import tpc.AbilityKit.Context
+//import tpc.UIKit.UIContext.*
+//import tpc.AbilityKit.Context
 //import tpc.UIKit.component_interop.*
 //import tpc.ImageKit.image.*
 //import tpc.LocalizationKit.resourceManager.*
@@ -37,11 +37,11 @@ public class Player {
     private var _speed: Int64 = 1
     private var _playerController: StateController
 
-    public init(UIContext: UIContext, context: Context, canvasRenderer: CanvasRenderingContext2D) {
+    public init(UIContext: AbilityContext, canvasRenderer: CanvasRenderingContext2D) {
         this._uiContext = UIContext
-        this._context = context
+//        this._context = context
         this._context2D = canvasRenderer
-        this._sourceManager = SourceManager(context)
+        this._sourceManager = SourceManager(UIContext)
         this._renderer = unsafe { zeroValue<Renderer>() }
         this._playerController = unsafe { zeroValue<StateController>() }
         this._playerController = StateController(this)
@@ -174,20 +174,20 @@ public class Player {
     /**
      * ui上下文 用于监听页面变化
      */
-    private var _uiContext: ?UIContext = None
+    private var _uiContext: ?AbilityContext = None
 
-    public func uiContext(): ?UIContext {
+    public func uiContext(): ?AbilityContext {
         return this._uiContext
     }
 
     /**
      * 上下文 用于进行本地文件操作
      */
-    private var _context: ?Context = None
-
-    public func context(): ?Context {
-        return this._context
-    }
+//    private var _context: ?Context = None
+//
+//    public func context(): ?Context {
+//        return this._context
+//    }
 
     /**
      * 循环次数
@@ -425,7 +425,7 @@ public class Player {
         this._renderer = None
         //    console.log('执行了清理222：' + this._renderer)
         this._uiContext = None
-        this._context = None
+//        this._context = None
         this._animator = None
         this.clearDynamicObjects()
         this._globalTransform = None

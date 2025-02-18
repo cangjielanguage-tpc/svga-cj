@@ -3,11 +3,13 @@
  */
 package svga.valueAnimator
 
-import tpc.UIKit.animator.*
-//import ohos.animator.*
-import tpc.UIKit.UIContext.*
+//import tpc.UIKit.animator.*
+import ohos.animator.*
+//import tpc.UIKit.UIContext.*
 import std.math.*
 import svga.parser.*
+import ohos.ability.*
+
 
 public enum AnimatorPlayStatus {
     | INACTIVE // 初始状态
@@ -25,10 +27,10 @@ public class ValueAnimator {
     public var fillRule: AnimatorFill = AnimatorFill.Forwards
     public var FPS: Float64 = 20.0
     public var onUpdate: ?(Float64) -> Unit = None;
-    private var uicontext: ?UIContext = None
+    private var uicontext: ?AbilityContext = None
     private var resetFlag: Bool = false
 
-    public init(uicontext: ?UIContext) {
+    public init(uicontext: ?AbilityContext) {
         this.uicontext = uicontext
     }
 
@@ -49,34 +51,25 @@ public class ValueAnimator {
         if (this._animator.isNone()) {
             this.resetFlag = (frame.isSome() && frame.getOrThrow() != this.startValue && frame.getOrThrow() <= this
                 .endValue)
-            this._animator = this
-                .uicontext
-                .getOrThrow()
-                .createAnimator(
-                    //this._animator = this.uicontext!.createAnimator(
+            this._animator = AnimatorResult(
                     AnimatorOptions(
-                        {
-                            => if (frame.isSome() && frame.getOrThrow() < this.endValue && frame.getOrThrow() > this
-                                .startValue) {
-                                return this.duration * (this.endValue - frame.getOrThrow()) / (this.endValue - this
-                                    .startValue)
+                        duration: if (frame.isSome() && frame.getOrThrow() < this.endValue && frame.getOrThrow() > this.startValue) {
+                            Int32(this.duration * (this.endValue - frame.getOrThrow()) / (this.endValue - this.startValue))
                             } else {
-                                this.duration
+                                Int32(this.duration)
                             }
-                        }(),
-                        "linear",
-                        0.0,
-                        this.fillRule,
-                        AnimatorDirection.Normal,
-                        this.loops,
-                        {
-                            => if (let Some(v) <- frame) {
-                                return v
+                        ,
+                        easing:"linear",
+                        delay:0,
+                        fill:this.fillRule,
+                        direction:AnimatorDirection.Normal,
+                        iterations:Int32(this.loops),
+                        begin:if (let Some(v) <- frame) {
+                                 v
                             } else {
                                 this.startValue
-                            }
-                        }(),
-                        this.endValue
+                            },
+                        end:this.endValue
                     )
                 )
             //            this._animator.getOrThrow().setExpectedFrameRateRange(
@@ -92,12 +85,12 @@ public class ValueAnimator {
             this._status = AnimatorPlayStatus.PLAY
             this.onStart()
         }
-        this._animator.getOrThrow().onFrame = {
+        this._animator.getOrThrow().onframe = {
             frame => if (let Some(function) <- this.onUpdate) {
                 function(frame)
             }
         }
-        this._animator.getOrThrow().onRepeat = {
+        this._animator.getOrThrow().onrepeat = {
             =>
             // 在启动动画时 指定开始位置 在一次结束后要重置动画参数 确保动画能够播放完整
             if (this.resetFlag) {
@@ -106,20 +99,20 @@ public class ValueAnimator {
                     .getOrThrow()
                     .reset(
                         AnimatorOptions(
-                            this.duration,
-                            "linear",
-                            0.0,
-                            this.fillRule,
-                            AnimatorDirection.Normal,
-                            this.loops,
-                            this.startValue,
-                            this.endValue
+                            duration:Int32(this.duration),
+                            easing:"linear",
+                            delay:0,
+                            fill:this.fillRule,
+                            direction:AnimatorDirection.Normal,
+                            iterations:Int32(this.loops),
+                            begin:this.startValue,
+                            end:this.endValue
                         )
                     )
                 this.resetFlag = false
             }
         }
-        this._animator.getOrThrow().onFinish = {
+        this._animator.getOrThrow().onfinish = {
             =>
             this._status = AnimatorPlayStatus.FINISH
             //console.log("动画状态11:" + this._status)

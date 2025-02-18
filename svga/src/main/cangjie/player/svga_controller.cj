@@ -3,10 +3,13 @@
  */
 package svga.player
 
-import tpc.UIKit.matrix4
-import tpc.UIKit.ResourceStr
-import tpc.UIKit.animator.*
-import tpc.UIKit.*
+//import tpc.UIKit.matrix4
+//import tpc.UIKit.ResourceStr
+//import tpc.UIKit.animator.*
+//import tpc.UIKit.*
+import ohos.ability.*
+import ohos.animator.*
+import ohos.component.*
 import svga.parser.*
 import svga.proto.*
 import std.math.*
@@ -21,10 +24,10 @@ public struct SvgaPlayerProps {
 
 //@Observed
 public class CanvasSizeAndTrans {
-    var width: String = '100%'
-    var height: String = '100%'
-    var transformValue: matrix4.Matrix4Transit = matrix4.identity()
-    var scaleValue: ScaleOptions = ScaleOptions(x: 1.0, y: 1.0)
+    public var width: String = '100%'
+    public var height: String = '100%'
+//    var transformValue: matrix4.Matrix4Transit = matrix4.identity()
+    public var scaleValue: ScaleOptions = ScaleOptions(x: 1.0, y: 1.0)
 }
 
 public class SvgaController {
