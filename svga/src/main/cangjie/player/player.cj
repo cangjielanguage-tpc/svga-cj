@@ -13,6 +13,7 @@ package svga.player
 //import tpc.UIKit.window.Size as Sizes
 //import tpc.UIKit.animator.*
 import ohos.image.Size as Sizes
+import ohos.resource_manager.*
 import ohos.image.*
 import ohos.resource_manager.Resource as Resourcese
 import ohos.ability.*
@@ -475,30 +476,22 @@ public class Player {
         } catch (e: Exception) {
             //            console.error('svga', 'setImage err:' + e)
         }
-        //        if (transform.isSome() && transform instanceof Array && transform.length == 6) {
+        this._renderer?.setDynamicImage(urlOrResource, forKey)
         if (let Some(v) <- transform) {
             this._dynamicImageTransform.put(forKey, v)
         }
     }
 
-    public func setImage(urlOrResource: Resourcese, forKey: String, transform: ?Transform) {
-        try {
-            var imageArray: Array<UInt8> = Array<UInt8>()
-//            try {
-//                imageArray = getSystemResourceManager().getMediaContent(urlOrResource)
-//            } catch (e: Exception) {
-//                try {
-//                    imageArray = getSystemResourceManager().getRawFileContent(
-//                        ((urlOrResource as Resource)?.paramsArr[0] as String).getOrThrow())
-//                } catch (e: Exception) {
-//                    //                console.error("svga", "parse file:" + e);
-//                }
-//            }
-//            var imageResource = this.parseResourceStr(imageArray)
-//            this._renderer?.setDynamicImage(imageResource, forKey)
-        } catch (e: Exception) {
-            //            console.error('svga', 'setImage err:' + e)
+    public func setImage(urlOrResource: String, forKey: String, transform: ?Transform) {
+        var imageArray: Array<UInt8> = Array<UInt8>()
+        let stageContext = getStageContext(globalcontext.getOrThrow())
+        let rm = ResourceManager.getResourceManager(stageContext)
+        imageArray = rm.getRawFileContent(urlOrResource)
+        if (imageArray.isEmpty()) {
+          return
         }
+        let imageResource = createImageSource(imageArray)
+        this._renderer?.setDynamicImage(imageResource, forKey)
         if (let Some(v) <- transform) {
             this._dynamicImageTransform.put(forKey, v)
         }
