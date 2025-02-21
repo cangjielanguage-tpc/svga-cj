@@ -30,6 +30,8 @@ import svga.proto.*
 import svga.parser.*
 import svga.model.*
 
+import svga.global.globalcontext
+
 public class Player {
     private var _onFinished: ?() -> Unit = None
     private var _onFrame: ?(Float64) -> Unit = None

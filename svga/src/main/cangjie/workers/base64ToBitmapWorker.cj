@@ -19,9 +19,9 @@ func workerPort(data: MessageEvents) {
 
     try {
         if (types == "img") {
-             var buf: Array<UInt8> = fromBase64String(src).getOrThrow()
+//             var buf: Array<UInt8> = fromBase64String(src).getOrThrow()
             // 1, 创建imageSource
-            var img = createImageSource(buf)
+            var img = createImageSource(src)
             var info = img.getImageInfo()
           var pixelMap: ?PixelMap= None
 //          if (img) {
@@ -30,7 +30,7 @@ func workerPort(data: MessageEvents) {
                 img.Release()
 //                var bitmap = ImageBitmap(pixelMap.getOrThrow(), LengthMetricsUnit.PX)
                 pixelMap?.Release()
-                pixelMap = None
+//                pixelMap = None
 //                workerPort.postMessage({
 //                  key,
 //                  bitmap,

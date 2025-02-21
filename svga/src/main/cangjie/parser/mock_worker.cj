@@ -5,6 +5,7 @@ package svga.parser
 
 import svga.proto.*
 import svga.utils.*
+import svga.global.globalcontext
 
 import ohos.resource_manager.*
 import ohos.base.AppResource
@@ -18,7 +19,7 @@ public type CbFn = (MockWorkerResponseData) -> Unit
 
 public type DecodeCbFn = (MockWorkerDecodeResponseData) -> Unit
 
-public var globalcontext: Option<AbilityContext> = Option<AbilityContext>.None
+//public var globalcontext: Option<AbilityContext> = Option<AbilityContext>.None
 
 public class MockWorker {
     public static func load(url: String, cb: CbFn, fn: FailureFn) {

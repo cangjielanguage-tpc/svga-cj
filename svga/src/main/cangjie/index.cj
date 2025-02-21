@@ -11,7 +11,7 @@ import svga.player.SvgaController
 import svga.player.CanvasSizeAndTrans
 import svga.parser.Parser
 import svga.player.*
-import svga.parser.globalcontext
+import svga.global.globalcontext
 
 @Component
 public class SvgaPlayer {
