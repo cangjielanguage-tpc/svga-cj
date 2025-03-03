@@ -41,10 +41,63 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
 ## 使用说明
 
 ### 编译构建
+1. 通过module引入
+    1. 克隆下载项目
+    2. 将svga模块拷贝到应用项目下
+    3. 将svga模块当module引用，修改项目下的 build-profile.json5 文件，在 modules 字段添加下面代码
+       ```json
+       {
+       "name": "svga",
+       "srcPath": "./svga"
+       }
+       ```
+    4. 修改自身应用 entry 下的 oh-package.json5 文件，在 dependencies 字段添加 "svga": "file:../svga"
+       ```json
+       {
+          "name": "entry",
+          "version": "1.0.0",
+          "description": "Please describe the basic information.",
+          "main": "",
+          "author": "",
+          "license": "",
+         "dependencies": {
+             "svga": "file:../svga"
+         }
+       }
+       ```
+    5. 修改自身应用 entry/src/main/cangjie 下的 cjpm.toml 文件，在 [dependencies] 字段下添加 svga = {path = "../../../../svga/src/main/cangjie", version = "1.0.0"}
+       ```toml
+       [dependencies]
+           svga = {path = "../../../../svga/src/main/cangjie", version = "1.0.0"}
+       ```
+    6. 在项目中使用 import svga.* 引用svga项目
+       ```cangjie
+       import svga.*
+       ```
 
 ### 功能示例
 
-用例代码在entry目录下 [功能示例](entry/src/main/cangjie/src/index.cj)
+```cangjie
+import ohos.base.*
+import ohos.component.*
+import ohos.state_manage.*
+import ohos.state_macro_manage.*
+import svga.*
+import svga.player.*
+
+@HybridComponentEntry
+@Component
+class Index {
+    @State
+    var msg: String = "Hello"
+    var controller: SvgaController = SvgaController()
+    public func build() {
+        Column {
+              SvgaPlayer(url: "angel.svga",abilitycontext: getContext(),controller: Option<SvgaController>.Some(controller))
+        }
+    }
+}
+```
 
 ## 约束与限制
 

@@ -43,20 +43,14 @@ public class Player {
     public init(UIContext: AbilityContext, canvasRenderer: CanvasRenderingContext2D)
     
     /**
-     * 获取资源管理器
-     * 返回 SourceManager - SourceManager
-     */
-    public func sourceManager(): SourceManager
-    
-    /**
-     * 设置pageIndex
-     * 参数 value - String
+     * 设置当前页面的属性
+     * 参数 value - 页面的属性
      */
     public func pageIndex(value: String)
     
     /**
-     * 获取pageIndex
-     * 返回 String - String
+     * 获取当前页面的属性
+     * 返回 String - 页面的属性
      */
     public func pageIndex(): String
     
@@ -73,26 +67,23 @@ public class Player {
     public func pageName(): String
     
     /**
-     * 获取ValueAnimator
-     * 返回 ValueAnimator - ValueAnimator
-     */
-    public func animator(): ?ValueAnimator
-    
-    /**
      * 获取CanvasRenderingContext2D
      * 返回 CanvasRenderingContext2D - CanvasRenderingContext2D
      */
-    public func context2D(): ?CanvasRenderingContext2D
-
+    public func context2D(): CanvasRenderingContext2D
+    
     /**
-     * 获取AnimatorFill
+     * 获取动画执行后是否恢复到初始状态，动画执行后，动画结束时的状态（在最后一个关键帧中定义）将保留
+     *
      * 返回 AnimatorFill - AnimatorFill
      */
     public func fillMode(): AnimatorFill 
     
     /**
-     * 设置AnimatorFill
-     * 参数 value - AnimatorFill
+     * 设置动画执行后是否恢复到初始状态，动画执行后，动画结束时的状态（在最后一个关键帧中定义）将保留
+     *
+     * @param value - AnimatorFill
+     * 
      */
     public func fillMode(value: AnimatorFill)
 
@@ -133,16 +124,10 @@ public class Player {
     public func clearsAfterStop(value: Bool)
     
     /**
-     * 获取当前UIContext
-     * 返回值 UIContext - UIContext
+     * 获取当前AbilityContext
+     * 返回值 AbilityContext - AbilityContext
      */
-    public func uiContext(): ?UIContext
-    
-    /**
-     * 获取当前Context
-     * 返回值 Context - Context
-     */
-    public func context(): ?Context
+    public func uiContext(): AbilityContext
     
     /**
      * 获取当前循环次数
@@ -174,7 +159,7 @@ public class Player {
      */
     public func autoRelease(value: Bool)
     
-    /**
+    /**CanvasSizeAndTrans
      * 获取当前画布值
      * 返回值 CanvasSizeAndTrans - CanvasSizeAndTrans
      */
@@ -194,7 +179,7 @@ public class Player {
     
     /**
      * 获取当前svgaPlayer组件尺寸，默认0
-     * 返回值 Sizes - Sizes
+     * 返回值 Sizes - Sizes 对应使用的是 ohos.image.Size 
      */
     public func parentSize(): Sizes
     
@@ -247,9 +232,9 @@ public class Player {
     
     /**
      * 停止动画
-     * 参数 clears - ?Bool
+     * 参数 clears - Bool
      */
-    public func stopAnimation(clears: ?Bool)
+    public func stopAnimation(clears: Bool)
     
     /**
      * 清理动画资源
@@ -306,47 +291,32 @@ public class Player {
      * 动画百分百回调回调
      */
     public func onPercentage(callback: (Float64) -> Unit)
-    
-    /**
-     * 设置动态图片
-     * 参数 urlOrResource - ImageSource
-     * 参数 forKey - String
-     * 参数 transform - ?Transform
-     */
-    public func setImage(urlOrResource: ImageSource, forKey: String, transform: ?Transform)
-    
-    /**
-     * 设置动态图片
-     * 参数 AppResource - AppResource
-     * 参数 forKey - String
-     * 参数 transform - ?Transform
-     */
-    public func setImage(urlOrResource: AppResource, forKey: String, transform: ?Transform)
-    
-    /**
-     * 设置动态文字
-     * 参数 textORMap - String
-     * 参数 forKey - String
-     */
-    public func setText(textORMap: String, forKey: String)
-    
-    /**
-     * 设置动态文字
-     * 参数 textORMap - TextMap
-     * 参数 forKey - String
-     */
-    public func setText(textORMap: TextMap, forKey: String)
 }
 
+public class CanvasSizeAndTrans {
+    public var width: String = '100%' //当前页面的宽度
+    public var height: String = '100%' //当前页面的高度，默认值为
+    public var transformValue: matrix4.Matrix4Transit = matrix4.identity() //变换矩阵
+    public var scaleValue: ScaleOptions = ScaleOptions(x: 1.0, y: 1.0) //缩放参数
+}
+
+// 填充模式 
 public enum PLAYER_CONTENT_MODE {
-    | AspectFit
-    | Fill
-    | AspectFill
+    | AspectFit //选取长宽里面较大的一个作为依据 填充整个容器
+    | Fill //填充整个容器
+    | AspectFill //选取长宽里面较小的一个作为依据 填充整个容器
 
     /* 判等 */
     public operator func ==
     /* 判不等 */
     public operator func !=
+}
+
+public enum AnimatorPlayStatus {
+    | INACTIVE // 初始状态
+    | PLAY // 播放中
+    | FINISH // 播放完成
+    | PAUSE // 暂停
 }
 
 public class ValueAnimator {
@@ -472,35 +442,35 @@ public class SvgaController {
     public func getloops(): Float64
     
     /**
-     * 获取动画释放状态
+     * 是否自动释放动画资源
      *
      * @return Bool类型
      */
     public func getautoRelease(): Bool
     
     /**
-     * 获取是否在停止后释放资源
+     * 是否在播放停止后情理动画资源，返回true,表示播放停止后情理，false则相反
      *
      * @return Bool类型
      */
     public func getclearsAfterStop(): Bool
     
     /**
-     * 获取动画执行后，动画结束时的状态
+     * 动画执行后是否恢复到初始状态,动画执行后，动画结束时的状态（在最后一个关键帧中定义）将保留
      *
      * @return AnimatorFill类型
      */
     public func getfillMode(): AnimatorFill
     
     /**
-     * 获取播放对对象
+     * 获取当前播放器对象
      *
      * @return Player 类型
      */
     public func getplayer(): Player
     
     /**
-     * 设置播放对象
+     * 设置当前播放器对象
      *
      * @param value - Player对象
      *
@@ -536,7 +506,7 @@ public class SvgaController {
      * @param clears - Bool 类型
      *
      */
-    public func stopAnimation(clears: ?Bool)
+    public func stopAnimation(clears: Bool)
 }
 ```
 
