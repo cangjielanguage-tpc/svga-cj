@@ -3,25 +3,7 @@
  */
 package svga.player
 
-//import tpc.UIKit.UIContext.*
-//import tpc.AbilityKit.Context
-//import tpc.UIKit.component_interop.*
-//import tpc.ImageKit.image.*
-//import tpc.LocalizationKit.resourceManager.*
-//import tpc.UIKit.matrix4.identity
-//import tpc.UIKit.matrix4.TranslateOption
-//import tpc.UIKit.window.Size as Sizes
-//import tpc.UIKit.animator.*
 import ohos.image.Size as Sizes
-import ohos.resource_manager.*
-import ohos.image.*
-import ohos.resource_manager.Resource as Resourcese
-import ohos.ability.*
-import ohos.base.*
-import ohos.component.*
-import ohos.state_manage.*
-import ohos.state_macro_manage.*
-import ohos.animator.*
 import std.collection.*
 import std.math.*
 import svga.valueAnimator.*
@@ -29,13 +11,15 @@ import svga.proto.*
 import svga.parser.*
 import svga.model.*
 import svga.global.globalcontext
+import ohos.component.*
+import ohos.state_macro_manage.*
 
 public class Player {
     private var _onFinished: ?() -> Unit = None
     private var _onFrame: ?(Float64) -> Unit = None
     private var _onPercentage: ?(Float64) -> Unit = None
     // 倍率
-    private var _speed: Int64 = 1
+    private var _speed: Float64 = 1.0
     private var _playerController: StateController
 
     public init(UIContext: AbilityContext, canvasRenderer: CanvasRenderingContext2D) {
@@ -193,7 +177,7 @@ public class Player {
     /**
      * 循环次数
      */
-    private var _loops: Int32 = 0
+    private var _loops: Int32 = 1
 
     public func loops(): Int32 {
         return this._loops
@@ -300,10 +284,10 @@ public class Player {
      */
     public func startAnimation(reverse: Bool) {
         this.stopAnimation(false);
-        this._doStart(Option<Range>.None, reverse, Option<Float64>.None)
+        this._doStart(Option<SvgaRange>.None, reverse, Option<Float64>.None)
     }
 
-    public func startAnimationWithRange(range: Range, reverse!: Bool = false) {
+    public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false) {
         this.stopAnimation(false);
         this._doStart(range, reverse, Option<Float64>.None)
     }
@@ -343,9 +327,13 @@ public class Player {
     }
 
     public func clear() {
-        this._renderer?.clear()
-        this._renderer?.clearAudios()
-        this._animator?.release()
+        if (let Some(render) <- this._renderer) {
+            render.clear()
+            render.clearAudios()
+        }
+        if (let Some(animator) <- this._animator) {
+            animator.release()
+        }
         this._animator = None
     }
 
@@ -367,7 +355,7 @@ public class Player {
         this._currentFrame = frame
         this._update();
         if (andPlay) {
-            this._doStart(Option<Range>.None, false, this._currentFrame);
+            this._doStart(Option<SvgaRange>.None, false, this._currentFrame);
         }
     }
 
@@ -408,7 +396,7 @@ public class Player {
      * @param curRate
      * 需要在setvideoitem后 startanimation前执行
      */
-    public func setCurRate(curRate: Int64) {
+    public func setCurRate(curRate: Float64) {
         this._speed = curRate
     }
 
@@ -509,9 +497,7 @@ public class Player {
         let color = "#000000"
         let weight = "normal"
         let offset: TextOffset = TextOffset()
-        this
-            ._dynamicText
-            .put(forKey, TextMap(text: text, style: "normal ${weight} ${size} ${family}", color: color, offset: offset))
+        this._dynamicText.put(forKey, TextMap(text: text, style: FontStyle.Normal, color: color, offset: offset))
     }
 
     public func setText(textORMap: TextMap, forKey: String) {
@@ -526,20 +512,17 @@ public class Player {
             size = "${fp2px(Length(14.0))?.value}.px"
         }
         let offset: ?TextOffset = textORMap.offset
-        this
-            ._dynamicText
-            .put(
-                forKey,
-                TextMap(text: text, style: "normal ${weight?.toString()} ${size} ${family}", color: color,
-                    offset: offset)
-            )
+        this._dynamicText.put(
+            forKey,
+            TextMap(text: text, style: FontStyle.Normal, color: color, offset: offset)
+        )
     }
 
     /**
      * 初始化
      */
     private func _init() {
-        //    this._renderer = Renderer(this)
+        this._renderer = Renderer(this)
     }
 
     /**
@@ -559,14 +542,14 @@ public class Player {
 
     private func getFps() {
         var src = if (let Some(v) <- this._videoItem) {
-            Int64(v.params.fps)
+            Float64(v.params.fps)
         } else {
-            20
+            20.0
         }
         return src * this._speed
     }
 
-    private func _doStart(range: ?Range, reverse: Bool, fromFrame: ?Float64) {
+    private func _doStart(range: ?SvgaRange, reverse: Bool, fromFrame: ?Float64) {
         try {
             //this._animator = new ValueAnimator(this.uiContext!)
             this._animator = ValueAnimator(this._uiContext)
@@ -578,9 +561,9 @@ public class Player {
                     1.0
                 }
                 this._animator?.endValue = min(src - 1.0, Float64(v.location) + Float64(v.length))
-                if (this.getFps() != 0) {
+                if (this.getFps() != 0.0) {
                     this._animator?.duration = ((this._animator?.endValue).getOrThrow() -
-                        (this._animator?.startValue).getOrThrow() + 1.0) * (1.0 / Float64(this.getFps())) * 1000.0
+                        (this._animator?.startValue).getOrThrow() + 1.0) * (1.0 / this.getFps()) * 1000.0
                 } else {
                     this._animator?.duration = ((this._animator?.endValue).getOrThrow() -
                         (this._animator?.startValue).getOrThrow() + 1.0) * (1.0 / 1.0) * 1000.0
@@ -593,20 +576,20 @@ public class Player {
                     1.0
                 }
                 this._animator?.endValue = srcs - 1.0
-                if (this.getFps() != 0) {
-                    this._animator?.duration = srcs * (1.0 / Float64(this.getFps())) * 1000.0
+                if (this.getFps() != 0.0) {
+                    this._animator?.duration = srcs * (1.0 / this.getFps()) * 1000.0
                 } else {
                     this._animator?.duration = srcs * (1.0 / 1.0) * 1000.0
                 }
             }
-            if (this.getFps() != 0) {
+            if (this.getFps() != 0.0) {
                 this._animator?.FPS = Float64(this.getFps())
             } else {
                 this._animator?.FPS = 20.0
             }
 
-            this._animator?.loops = if (this._loops <= 0.0) {
-                Float64.Inf
+            this._animator?.loops = if (this._loops <= 0) {
+                -1
             } else {
                 this._loops
             }
@@ -669,18 +652,20 @@ public class Player {
         }
     }
 
+    //    private var martix: Matrix2D = Matrix2D()
+
     /**
      * 设置尺寸
      */
     private func _resize() {
-        //        this._canvasValue.transformValue = identity()
+        //this._canvasValue.transformValue = identity()
         this._globalTransform = None
-        //        this._canvasValue.scaleValue = ScaleOptions(
-        //            x: 1.0,
-        //            y: 1.0,
-        //            centerX: 0.0,
-        //            centerY: 0.0
-        //        )
+        this._canvasValue.scaleValue = ScaleOptions(
+            x: 1.0,
+            y: 1.0,
+            centerX: Length(0.0),
+            centerY: Length(0.0)
+        )
         if (this._context2D.isSome()) {
             var scaleX = 1.0;
             var scaleY = 1.0;
@@ -688,7 +673,7 @@ public class Player {
             var translateY = 0.0;
             var targetSize: Sizes = Sizes(height: 0, width: 0)
             if (this._parentSize.width != 0 && this._parentSize.height != 0) {
-                targetSize = Sizes(height: this._parentSize.width, width: this._parentSize.height)
+                targetSize = Sizes(height: this._parentSize.height, width: this._parentSize.width)
             } else {
                 let width_1: Int32 = if (let Some(v) <- this._videoItem) {
                     Int32(v.params.viewBoxWidth)
@@ -700,7 +685,7 @@ public class Player {
                 } else {
                     0
                 }
-                targetSize = Sizes(height: width_1, width: height_1)
+                targetSize = Sizes(height: height_1, width: width_1)
             }
             var width_imageSize: Int32 = if (let Some(v) <- this._videoItem) {
                 Int32(v.params.viewBoxWidth)
@@ -712,25 +697,25 @@ public class Player {
             } else {
                 0
             }
-            let imageSize: Sizes = Sizes(height: width_imageSize, width: height_imageSize)
+            let imageSize: Sizes = Sizes(height: height_imageSize, width: width_imageSize)
             if (targetSize.width >= imageSize.width && targetSize.height >= imageSize.height) {
-                this._canvasValue.width = "${px2vp(Length(Float64(targetSize.width)))?.value}.vp"
-                this._canvasValue.height = "${px2vp(Length(Float64(targetSize.height)))?.value}.vp"
+                this._canvasValue.width = Length(Float64(targetSize.width))
+                this._canvasValue.height = Length(Float64(targetSize.height))
                 if (this._contentMode == PLAYER_CONTENT_MODE.Fill) {
-                    scaleX = Float64(targetSize.width / imageSize.width)
-                    scaleY = Float64(targetSize.height / imageSize.height)
+                    scaleX = Float64(targetSize.width) / Float64(imageSize.width)
+                    scaleY = Float64(targetSize.height) / Float64(imageSize.height)
                 } else if (this._contentMode == PLAYER_CONTENT_MODE.AspectFit || this._contentMode == PLAYER_CONTENT_MODE
                     .AspectFill) {
                     let imageRatio = imageSize.width / imageSize.height;
                     let viewRatio = targetSize.width / targetSize.height;
                     if ((imageRatio >= viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio <=
                         viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
-                        scaleY = Float64(targetSize.width / imageSize.width)
+                        scaleY = Float64(targetSize.width) / Float64(imageSize.width)
                         scaleX = scaleY
                         translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
                     } else if ((imageRatio < viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio >
                         viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
-                        scaleY = Float64(targetSize.height / imageSize.height)
+                        scaleY = Float64(targetSize.height) / Float64(imageSize.height)
                         scaleX = scaleY
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
                     }
@@ -744,48 +729,30 @@ public class Player {
                     ty: Float32(translateY)
                 )
             } else {
-                this._canvasValue.width = "${px2vp(Length(Float64(imageSize.width)))?.value}.vp"
-                this._canvasValue.height = "${px2vp(Length(Float64(imageSize.height)))?.value}.vp"
+                this._canvasValue.width = px2vp(Length(Float64(imageSize.width))).getOrThrow()
+                this._canvasValue.height = px2vp(Length(Float64(imageSize.height))).getOrThrow()
                 if (this._contentMode == PLAYER_CONTENT_MODE.Fill) {
-                    scaleX = Float64(targetSize.width / imageSize.width)
-                    scaleY = Float64(targetSize.height / imageSize.height)
+                    scaleX = Float64(targetSize.width) / Float64(imageSize.width)
+                    scaleY = Float64(targetSize.height) / Float64(imageSize.height)
                     translateX = (Float64(imageSize.width) * scaleX - Float64(imageSize.width)) / 2.0
                     translateY = (Float64(imageSize.height) * scaleY - Float64(imageSize.height)) / 2.0
-                //           this._canvasValue.transformValue.translate(TranslateOption(
-                //             x: translateX,
-                //             y: translateY
-                //           ))
-                //                    this._canvasValue.scaleValue = ScaleOptions(
-                //                        x: scaleX,
-                //                        y: scaleY,
-                //                        centerX: 0.0,
-                //                        centerY: 0.0
-                //                    )
+                    //                           this._canvasValue.transformValue.translate(TranslateOption(
+                    //                             x: translateX,
+                    //                             y: translateY
+                    //                           ))
+                    this._canvasValue.scaleValue = ScaleOptions(
+                        x: Float32(scaleX),
+                        y: Float32(scaleY),
+                        centerX: Length(0.0),
+                        centerY: Length(0.0)
+                    )
                 } else if (this._contentMode == PLAYER_CONTENT_MODE.AspectFit || this._contentMode == PLAYER_CONTENT_MODE
                     .AspectFill) {
                     let imageRatio = imageSize.width / imageSize.height;
                     let viewRatio = targetSize.width / targetSize.height;
                     if ((imageRatio >= viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio <=
                         viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit)) {
-                        scaleY = Float64(targetSize.width / imageSize.width)
-                        scaleX = scaleY
-                        translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
-                        translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
-                    //                        this._canvasValue.transformValue.translate(
-                    //                            TranslateOption(
-                    //                                x: translateX,
-                    //                                y: translateY
-                    //                            )
-                    //                        )
-                    //                        this._canvasValue.scaleValue = ScaleOptions(
-                    //                            x: scaleX,
-                    //                            y: scaleY,
-                    //                            centerX: 0.0,
-                    //                            centerY: 0.0
-                    //                        )
-                    } else if ((imageRatio < viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio >
-                        viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
-                        scaleY = Float64(targetSize.height / imageSize.height)
+                        scaleY = Float64(targetSize.width) / Float64(imageSize.width)
                         scaleX = scaleY
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
                         translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
@@ -795,12 +762,30 @@ public class Player {
                         //                                y: translateY
                         //                            )
                         //                        )
-                        //                        this._canvasValue.scaleValue = ScaleOptions(
-                        //                            x: scaleX,
-                        //                            y: scaleY,
-                        //                            centerX: 0.0,
-                        //                            centerY: 0.0
-                        //                        )
+                        this._canvasValue.scaleValue = ScaleOptions(
+                            x: Float32(scaleX),
+                            y: Float32(scaleY),
+                            centerX: Length(0.0),
+                            centerY: Length(0.0)
+                        )
+                    } else if ((imageRatio < viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio >
+                        viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
+                        scaleY = Float64(targetSize.height) / Float64(imageSize.height)
+                        scaleX = scaleY
+                        translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
+                        translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
+                        //                                                this._canvasValue.transformValue.translate(
+                        //                                                    TranslateOption(
+                        //                                                        x: translateX,
+                        //                                                        y: translateY
+                        //                                                    )
+                        //                                                )
+                        this._canvasValue.scaleValue = ScaleOptions(
+                            x: Float32(scaleX),
+                            y: Float32(scaleY),
+                            centerX: Length(0.0),
+                            centerY: Length(0.0)
+                        )
                     }
                 }
             }
@@ -816,7 +801,12 @@ public class Player {
     }
 }
 
-public interface Range {
-    prop location: Int64
-    prop length: Int64
+public class SvgaRange {
+    protected var location: Float64
+    protected var length: Float64
+
+    public init(location: Float64, length: Float64) {
+        this.length = length
+        this.location = location
+    }
 }

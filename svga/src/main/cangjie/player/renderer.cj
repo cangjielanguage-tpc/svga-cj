@@ -3,16 +3,12 @@
  */
 package svga.player
 
-import ohos.image.*
-import ohos.image.Size as imageSize
 import ohos.base.Color
-import ohos.component.*
 import svga.proto.*
 import svga.parser.*
 import svga.parser.EllipsePath
 import svga.parser.RectPath
 import svga.audio.*
-import svga.parser.MockWorker
 import std.collection.*
 import std.convert.*
 
@@ -22,7 +18,7 @@ public class Renderer {
     private var owner: Player
     private var unDrawFrame: ?Float64 = Option<Float64>.None;
     private var dynamicImage: HashMap<String, ImageSource> = HashMap<String, ImageSource>()
-    private var bitmapCache: HashMap<String, ImageBitmap> = HashMap<String, ImageBitmap>()
+    private var bitmapCache: HashMap<String, PixelMap> = HashMap<String, PixelMap>()
     private var soundsQueue: ArrayList<SoundsItem> = ArrayList<SoundsItem>();
     private var lastShape: HashMap<Int64, ShapeEntity> = HashMap<Int64, ShapeEntity>()
     init(owner: Player) {

@@ -11,12 +11,6 @@ type WireNum = UInt8
 type Bytes = Array<Byte>
 type BytesSlice = RoArray<Byte>
 
-/* ffi, typecast by bits */
-foreign func itof(v: UInt32): Float32
-foreign func ltod(v: UInt64): Float64
-foreign func ftoi(v: Float32): UInt32
-foreign func dtol(v: Float64): UInt64
-
 let VARINT: WireNum = 0
 let BIT64: WireNum = 1
 let PREFIXED: WireNum = 2

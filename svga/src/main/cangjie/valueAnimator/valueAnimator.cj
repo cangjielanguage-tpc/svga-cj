@@ -75,13 +75,6 @@ public class ValueAnimator {
             //                            120,
             //                            this.FPS
             //                        )
-            if (reverse) {
-                this._animator.getOrThrow().reverse()
-            } else {
-                this._animator.getOrThrow().play()
-            }
-            this._status = AnimatorPlayStatus.PLAY
-            this.onStart()
         }
         this._animator.getOrThrow().onframe = {
             frame => if (let Some(function) <- this.onUpdate) {

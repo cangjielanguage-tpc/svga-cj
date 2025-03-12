@@ -32,7 +32,7 @@ public struct SvgaPlayerProps {
 public class CanvasSizeAndTrans {
     public var width: Length = 100.percent
     public var height: Length = 100.percent
-    //    var transformValue: matrix4.Matrix4Transit = matrix4.identity()
+    //var transformValue: matrix4.Matrix4Transit = Mtrix4.identity()
     public var scaleValue: ScaleOptions = ScaleOptions(x: 1.0, y: 1.0)
 }
 
@@ -212,7 +212,7 @@ public class SvgaController {
         this._player?.setLoops(loops)
     }
 
-    public func setLoops(curRate: Int64) {
+    public func setCurRate(curRate: Float64) {
         if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
             throw Exception('请在资源加载后调用')
         }

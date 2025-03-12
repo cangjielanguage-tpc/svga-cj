@@ -12,7 +12,7 @@ public class TextMap {
     public var color: ?String
     public var offset: ?TextOffset
     public var family: ?String
-    public var style: ?FontStyle
+    public var style: FontStyle
     public var weight: ?SVGAFontWeight
 
     public init(text!: String = "", size!: ?Length = None, color!: ?String = None, offset!: ?TextOffset = None,
