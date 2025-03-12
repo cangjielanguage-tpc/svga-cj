@@ -3,12 +3,7 @@
  */
 package svga.workers
 
-//import tpc.ImageKit.image.*
-//import tpc.UIKit.component_interop.ImageBitmap
-//import tpc.UIKit.component_interop.LengthMetricsUnit
 import ohos.image.*
-import ohos.base.BusinessException
-
 import encoding.base64.*
 
 func workerPort(data: MessageEvents) {
@@ -19,33 +14,20 @@ func workerPort(data: MessageEvents) {
 
     try {
         if (types == "img") {
-//             var buf: Array<UInt8> = fromBase64String(src).getOrThrow()
+            var buf: Array<UInt8> = fromBase64String(src).getOrThrow()
             // 1, 创建imageSource
-            var img = createImageSource(src)
+            var img = createImageSource(buf)
             var info = img.getImageInfo()
-          var pixelMap: ?PixelMap= None
-//          if (img) {
-            //DecodingOptions
-                pixelMap = img.createPixelMap(options: DecodingOptions(editable: false, desiredSize: Size (height:info.size.width,width:info.size.height)))
-                img.Release()
-//                var bitmap = ImageBitmap(pixelMap.getOrThrow(), LengthMetricsUnit.PX)
-                pixelMap?.Release()
-//                pixelMap = None
-//                workerPort.postMessage({
-//                  key,
-//                  bitmap,
-//                })
-//          } else {
-//            workerPort.postMessage({
-//              key,
-//              bitmap: null,
-//            })
-//          }
-        }else {
-
+            var pixelMap: ?PixelMap = None
+            pixelMap = img.createPixelMap(
+                options: DecodingOptions(editable: false,
+                    desiredSize: Size(height: info.size.width, width: info.size.height)))
+            img.Release()
+            pixelMap?.Release()
+            pixelMap = None
+        } else {
         }
     } catch (e: Exception) {
-
     }
 }
 

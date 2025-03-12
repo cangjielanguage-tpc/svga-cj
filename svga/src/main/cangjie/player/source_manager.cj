@@ -3,11 +3,6 @@
  */
 package svga.player
 
-//import tpc.CoreFileKit.fs.*
-//import tpc.AbilityKit.Context
-import ohos.file_fs.*
-import ohos.ability.*
-
 import std.random.*
 import std.time.DateTime
 
@@ -22,7 +17,6 @@ public class SourceManager {
         let m: Random = Random()
         m.seed = 3
         DateTime.now().nanosecond
-//        this._basePath = context.cacheDir + '/svga' + "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
         this._basePath = context.filesDir + '/svga' + "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
         initSourceManager()
     }

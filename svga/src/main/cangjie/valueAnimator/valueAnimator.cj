@@ -3,13 +3,11 @@
  */
 package svga.valueAnimator
 
-//import tpc.UIKit.animator.*
+import ohos.component.ExpectedFrameRateRange
 import ohos.animator.*
-//import tpc.UIKit.UIContext.*
 import std.math.*
 import svga.parser.*
 import ohos.ability.*
-
 
 public enum AnimatorPlayStatus {
     | INACTIVE // 初始状态
@@ -23,7 +21,7 @@ public class ValueAnimator {
     public var startValue: Float64 = 0.0
     public var endValue: Float64 = 0.0
     public var duration: Float64 = 0.0
-    public var loops: Float64 = 1.0
+    public var loops: Int32 = 1
     public var fillRule: AnimatorFill = AnimatorFill.Forwards
     public var FPS: Float64 = 20.0
     public var onUpdate: ?(Float64) -> Unit = None;
@@ -52,31 +50,31 @@ public class ValueAnimator {
             this.resetFlag = (frame.isSome() && frame.getOrThrow() != this.startValue && frame.getOrThrow() <= this
                 .endValue)
             this._animator = AnimatorResult(
-                    AnimatorOptions(
-                        duration: if (frame.isSome() && frame.getOrThrow() < this.endValue && frame.getOrThrow() > this.startValue) {
-                            Int32(this.duration * (this.endValue - frame.getOrThrow()) / (this.endValue - this.startValue))
-                            } else {
-                                Int32(this.duration)
-                            }
-                        ,
-                        easing:"linear",
-                        delay:0,
-                        fill:this.fillRule,
-                        direction:AnimatorDirection.Normal,
-                        iterations:Int32(this.loops),
-                        begin:if (let Some(v) <- frame) {
-                                 v
-                            } else {
-                                this.startValue
-                            },
-                        end:this.endValue
-                    )
+                AnimatorOptions(
+                    duration: if (frame.isSome() && frame.getOrThrow() < this.endValue && frame.getOrThrow() > this
+                        .startValue) {
+                        Int32(this.duration * (this.endValue - frame.getOrThrow()) / (this.endValue - this.startValue))
+                    } else {
+                        Int32(this.duration)
+                    },
+                    easing: "linear",
+                    delay: 0,
+                    fill: this.fillRule,
+                    direction: AnimatorDirection.Normal,
+                    iterations: Int32(this.loops),
+                    begin: if (let Some(v) <- frame) {
+                        v
+                    } else {
+                        this.startValue
+                    },
+                    end: this.endValue
                 )
-            //            this._animator.getOrThrow().setExpectedFrameRateRange(
-            //                0,
-            //                120,
-            //                this.FPS
-            //            )
+            )
+            //                        this._animator.getOrThrow().setExpectedFrameRateRange(
+            //                            0,
+            //                            120,
+            //                            this.FPS
+            //                        )
             if (reverse) {
                 this._animator.getOrThrow().reverse()
             } else {
@@ -99,14 +97,14 @@ public class ValueAnimator {
                     .getOrThrow()
                     .reset(
                         AnimatorOptions(
-                            duration:Int32(this.duration),
-                            easing:"linear",
-                            delay:0,
-                            fill:this.fillRule,
-                            direction:AnimatorDirection.Normal,
-                            iterations:Int32(this.loops),
-                            begin:this.startValue,
-                            end:this.endValue
+                            duration: Int32(this.duration),
+                            easing: "linear",
+                            delay: 0,
+                            fill: this.fillRule,
+                            direction: AnimatorDirection.Normal,
+                            iterations: Int32(this.loops),
+                            begin: this.startValue,
+                            end: this.endValue
                         )
                     )
                 this.resetFlag = false
@@ -118,6 +116,14 @@ public class ValueAnimator {
             //console.log("动画状态11:" + this._status)
             this.onEnd()
         }
+
+        if (reverse) {
+            this._animator.getOrThrow().reverse()
+        } else {
+            this._animator.getOrThrow().play()
+        }
+        this._status = AnimatorPlayStatus.PLAY
+        this.onStart()
     }
 
     public func reverse(currentValue: ?Float64) {
@@ -125,7 +131,6 @@ public class ValueAnimator {
     }
 
     public func release() {
-        this._animator.getOrThrow().finish()
         this._animator = None
         this._status = AnimatorPlayStatus.INACTIVE
     }

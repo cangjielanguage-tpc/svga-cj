@@ -22,14 +22,12 @@ import ohos.component.*
 import ohos.state_manage.*
 import ohos.state_macro_manage.*
 import ohos.animator.*
-
 import std.collection.*
 import std.math.*
 import svga.valueAnimator.*
 import svga.proto.*
 import svga.parser.*
 import svga.model.*
-
 import svga.global.globalcontext
 
 public class Player {
@@ -42,7 +40,7 @@ public class Player {
 
     public init(UIContext: AbilityContext, canvasRenderer: CanvasRenderingContext2D) {
         this._uiContext = UIContext
-//        this._context = context
+        //        this._context = context
         this._context2D = canvasRenderer
         this._sourceManager = SourceManager(UIContext)
         this._renderer = unsafe { zeroValue<Renderer>() }
@@ -186,18 +184,18 @@ public class Player {
     /**
      * 上下文 用于进行本地文件操作
      */
-//    private var _context: ?Context = None
-//
-//    public func context(): ?Context {
-//        return this._context
-//    }
+    //    private var _context: ?Context = None
+    //
+    //    public func context(): ?Context {
+    //        return this._context
+    //    }
 
     /**
      * 循环次数
      */
-    private var _loops: Float64 = 0.0
+    private var _loops: Int32 = 0
 
-    public func loops(): Float64 {
+    public func loops(): Int32 {
         return this._loops
     }
 
@@ -249,7 +247,7 @@ public class Player {
     /**
      * svgaPlayer组件尺寸
      */
-    private var _parentSize: Sizes = Sizes(height:0, width:0)
+    private var _parentSize: Sizes = Sizes(height: 0, width: 0)
 
     public func parentSize(): Sizes {
         return this._parentSize
@@ -397,9 +395,9 @@ public class Player {
      * 设置播放次数 播放中修改无效
      * @param loops
      */
-    public func setLoops(loops: Float64) {
-        this._loops = if (loops <= 0.0) {
-            Float64.Inf
+    public func setLoops(loops: Int32) {
+        this._loops = if (loops <= 0) {
+            -1
         } else {
             loops
         }
@@ -428,7 +426,7 @@ public class Player {
         this._renderer = None
         //    console.log('执行了清理222：' + this._renderer)
         this._uiContext = None
-//        this._context = None
+        //        this._context = None
         this._animator = None
         this.clearDynamicObjects()
         this._globalTransform = None
@@ -490,7 +488,7 @@ public class Player {
         let rm = ResourceManager.getResourceManager(stageContext)
         imageArray = rm.getRawFileContent(urlOrResource)
         if (imageArray.isEmpty()) {
-          return
+            return
         }
         let imageResource = createImageSource(imageArray)
         this._renderer?.setDynamicImage(imageResource, forKey)
@@ -530,9 +528,11 @@ public class Player {
         let offset: ?TextOffset = textORMap.offset
         this
             ._dynamicText
-            .put(forKey,
+            .put(
+                forKey,
                 TextMap(text: text, style: "normal ${weight?.toString()} ${size} ${family}", color: color,
-                    offset: offset))
+                    offset: offset)
+            )
     }
 
     /**
@@ -610,7 +610,7 @@ public class Player {
             } else {
                 this._loops
             }
-//            this._animator?.fillRule = this._fillMode
+            //            this._animator?.fillRule = this._fillMode
             this._animator?.onUpdate = {value => this.animatorUpdate(value)}
             this._animator?.onEnd = {=> this.animatorEnd()}
 
@@ -673,22 +673,22 @@ public class Player {
      * 设置尺寸
      */
     private func _resize() {
-//        this._canvasValue.transformValue = identity()
+        //        this._canvasValue.transformValue = identity()
         this._globalTransform = None
-//        this._canvasValue.scaleValue = ScaleOptions(
-//            x: 1.0,
-//            y: 1.0,
-//            centerX: 0.0,
-//            centerY: 0.0
-//        )
+        //        this._canvasValue.scaleValue = ScaleOptions(
+        //            x: 1.0,
+        //            y: 1.0,
+        //            centerX: 0.0,
+        //            centerY: 0.0
+        //        )
         if (this._context2D.isSome()) {
             var scaleX = 1.0;
             var scaleY = 1.0;
             var translateX = 0.0;
             var translateY = 0.0;
-            var targetSize: Sizes = Sizes(height:0, width:0)
+            var targetSize: Sizes = Sizes(height: 0, width: 0)
             if (this._parentSize.width != 0 && this._parentSize.height != 0) {
-                targetSize = Sizes(height:this._parentSize.width, width:this._parentSize.height)
+                targetSize = Sizes(height: this._parentSize.width, width: this._parentSize.height)
             } else {
                 let width_1: Int32 = if (let Some(v) <- this._videoItem) {
                     Int32(v.params.viewBoxWidth)
@@ -700,7 +700,7 @@ public class Player {
                 } else {
                     0
                 }
-                targetSize = Sizes(height:width_1, width:height_1)
+                targetSize = Sizes(height: width_1, width: height_1)
             }
             var width_imageSize: Int32 = if (let Some(v) <- this._videoItem) {
                 Int32(v.params.viewBoxWidth)
@@ -712,7 +712,7 @@ public class Player {
             } else {
                 0
             }
-            let imageSize: Sizes = Sizes(height:width_imageSize, width:height_imageSize)
+            let imageSize: Sizes = Sizes(height: width_imageSize, width: height_imageSize)
             if (targetSize.width >= imageSize.width && targetSize.height >= imageSize.height) {
                 this._canvasValue.width = "${px2vp(Length(Float64(targetSize.width)))?.value}.vp"
                 this._canvasValue.height = "${px2vp(Length(Float64(targetSize.height)))?.value}.vp"
@@ -751,16 +751,16 @@ public class Player {
                     scaleY = Float64(targetSize.height / imageSize.height)
                     translateX = (Float64(imageSize.width) * scaleX - Float64(imageSize.width)) / 2.0
                     translateY = (Float64(imageSize.height) * scaleY - Float64(imageSize.height)) / 2.0
-                    //           this._canvasValue.transformValue.translate(TranslateOption(
-                    //             x: translateX,
-                    //             y: translateY
-                    //           ))
-//                    this._canvasValue.scaleValue = ScaleOptions(
-//                        x: scaleX,
-//                        y: scaleY,
-//                        centerX: 0.0,
-//                        centerY: 0.0
-//                    )
+                //           this._canvasValue.transformValue.translate(TranslateOption(
+                //             x: translateX,
+                //             y: translateY
+                //           ))
+                //                    this._canvasValue.scaleValue = ScaleOptions(
+                //                        x: scaleX,
+                //                        y: scaleY,
+                //                        centerX: 0.0,
+                //                        centerY: 0.0
+                //                    )
                 } else if (this._contentMode == PLAYER_CONTENT_MODE.AspectFit || this._contentMode == PLAYER_CONTENT_MODE
                     .AspectFill) {
                     let imageRatio = imageSize.width / imageSize.height;
@@ -771,36 +771,36 @@ public class Player {
                         scaleX = scaleY
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
                         translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
-//                        this._canvasValue.transformValue.translate(
-//                            TranslateOption(
-//                                x: translateX,
-//                                y: translateY
-//                            )
-//                        )
-//                        this._canvasValue.scaleValue = ScaleOptions(
-//                            x: scaleX,
-//                            y: scaleY,
-//                            centerX: 0.0,
-//                            centerY: 0.0
-//                        )
+                    //                        this._canvasValue.transformValue.translate(
+                    //                            TranslateOption(
+                    //                                x: translateX,
+                    //                                y: translateY
+                    //                            )
+                    //                        )
+                    //                        this._canvasValue.scaleValue = ScaleOptions(
+                    //                            x: scaleX,
+                    //                            y: scaleY,
+                    //                            centerX: 0.0,
+                    //                            centerY: 0.0
+                    //                        )
                     } else if ((imageRatio < viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio >
                         viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
                         scaleY = Float64(targetSize.height / imageSize.height)
                         scaleX = scaleY
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
                         translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
-//                        this._canvasValue.transformValue.translate(
-//                            TranslateOption(
-//                                x: translateX,
-//                                y: translateY
-//                            )
-//                        )
-//                        this._canvasValue.scaleValue = ScaleOptions(
-//                            x: scaleX,
-//                            y: scaleY,
-//                            centerX: 0.0,
-//                            centerY: 0.0
-//                        )
+                        //                        this._canvasValue.transformValue.translate(
+                        //                            TranslateOption(
+                        //                                x: translateX,
+                        //                                y: translateY
+                        //                            )
+                        //                        )
+                        //                        this._canvasValue.scaleValue = ScaleOptions(
+                        //                            x: scaleX,
+                        //                            y: scaleY,
+                        //                            centerX: 0.0,
+                        //                            centerY: 0.0
+                        //                        )
                     }
                 }
             }

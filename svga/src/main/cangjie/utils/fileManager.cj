@@ -3,9 +3,6 @@
  */
 package svga.utils
 
-//import tpc.CoreFileKit.fs.*
-//import tpc.UIKit.AlertDialog
-//import tpc.UIKit.AlertDialogParamWithConfirm
 import ohos.base.*
 import ohos.component.*
 import ohos.state_manage.*
@@ -39,53 +36,51 @@ public class FileManager {
 
     public static func saveAndUnzipFile(data: Array<Byte>, p: String): ?String {
         try {
-        // 创建目录
-          FileFs.mkdir(p)
-//          var filePath = p + '/' + util.generateRandomUUID() + '.zip'
-          var filePath = p + '/' + '.zip'
-          var file = FileFs.open(filePath, mode: (READ_WRITE.mode | CREATE.mode))
-          FileFs.write(file.fd, data)
-          FileFs.close(file.fd)
-//          const path = p + '/' + util.generateRandomUUID()
-          var path = p + '/'
-          FileFs.mkdir(path)
+            // 创建目录
+            FileFs.mkdir(p)
+            var filePath = p + '/' + '.zip'
+            var file = FileFs.open(filePath, mode: (READ_WRITE.mode | CREATE.mode))
+            FileFs.write(file.fd, data)
+            FileFs.close(file.fd)
+            var path = p + '/'
+            FileFs.mkdir(path)
             //(?BusinessException, ?T) -> Unit  使用tpc的解压
-          decompressFile(filePath, path, {a,b =>})
-          return path
+            decompressFile(filePath, path, {a, b =>})
+            return path
         } catch (e: Exception) {
-          return None
+            return None
         }
     }
 
     public static func removeFile(path: String): Unit {
         try {
-          let stat = FileFs.stat(path)
-          if (stat.isFile()) {
-            FileFs.unlink(path)
-          } else if (stat.isDirectory()) {
-            FileFs.rmdir(path)
-          }
+            let stat = FileFs.stat(path)
+            if (stat.isFile()) {
+                FileFs.unlink(path)
+            } else if (stat.isDirectory()) {
+                FileFs.rmdir(path)
+            }
         } catch (e: Exception) {
         }
     }
 
     public static func getFiles(path: String): ?Array<String> {
         try {
-          if (!FileFs.access(path)) {
-            return None
-          }
-          if (!FileFs.stat(path).isDirectory()) {
-            return None
-          }
-          return FileFs.listFile(path)
+            if (!FileFs.access(path)) {
+                return None
+            }
+            if (!FileFs.stat(path).isDirectory()) {
+                return None
+            }
+            return FileFs.listFile(path)
         } catch (e: Exception) {
-          return None
+            return None
         }
     }
 
     public static func readString(path: String): String {
         if (!FileFs.access(path)) {
-          return ""
+            return ""
         }
         return FileFs.readText(path)
     }

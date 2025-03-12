@@ -3,20 +3,20 @@
  */
 package svga.model
 
-//import tpc.UIKit.Length
+import ohos.base.Length
+import ohos.component.FontStyle
 
-import ohos.base.*
 public class TextMap {
     public var text: String
     public var size: ?Length
     public var color: ?String
     public var offset: ?TextOffset
     public var family: ?String
-    public var style: ?String
+    public var style: ?FontStyle
     public var weight: ?SVGAFontWeight
 
     public init(text!: String = "", size!: ?Length = None, color!: ?String = None, offset!: ?TextOffset = None,
-        family!: ?String = None, style!: ?String = None, weight!: ?SVGAFontWeight = None) {
+        family!: ?String = None, style!: FontStyle = FontStyle.Normal, weight!: ?SVGAFontWeight = None) {
         this.text = text
         this.size = size
         this.color = color

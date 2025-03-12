@@ -57,12 +57,12 @@ public class Renderer {
             data: MockWorkerDecodeResponseData =>
             let key: String = data.key
             let bitmap = data.bitmap
-//            let bitmap: ?PixelMap = data.bitmap
+            //            let bitmap: ?PixelMap = data.bitmap
             let fd: ?Int32 = data.fd
             // 处理图片
             if (bitmap.isSome()) {
-//                this.bitmapCache.put(key, ImageBitmap(bitmap.getOrThrow(), LengthMetricsUnit.PX))
-//                bitmap.getOrThrow().release
+                //                this.bitmapCache.put(key, ImageBitmap(bitmap.getOrThrow(), LengthMetricsUnit.PX))
+                //                bitmap.getOrThrow().release
             }
             if (this.dynamicImage.get(key).isSome()) {
                 let dynamicImage = this.dynamicImage.get(key)
@@ -166,11 +166,11 @@ public class Renderer {
      * 清空画布
      */
     public func clear() {
-//        this
-//            .owner
-//            .context2D()?
-//            .clearRect(0, 0, Int64(this.owner.context2D().getOrThrow().width),
-//                Int64(this.owner.context2D().getOrThrow().height))
+        //        this
+        //            .owner
+        //            .context2D()?
+        //            .clearRect(0, 0, Int64(this.owner.context2D().getOrThrow().width),
+        //                Int64(this.owner.context2D().getOrThrow().height))
     }
 
     public func release() {
@@ -205,53 +205,53 @@ public class Renderer {
     }
 
     public func drawFrame(frame: Float64) {
-//        if (this._prepared) {
-//            this.clear()
-//            if (this.owner.context2D().isNone()) {
-//                return;
-//            }
-//            var ctx = this.owner.context2D().getOrThrow()
-//            let matteSprites = HashMap<String, SpriteEntity>();
-//            var isMatting = false
-//            let sprites = this.owner.videoItem()?.sprites
-//            if (let Some(sprites) <- sprites) {
-//                var index = 0
-//                for (sprite in sprites) {
-//                    if (sprites[0].imageKey.indexOf('.matte').isNone()) {
-//                        this.drawSprite(sprite, ctx, frame, index)
-//                        return;
-//                    }
-//                    if (sprite.imageKey.indexOf('.matte').isSome()) {
-//                        matteSprites.put(sprite.imageKey, sprite)
-//                        return;
-//                    }
-//                    var lastSprite = sprites[index - 1];
-//                    if (isMatting && (sprite.matteKey.isEmpty() || sprite.matteKey != lastSprite.matteKey)) {
-//                        isMatting = false
-//                        let matteSprite = matteSprites.get(sprite.matteKey).getOrThrow()
-//                        ctx.globalCompositeOperation = "destination-in"
-//                        this.drawSprite(matteSprite, ctx, frame, index)
-//                        ctx.globalCompositeOperation = "source-over"
-//                        ctx.restore()
-//                    }
-//                    if (!sprite.matteKey.isEmpty() && ((lastSprite.matteKey.isEmpty()) || lastSprite.matteKey != sprite
-//                        .matteKey)) {
-//                        isMatting = true
-//                        ctx.save()
-//                    }
-//                    this.drawSprite(sprite, ctx, frame, index)
-//                    if (isMatting && index == sprites.size - 1) {
-//                        let matteSprite = matteSprites.get(sprite.matteKey).getOrThrow()
-//                        ctx.globalCompositeOperation = "destination-in"
-//                        this.drawSprite(matteSprite, ctx, frame, index);
-//                        ctx.globalCompositeOperation = "source-over"
-//                        ctx.restore();
-//                    }
-//                }
-//            }
-//        } else {
-//            this.unDrawFrame = frame
-//        }
+        //        if (this._prepared) {
+        //            this.clear()
+        //            if (this.owner.context2D().isNone()) {
+        //                return;
+        //            }
+        //            var ctx = this.owner.context2D().getOrThrow()
+        //            let matteSprites = HashMap<String, SpriteEntity>();
+        //            var isMatting = false
+        //            let sprites = this.owner.videoItem()?.sprites
+        //            if (let Some(sprites) <- sprites) {
+        //                var index = 0
+        //                for (sprite in sprites) {
+        //                    if (sprites[0].imageKey.indexOf('.matte').isNone()) {
+        //                        this.drawSprite(sprite, ctx, frame, index)
+        //                        return;
+        //                    }
+        //                    if (sprite.imageKey.indexOf('.matte').isSome()) {
+        //                        matteSprites.put(sprite.imageKey, sprite)
+        //                        return;
+        //                    }
+        //                    var lastSprite = sprites[index - 1];
+        //                    if (isMatting && (sprite.matteKey.isEmpty() || sprite.matteKey != lastSprite.matteKey)) {
+        //                        isMatting = false
+        //                        let matteSprite = matteSprites.get(sprite.matteKey).getOrThrow()
+        //                        ctx.globalCompositeOperation = "destination-in"
+        //                        this.drawSprite(matteSprite, ctx, frame, index)
+        //                        ctx.globalCompositeOperation = "source-over"
+        //                        ctx.restore()
+        //                    }
+        //                    if (!sprite.matteKey.isEmpty() && ((lastSprite.matteKey.isEmpty()) || lastSprite.matteKey != sprite
+        //                        .matteKey)) {
+        //                        isMatting = true
+        //                        ctx.save()
+        //                    }
+        //                    this.drawSprite(sprite, ctx, frame, index)
+        //                    if (isMatting && index == sprites.size - 1) {
+        //                        let matteSprite = matteSprites.get(sprite.matteKey).getOrThrow()
+        //                        ctx.globalCompositeOperation = "destination-in"
+        //                        this.drawSprite(matteSprite, ctx, frame, index);
+        //                        ctx.globalCompositeOperation = "source-over"
+        //                        ctx.restore();
+        //                    }
+        //                }
+        //            }
+        //        } else {
+        //            this.unDrawFrame = frame
+        //        }
     }
 
     public func playAudio(frame: Float64) {
@@ -369,10 +369,10 @@ public class Renderer {
                 ctx.transform(Float64(concatTransform.a), Float64(concatTransform.b), Float64(concatTransform.c),
                     Float64(concatTransform.d), Float64(concatTransform.tx), Float64(concatTransform.ty))
             }
-//            var img = ImageBitmap('file://' + "src", LengthMetricsUnit.PX)
-            var img = ImageBitmap('file://' + "src", 1,1)
+            //            var img = ImageBitmap('file://' + "src", LengthMetricsUnit.PX)
+            var img = ImageBitmap('file://' + "src", 1, 1)
             ctx.drawImage(img, 0.0, 0.0)
-//            img.close()
+            //            img.close()
             if (this.owner.dynamicImageTransform().contains(sprite.imageKey) &&
                 this.owner.dynamicImageTransform().get(sprite.imageKey).isSome()) {
                 ctx.restore()
@@ -413,7 +413,7 @@ public class Renderer {
         let dynamicText = this.owner.dynamicText().get(sprite.imageKey)
         if (let Some(dynamicText) <- dynamicText) {
             ctx.textBaseline(TextBaseline.Middle)
-//            ctx.font = dynamicText.style.getOrThrow()
+            //            ctx.font = dynamicText.style.getOrThrow()
             let textWidth = ctx.measureText(dynamicText.text).width
             //ctx.fillStyle(dynamicText.color.getOrThrow())
             let offsetX = 0.0 //(dynamicText.offset.isSome()) ?
@@ -474,7 +474,7 @@ public class Renderer {
 
         lineDash.append(Float64(styles.lineDashIII))
 
-//        ctx.setLineDash(lineDash.toArray());
+        //        ctx.setLineDash(lineDash.toArray());
         ctx.lineDash(lineDash.toArray());
     }
 
@@ -702,11 +702,12 @@ public class Renderer {
             var pixelMap: ?PixelMap = None
             if (let Some(imageSource) <- imageSource) {
                 pixelMap = imageSource.createPixelMap(
-                    options: DecodingOptions(editable: false, desiredSize: imageSize(height:Int32(width), width:Int32(height))))
+                    options: DecodingOptions(editable: false,
+                        desiredSize: imageSize(height: Int32(width), width: Int32(height))))
                 imageSource.Release()
-//                bitmap = ImageBitmap(pixelMap.getOrThrow(), LengthMetricsUnit.PX)
-//                pixelMap.getOrThrow().release
-//                pixelMap = None
+                //                bitmap = ImageBitmap(pixelMap.getOrThrow(), LengthMetricsUnit.PX)
+                //                pixelMap.getOrThrow().release
+                //                pixelMap = None
             }
         } catch (e: Exception) {
             //console.error('svga', 'transformBase64str2Bitmap err:' + e)

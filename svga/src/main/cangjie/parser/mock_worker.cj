@@ -5,32 +5,27 @@ package svga.parser
 
 import svga.proto.*
 import svga.utils.*
-import svga.global.globalcontext
-
 import ohos.resource_manager.*
-import ohos.base.AppResource
-
-import std.io.ByteArrayStream
 import std.collection.HashMap
-import std.unittest.UnitTestCase
 import encoding.base64.*
+import ohos.prompt_action.PromptAction
+import ohos.component.AlertDialog
+import ohos.component.AlertDialogParamWithConfirm
 
 public type CbFn = (MockWorkerResponseData) -> Unit
 
 public type DecodeCbFn = (MockWorkerDecodeResponseData) -> Unit
-
-//public var globalcontext: Option<AbilityContext> = Option<AbilityContext>.None
 
 public class MockWorker {
     public static func load(url: String, cb: CbFn, fn: FailureFn) {
         try {
             let stageContext = getStageContext(globalcontext.getOrThrow())
             let rm = ResourceManager.getResourceManager(stageContext)
-            //todo
             let buffer: Array<UInt8> = rm.getRawFileContent(url)
             MockWorker.load_viaProto(buffer, cb)
         } catch (e: Exception) {
-            //console.error("read file error " + e)
+            AlertDialog.show(AlertDialogParamWithConfirm("地址错误请输入完整沙盒路径"))
+            fn(e)
         }
     }
 
@@ -80,8 +75,8 @@ func base64ToBitmap(key: String, src: String, types: String, dir: String) {
             var info = img.getImageInfo()
 
             let pixelMap: PixelMap = img.createPixelMap(
-                options: DecodingOptions(editable: false, desiredSize: Size(width:info.size.width, height:info.size.height)))
-
+                options: DecodingOptions(editable: false,
+                    desiredSize: Size(width: info.size.width, height: info.size.height)))
             response.bitmap = pixelMap
             img.Release()
         } else {
@@ -89,7 +84,6 @@ func base64ToBitmap(key: String, src: String, types: String, dir: String) {
             response.fd = fd
         }
     } catch (e: Exception) {
-        // console.error("Decode error: " + JSON.stringify(e), undefined, 4)
     }
     return response
 }

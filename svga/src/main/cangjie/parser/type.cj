@@ -20,6 +20,14 @@ public enum PageUpdateMode {
     public operator func !=(that: PageUpdateMode): Bool {
         return !(this == that)
     }
+
+    public func toString(): String {
+        match (this) {
+            case pause => "pause"
+            case play => "play"
+            case release => "release"
+        }
+    }
 }
 
 public enum PLAYER_FILL_MODE {
