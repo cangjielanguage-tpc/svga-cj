@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "svga",
+        "License": "Apache License",
+        "License File": "LICENSE",
+        "Version Number": "v2.0",
+        "Owner": "田斌"
+        "Upstream URL": "https://gitee.com/tianbin0912/svga",
+        "Description": "Cangjie version of svga-cj library"
+    }
+]
