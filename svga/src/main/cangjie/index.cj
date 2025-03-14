@@ -10,16 +10,16 @@ import svga.player.CanvasSizeAndTrans
 import svga.parser.Parser
 import svga.player.*
 import svga.global.globalcontext
+import ohos.ability.AbilityContext
 
 @Component
 public class SvgaPlayer {
-
-    //    @Prop
-    //    @Require
     @State
     @Watch[updateSource]
     var url: String = ""
-    public var controller: ?SvgaController = None
+    @Prop
+    var abilitycontext: AbilityContext
+    var controller: SvgaController = SvgaController()
     var setting: RenderingContextSettings = RenderingContextSettings(antialias: true)
     var context: CanvasRenderingContext2D = CanvasRenderingContext2D(this.setting)
     @State
@@ -33,33 +33,18 @@ public class SvgaPlayer {
     }
 
     public func aboutToAppear(): Unit {
-        //        var uniqueId = this.getUniqueId();
-        //        var uiContext = this.getUIContext()  fromUIContextBase
-        //         var uiContextBase = findWindow("").getUIContext()
-        //        var uiContext = fromUIContextBase(uiContextBase)
-        //         var uniqueId = FrameNode(uiContextBase).getUniqueId();
-        //        var pageInfos: ?PageInfo= uiContext.getPageInfoByUniqueId(Int32(uniqueId))
+        var uiContext = this.abilitycontext
+        this.controller.setparser(Parser(uiContext))
+        var player = Player(uiContext, this.context)
 
-        //        if (this.controller.isNone()) {
-        //          this.controller = SvgaController()
-        //        }
-        //        this.controller?.setparser(Parser())
-        //        var player = Player(uiContext, Context(), this.context)
-        //        var player: Player = this.controller?.getplayer().getOrThrow() //暂时替代
-        //
-        //        this.controller?.setparser(player)
-        //        if (let Some(pageInfo) <- pageInfos) {
-        //            if (pageInfo.navDestinationInfo.isSome()) {
-        //            player.pageName(pageInfo.navDestinationInfo.getOrThrow().name.STRING)
-        //            player.pageName("")
-        //            player.pageIndex = pageInfo.navDestinationInfo.index.toString()
-        //          } else if (pageInfo.routerPageInfo.isSome()) {
-        //            player.pageName = pageInfo.routerPageInfo.name
-        //            player.pageIndex = pageInfo.routerPageInfo.index.toString()
-        //          }
-        //        }
-        this.controller?.setplayer(Player(globalcontext.getOrThrow(), this.context))
-        this.controller?.getplayer().canvasValue(this.canvasValue)
+        this.controller.setplayer(Player(globalcontext.getOrThrow(), this.context))
+        this.controller.getplayer().canvasValue(this.canvasValue)
+        this
+            .controller
+            .getplayer()
+            .parentSize(
+                Sizes(width: Int32(vp2px(Length(this.context.width)).getOrThrow().value),
+                    height: Int32(vp2px(Length(this.context.height)).getOrThrow().value)))
     }
 
     public func build() {
@@ -92,7 +77,7 @@ public class SvgaPlayer {
             .onAreaChange(
                 {
                     old, area => this
-                        .controller?
+                        .controller
                         .getplayer()
                         .parentSize(
                             Sizes(
@@ -103,7 +88,7 @@ public class SvgaPlayer {
                 })
     }
     public func playAnim() {
-        this.controller?.stopAnimation(true)
-        this.controller?.load(this.url)
+        this.controller.stopAnimation(true)
+        this.controller.load(this.url)
     }
 }

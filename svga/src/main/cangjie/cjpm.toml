@@ -26,7 +26,6 @@
   [dependencies.cj_res_svga]
     path = "./cj_res"
     version = "1.0.0"
-
   [dependencies.zlib4cj]
     tag = "cjc_0.53.18"
     git = "https://gitcode.com/Cangjie-TPC/zlib4cj"
