@@ -48,65 +48,7 @@ public class Renderer {
             this._prepared = true
             return;
         }
-        let promiseArr: ArrayList<Bool> = ArrayList<Bool>()
-        let decodeCb: DecodeCbFn = {
-            data: MockWorkerDecodeResponseData =>
-            let key: String = data.key
-            let bitmap = data.bitmap
-            //            let bitmap: ?PixelMap = data.bitmap
-            let fd: ?Int32 = data.fd
-            // 处理图片
-            if (bitmap.isSome()) {
-                //                this.bitmapCache.put(key, ImageBitmap(bitmap.getOrThrow(), LengthMetricsUnit.PX))
-                //                bitmap.getOrThrow().release
-            }
-            if (this.dynamicImage.get(key).isSome()) {
-                let dynamicImage = this.dynamicImage.get(key)
-                this.handleDynamicImage(dynamicImage, key)
-            }
-            // 处理音频
-            if (fd.isSome() && fd.getOrThrow() > 0) {
-                var player = AVPlayerClass()
-                //                        this.bitmapCache.put(key, player)
-                //                        promiseArr.append(player(`fd://${fd}`))
-            }
-            if (this.owner.videoItem().isSome() && this.bitmapCache.size == this
-                .owner
-                .videoItem()
-                .getOrThrow()
-                .images
-                .keys()
-                .size) {
-                if (promiseArr.size > 0) {
-                //                          Promise.all(promiseArr).then(res => {
-                //                            console.timeLog('准备资源总耗时', '准备资源 end')
-                //                            promiseArr = []
-                //                            this._prepared = true
-                //                            if (typeof this.unDrawFrame === "number") {
-                //                              this.drawFrame(this.unDrawFrame);
-                //                              this.unDrawFrame = undefined;
-                //                            }
-                //                          }).catch(() => {
-                //                            console.timeLog('准备资源总耗时', '准备资源 end')
-                //
-                //                            promiseArr = []
-                //                            this._prepared = true
-                //                            if (typeof this.unDrawFrame === "number") {
-                //                              this.drawFrame(this.unDrawFrame);
-                //                              this.unDrawFrame = undefined;
-                //                            }
-                //                          })
-                } else {
-                    this._prepared = true
-                    //console.timeLog('准备资源总耗时', '准备资源 end')
-
-                    if (this.unDrawFrame.isSome()) {
-                        this.drawFrame(this.unDrawFrame.getOrThrow());
-                        this.unDrawFrame = None
-                    }
-                }
-            }
-        }
+        var promiseArr: ArrayList<Bool> = ArrayList<Bool>()
 
         if (this.bitmapCache.size == 0) {
             var keys: EquatableCollection<String> = this
@@ -115,22 +57,61 @@ public class Renderer {
                 .getOrThrow()
                 .images
                 .keys()
-            //console.time('准备资源总耗时')
-            //console.timeLog('准备资源总耗时', '准备资源 start')
             for (key in keys) {
-                let src: String = this
+                let src = this
                     .owner
                     .videoItem()
                     .getOrThrow()
                     .images
                     .get(key)
-                    .toString()
-                if (src.indexOf("iVBO") == 0 || src.indexOf("/9j/2w") == 0) {
-                    let bitmapKey = key.replace('.matte', '')
-                    MockWorker.decode(bitmapKey, src, "img", "", decodeCb, Option<FailureFn>.None)
-                } else if (src.indexOf('SUQz') == 0) {
-                    // 音频
-                    //actions.decode(key, src, 'audio', this.owner.sourceManager.basePath, decodeCb)
+                    .getOrThrow()
+                    .toArray()
+                try {
+                    var img = createImageSource(src)
+                    var info = img.getImageInfo()
+                    let pixelMap: PixelMap = img.createPixelMap()
+                    let bitMapKey = key.replace('.matte', '')
+                    this.bitmapCache.put(bitMapKey, pixelMap)
+                    if (this.dynamicImage.get(bitMapKey).isSome()) {
+                        let dynamicImage = this.dynamicImage.get(bitMapKey)
+                        this.handleDynamicImage(dynamicImage.getOrThrow(), bitMapKey)
+                    }
+                } catch (e: Exception) {
+                    var player = AVPlayerClass()
+                    //this.avplayerCache.add(key, player)
+                    continue
+                }
+            }
+        }
+        if (this.bitmapCache.size == this
+            .owner
+            .videoItem()
+            .getOrThrow()
+            .images
+            .keys()
+            .size) {
+            if (promiseArr.size != 0) {
+                try {
+                    promiseArr = ArrayList<Bool>()
+                    this._prepared = true
+                    if (this.unDrawFrame.isSome()) {
+                        this.drawFrame(this.unDrawFrame.getOrThrow());
+                        this.unDrawFrame = None
+                    }
+                } catch (e: Exception) {
+                    promiseArr = ArrayList<Bool>()
+                    this._prepared = true
+                    if (this.unDrawFrame.isSome()) {
+                        this.drawFrame(this.unDrawFrame.getOrThrow());
+                        this.unDrawFrame = None
+                    }
+                }
+            } else {
+                this._prepared = true
+
+                if (this.unDrawFrame.isSome()) {
+                    this.drawFrame(this.unDrawFrame.getOrThrow());
+                    this.unDrawFrame = None
                 }
             }
         }
@@ -162,11 +143,11 @@ public class Renderer {
      * 清空画布
      */
     public func clear() {
-        //        this
-        //            .owner
-        //            .context2D()?
-        //            .clearRect(0, 0, Int64(this.owner.context2D().getOrThrow().width),
-        //                Int64(this.owner.context2D().getOrThrow().height))
+        this
+            .owner
+            .context2D()?
+            .clearRect(0, 0, Int64(this.owner.context2D().getOrThrow().width()),
+                Int64(this.owner.context2D().getOrThrow().height()))
     }
 
     public func release() {
@@ -201,53 +182,24 @@ public class Renderer {
     }
 
     public func drawFrame(frame: Float64) {
-        //        if (this._prepared) {
-        //            this.clear()
-        //            if (this.owner.context2D().isNone()) {
-        //                return;
-        //            }
-        //            var ctx = this.owner.context2D().getOrThrow()
-        //            let matteSprites = HashMap<String, SpriteEntity>();
-        //            var isMatting = false
-        //            let sprites = this.owner.videoItem()?.sprites
-        //            if (let Some(sprites) <- sprites) {
-        //                var index = 0
-        //                for (sprite in sprites) {
-        //                    if (sprites[0].imageKey.indexOf('.matte').isNone()) {
-        //                        this.drawSprite(sprite, ctx, frame, index)
-        //                        return;
-        //                    }
-        //                    if (sprite.imageKey.indexOf('.matte').isSome()) {
-        //                        matteSprites.put(sprite.imageKey, sprite)
-        //                        return;
-        //                    }
-        //                    var lastSprite = sprites[index - 1];
-        //                    if (isMatting && (sprite.matteKey.isEmpty() || sprite.matteKey != lastSprite.matteKey)) {
-        //                        isMatting = false
-        //                        let matteSprite = matteSprites.get(sprite.matteKey).getOrThrow()
-        //                        ctx.globalCompositeOperation = "destination-in"
-        //                        this.drawSprite(matteSprite, ctx, frame, index)
-        //                        ctx.globalCompositeOperation = "source-over"
-        //                        ctx.restore()
-        //                    }
-        //                    if (!sprite.matteKey.isEmpty() && ((lastSprite.matteKey.isEmpty()) || lastSprite.matteKey != sprite
-        //                        .matteKey)) {
-        //                        isMatting = true
-        //                        ctx.save()
-        //                    }
-        //                    this.drawSprite(sprite, ctx, frame, index)
-        //                    if (isMatting && index == sprites.size - 1) {
-        //                        let matteSprite = matteSprites.get(sprite.matteKey).getOrThrow()
-        //                        ctx.globalCompositeOperation = "destination-in"
-        //                        this.drawSprite(matteSprite, ctx, frame, index);
-        //                        ctx.globalCompositeOperation = "source-over"
-        //                        ctx.restore();
-        //                    }
-        //                }
-        //            }
-        //        } else {
-        //            this.unDrawFrame = frame
-        //        }
+        if (this._prepared) {
+            this.clear()
+            if (this.owner.context2D().isNone()) {
+                return;
+            }
+            var ctx = this.owner.context2D().getOrThrow()
+            let matteSprites = HashMap<String, SpriteEntity>();
+            var isMatting = false
+            let sprites = this.owner.videoItem()?.sprites
+            if (let Some(sprites) <- sprites) {
+                var index = 0
+                for (sprite in sprites) {
+                    this.drawSprite(sprite, ctx, frame, index)
+                }
+            }
+        } else {
+            this.unDrawFrame = frame
+        }
     }
 
     public func playAudio(frame: Float64) {
@@ -312,76 +264,56 @@ public class Renderer {
         let transform = sprite.frames[Int64(this.owner.currentFrame())].transform
         let a = transform.a
         ctx.transform(
-            Float64(transform.a),
+            {
+                => if (Float64(transform.a) == 0.0) {
+                    return 1.0
+                } else {
+                    return Float64(transform.a)
+                }
+            }(),
             Float64(transform.b),
             Float64(transform.c),
-            Float64(transform.d),
+            {
+                => if (Float64(transform.d) == 0.0) {
+                    return 1.0
+                } else {
+                    return Float64(transform.d)
+                }
+            }(),
             Float64(transform.tx),
             Float64(transform.ty)
         )
         let bitMapKey = sprite.imageKey.replace('.matte', '');
-        //                    if (!bitMapKey.isEmpty()) {
-        //                      return;
-        //                    }
-        let src: ImageBitmap = (this.bitmapCache.get(bitMapKey)).getOrThrow()
-        //                        //(this.owner.videoItem!.images![bitMapKey])
-        //                    if (src.isNone()) {
-        //                      return;
-        //                    }
-        if (src is Object) {
-            let clipPath = sprite.frames[Int64(this.owner.currentFrame())].clipPath
-            if (clipPath.size > 0) {
-                let maskPath = BezierPath(clipPath, Option<Transform>.None, Option<ShapeEntity_ShapeStyle>.None);
-                this.drawBezier(ctx, maskPath)
-                ctx.clip()
-            }
-            if (this.owner.dynamicImageTransform().contains(sprite.imageKey) &&
-                this.owner.dynamicImageTransform().get(sprite.imageKey).isSome()) {
-                ctx.save()
-                var concatTransform = this.owner.dynamicImageTransform().get(sprite.imageKey).getOrThrow()
-                ctx.transform(Float64(concatTransform.a), Float64(concatTransform.b), Float64(concatTransform.c),
-                    Float64(concatTransform.d), Float64(concatTransform.tx), Float64(concatTransform.ty))
-            }
-            if (src is AVPlayerClass) {
-            } else {
-                ctx.drawImage(src, 0.0, 0.0, src.width, src.height)
+
+        let src = (this.bitmapCache.get(bitMapKey))
+
+        if (let Some(src) <- src) {
+            if (src is Object) {
+                let clipPath = sprite.frames[Int64(this.owner.currentFrame())].clipPath
+                if (clipPath.size > 0) {
+                    let maskPath = BezierPath(clipPath, Option<Transform>.None, Option<ShapeEntity_ShapeStyle>.None);
+                    this.drawBezier(ctx, maskPath)
+                    ctx.clip()
+                }
                 if (this.owner.dynamicImageTransform().contains(sprite.imageKey) &&
                     this.owner.dynamicImageTransform().get(sprite.imageKey).isSome()) {
-                    ctx.restore()
+                    ctx.save()
+                    var concatTransform = this.owner.dynamicImageTransform().get(sprite.imageKey).getOrThrow()
+                    ctx.transform(Float64(concatTransform.a), Float64(concatTransform.b), Float64(concatTransform.c),
+                        Float64(concatTransform.d), Float64(concatTransform.tx), Float64(concatTransform.ty))
+                }
+                if (src is AVPlayerClass) {
+                } else {
+                    ctx.drawImage(src, 0.0, 0.0)
+                    if (this.owner.dynamicImageTransform().contains(sprite.imageKey) &&
+                        this.owner.dynamicImageTransform().get(sprite.imageKey).isSome()) {
+                        ctx.restore()
+                    }
                 }
             }
-        } else if (src is String) {
-            // 沙箱路径
-            let clipPath = sprite.frames[Int64(this.owner.currentFrame())].clipPath
-            if (clipPath.size > 0) {
-                let maskPath = BezierPath(clipPath, Option<Transform>.None, Option<ShapeEntity_ShapeStyle>.None);
-                this.drawBezier(ctx, maskPath)
-                ctx.clip()
-            }
-            if (this.owner.dynamicImageTransform().contains(sprite.imageKey) &&
-                this.owner.dynamicImageTransform().get(sprite.imageKey).isSome()) {
-                ctx.save()
-                var concatTransform = this.owner.dynamicImageTransform().get(sprite.imageKey).getOrThrow()
-                ctx.transform(Float64(concatTransform.a), Float64(concatTransform.b), Float64(concatTransform.c),
-                    Float64(concatTransform.d), Float64(concatTransform.tx), Float64(concatTransform.ty))
-            }
-            //            var img = ImageBitmap('file://' + "src", LengthMetricsUnit.PX)
-            var img = ImageBitmap('file://' + "src", 1, 1)
-            ctx.drawImage(img, 0.0, 0.0)
-            //            img.close()
-            if (this.owner.dynamicImageTransform().contains(sprite.imageKey) &&
-                this.owner.dynamicImageTransform().get(sprite.imageKey).isSome()) {
-                ctx.restore()
-            }
         }
-        //
+
         for (shape in sprite.frames[Int64(this.owner.currentFrame())].shapes) {
-            //            sprite.frames[this.owner.currentFrame].shapes!.forEach(shape => {
-            if (shape.type_ == ShapeEntity_ShapeType.KEEP && this.lastShape.contains((index)) &&
-                this.lastShape.get((index)).isSome()) {
-                //this.shape = this.lastShape.get(index)!
-            }
-            //
             if (shape.type_ == ShapeEntity_ShapeType.SHAPE) {
                 this.lastShape.put(index, shape)
                 var shapeArgs = shape.shape;
@@ -409,15 +341,10 @@ public class Renderer {
         let dynamicText = this.owner.dynamicText().get(sprite.imageKey)
         if (let Some(dynamicText) <- dynamicText) {
             ctx.textBaseline(TextBaseline.Middle)
-            //            ctx.font = dynamicText.style.getOrThrow()
+            ctx.font(style: dynamicText.style)
             let textWidth = ctx.measureText(dynamicText.text).width
-            //ctx.fillStyle(dynamicText.color.getOrThrow())
             let offsetX = 0.0 //(dynamicText.offset.isSome()) ?
-
-            //                isNaN(parseFloat(dynamicText.offset.x.toString())) ? 0 : parseFloat(dynamicText.offset.x.toString()) : 0;
             let offsetY = 0.0 //(dynamicText.offset !== undefined && dynamicText.offset.y !== undefined) ?
-
-            //                isNaN(parseFloat(dynamicText.offset.y.toString())) ? 0 : parseFloat(dynamicText.offset.y.toString()) : 0;
             ctx.fillText(
                 dynamicText.text,
                 (Float64(sprite.frames[Int64(this.owner.currentFrame())].layout.width) - textWidth) / 2.0 + offsetX,
@@ -683,30 +610,26 @@ public class Renderer {
         let cachedBitmap = this.bitmapCache.get(forKey)
         if (let Some(bitmap) <- cachedBitmap) {
             let originBitmap = bitmap
-            let dynamicImageBitmap = this.transformBase64str2Bitmap(imageSource, originBitmap.width, originBitmap.height
-            )
+            var bitmapInfo = originBitmap.getImageInfo()
+            let dynamicImageBitmap: ?PixelMap = this.transformBase64str2Bitmap(imageSource,
+                Float64(bitmapInfo.size.width), Float64(bitmapInfo.size.height))
             if (let Some(dynamicImageBitmap) <- dynamicImageBitmap) {
                 this.bitmapCache.put(forKey, dynamicImageBitmap)
             }
         }
     }
 
-    private func transformBase64str2Bitmap(imageSource: ?ImageSource, width: Float64, height: Float64): ?ImageBitmap {
-        var bitmap: ?ImageBitmap = None
+    private func transformBase64str2Bitmap(imageSource: ?ImageSource, width: Float64, height: Float64): ?PixelMap {
+        var bitmap: ?PixelMap = None
         DecodingOptions()
         try {
-            var pixelMap: ?PixelMap = None
             if (let Some(imageSource) <- imageSource) {
-                pixelMap = imageSource.createPixelMap(
+                bitmap = imageSource.createPixelMap(
                     options: DecodingOptions(editable: false,
-                        desiredSize: imageSize(height: Int32(width), width: Int32(height))))
+                        desiredSize: Size(height: Int32(width), width: Int32(height))))
                 imageSource.Release()
-                //                bitmap = ImageBitmap(pixelMap.getOrThrow(), LengthMetricsUnit.PX)
-                //                pixelMap.getOrThrow().release
-                //                pixelMap = None
             }
         } catch (e: Exception) {
-            //console.error('svga', 'transformBase64str2Bitmap err:' + e)
         }
         return bitmap
     }
