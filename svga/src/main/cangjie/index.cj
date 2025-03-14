@@ -52,12 +52,18 @@ public class SvgaPlayer {
             Canvas(this.context)
                 .width(this.canvasValue.width)
                 .height(this.canvasValue.height)
-                //            .transform(this.canvasValue.transformValue)
+                .transform(this.canvasValue.transformValue)
                 .scale(x: this.canvasValue.scaleValue.x, y: this.canvasValue.scaleValue.x,
                     z: this.canvasValue.scaleValue.x, centerX: this.canvasValue.scaleValue.centerX,
                     centerY: this.canvasValue.scaleValue.centerY)
                 .backgroundColor(Color.TRANSPARENT)
                 .onReady {
+                    this
+                        .controller
+                        .getplayer()
+                        .parentSize(
+                            Sizes(width: Int32(vp2px(Length(this.context.width)).getOrThrow().value),
+                                height: Int32(vp2px(Length(this.context.height)).getOrThrow().value)))
                     if (this.onreadyIsLose) {
                         return
                     }
@@ -67,6 +73,7 @@ public class SvgaPlayer {
                         return
                     }
                     if (this.url == "") {
+                        AlertDialog.show(AlertDialogParamWithConfirm("地址错误 请输入完整沙盒路径地址"))
                         return
                     }
                     this.playAnim()
