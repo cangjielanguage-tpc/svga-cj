@@ -3,15 +3,16 @@
  */
 package svga.utils
 
-import ohos.base.*
-import ohos.component.*
-import ohos.state_manage.*
-import ohos.state_macro_manage.*
 import ohos.file_fs.*
-import encoding.base64.*
-import std.random.*
-import std.time.DateTime
-import tpc.BasicServicesKit.zlib.decompressFile
+import ohos.component.AlertDialog
+import ohos.component.AlertDialogParamWithConfirm
+import stdx.encoding.base64
+internal import std.random.*
+internal import std.time.DateTime
+import kit.AbilityKit.*
+import std.fs as stdfs
+import ohos.hilog.Hilog
+import std.io.readToEnd
 
 public class FileManager {
     public static func saveAudio(src: String, fileDir: String): Int32 {
@@ -19,11 +20,10 @@ public class FileManager {
             if (!FileFs.access(fileDir)) {
                 FileFs.mkdir(fileDir)
             }
-            let m: Random = Random()
-            m.seed = 3
+            let m: Random = Random(3)
             DateTime.now().nanosecond
             var filePath = fileDir + '/' + "${DateTime.now().nanosecond} + ${m.nextUInt64()}" + '.mp3'
-            var file = FileFs.open(filePath, mode: READ_WRITE.mode)
+            var file = FileFs.open(filePath, mode: OpenMode.READ_WRITE.mode)
             var buf = fromBase64String(src).getOrThrow()
             FileFs.write(file.fd, buf)
             return file.fd
@@ -38,14 +38,20 @@ public class FileManager {
         try {
             // 创建目录
             FileFs.mkdir(p)
-            var filePath = p + '/' + '.zip'
-            var file = FileFs.open(filePath, mode: (READ_WRITE.mode | CREATE.mode))
-            FileFs.write(file.fd, data)
-            FileFs.close(file.fd)
-            var path = p + '/'
-            FileFs.mkdir(path)
-            //(?BusinessException, ?T) -> Unit  使用tpc的解压
-            decompressFile(filePath, path, {a, b =>})
+            let m: Random = Random(3)
+            var filePath = p + '/' + "${DateTime.now().nanosecond} + ${m.nextUInt64()}" + '.zip'
+            var file1 = FileFs.open(filePath, mode: (READ_WRITE.mode | CREATE.mode))
+            FileFs.close(file1.fd)
+            var file = stdfs.File(filePath,stdfs.OpenMode.ReadWrite)
+            file.write(data)
+            file.close()
+            var file2 = stdfs.File(filePath,stdfs.OpenMode.Read)
+            var res=readToEnd(file2)
+            file2.close()
+            let m1: Random = Random(3)
+            var path = p + '/' + "${DateTime.now().nanosecond} + ${m1.nextUInt64()}"
+            FileFs.mkdir(oath)
+            Zip.deCompressFile(filePath,path)
             return path
         } catch (e: Exception) {
             return None

@@ -11,14 +11,16 @@ import svga.parser.RectPath
 import svga.audio.*
 import std.collection.*
 import std.convert.*
-
+import ohos.advertising.advertising.ValueType
+import std.regex.Regex
 var validMethods = 'MLHVCSQAZmlhvcsqaz'
 
 public class Renderer {
     private var owner: Player
     private var unDrawFrame: ?Float64 = Option<Float64>.None;
     private var dynamicImage: HashMap<String, ImageSource> = HashMap<String, ImageSource>()
-    private var bitmapCache: HashMap<String, PixelMap> = HashMap<String, PixelMap>()
+    public var bitmapCache: HashMap<String, PixelMap> = HashMap<String, PixelMap>()
+    public var avplayerCache: HashMap<String, AVPlayerClass> = HashMap<String, AVPlayerClass>()
     private var soundsQueue: ArrayList<SoundsItem> = ArrayList<SoundsItem>();
     private var lastShape: HashMap<Int64, ShapeEntity> = HashMap<Int64, ShapeEntity>()
     init(owner: Player) {
@@ -71,13 +73,13 @@ public class Renderer {
                     var info = img.getImageInfo()
                     let pixelMap: PixelMap = img.createPixelMap()
                     let bitMapKey = key.replace('.matte', '')
-                    this.bitmapCache.put(bitMapKey, pixelMap)
+                    this.bitmapCache.add(bitMapKey, pixelMap)
                     if (this.dynamicImage.get(bitMapKey).isSome()) {
                         let dynamicImage = this.dynamicImage.get(bitMapKey)
                         this.handleDynamicImage(dynamicImage.getOrThrow(), bitMapKey)
                     }
                 } catch (e: Exception) {
-                    var player = AVPlayerClass()
+//                    var player = AVPlayerClass()
                     //this.avplayerCache.add(key, player)
                     continue
                 }
@@ -134,7 +136,7 @@ public class Renderer {
 
     public func setDynamicImage(imageSource: ?ImageSource, forKey: String) {
         if (let Some(imageSource) <- imageSource) {
-            this.dynamicImage.put(forKey, imageSource)
+            this.dynamicImage.add(forKey, imageSource)
             this.handleDynamicImage(imageSource, forKey)
         }
     }
@@ -158,17 +160,17 @@ public class Renderer {
         this.soundsQueue = ArrayList<SoundsItem>()
         try {
             for (v in this.bitmapCache) {
-                if (v is AVPlayerClass) {
-                    (v as AVPlayerClass).getOrThrow().release()
-                } else {
-                    if (v is Object) {
-                        // v.close()
-                    }
-                }
+//                if (v is AVPlayerClass) {
+//                    (v as AVPlayerClass).getOrThrow().release()
+//                } else {}
+                v.Release()
             }
             this.bitmapCache.clear()
         } catch (error: Exception) {
             //console.error('svga', error)
+        }
+        for ((k,v) in this.dynamicImage) {
+            v.Release()
         }
         this.lastShape.clear()
     }
@@ -218,7 +220,7 @@ public class Renderer {
                     item.player.play()
                     item.player.seek(audio.startTime / 1000)
                     //console.log('audio触发了：播放')
-                    this.soundsQueue.append(item)
+                    this.soundsQueue.add(item)
                 }
             }
             var deleted = false
@@ -234,7 +236,7 @@ public class Renderer {
                 var newsoundsQueue = ArrayList<SoundsItem>()
                 for (it in this.soundsQueue) {
                     if (frame > it.endFrame) {
-                        newsoundsQueue.append(it)
+                        newsoundsQueue.add(it)
                     }
                 }
                 this.soundsQueue = newsoundsQueue
@@ -315,12 +317,12 @@ public class Renderer {
 
         for (shape in sprite.frames[Int64(this.owner.currentFrame())].shapes) {
             if (shape.type_ == ShapeEntity_ShapeType.SHAPE) {
-                this.lastShape.put(index, shape)
+                this.lastShape.add(index, shape)
                 var shapeArgs = shape.shape;
                 this.drawBezier(ctx, BezierPath(shapeArgs.d, shape.transform, shape.styles))
             }
             if (shape.type_ == ShapeEntity_ShapeType.ELLIPSE) {
-                this.lastShape.put(index, shape)
+                this.lastShape.add(index, shape)
                 var ellipseArgs = shape.ellipse;
                 this.drawEllipse(
                     ctx,
@@ -329,7 +331,7 @@ public class Renderer {
                 )
             }
             if (shape.type_ == ShapeEntity_ShapeType.RECT) {
-                this.lastShape.put(index, shape)
+                this.lastShape.add(index, shape)
                 var rectArgs = shape.rect;
                 this.drawRect(
                     ctx,
@@ -359,14 +361,32 @@ public class Renderer {
             return;
         }
         var styles: ShapeEntity_ShapeStyle = obj.styles.getOrThrow();
-
-        //    if (styles && styles.stroke) {
-        ctx.strokeStyle(
-            Color(UInt8(styles.stroke.r), UInt8(styles.stroke.g), UInt8(styles.stroke.b), alpha: styles.stroke.a))
-        //    } else {
-        //      ctx.strokeStyle = "transparent"
-        //    }
-        ctx.lineWidth(Float64(styles.strokeWidth))
+        if(!styles.stroke.isEmpty()) {
+            var r: Float32=0.0
+            var g: Float32=0.0
+            var b: Float32=0.0
+            var a: Float32=0.0
+            if(styles.stroke.r.isNormal()) {
+                r=styles.stroke.r*255.0
+            }
+            if(styles.stroke.r.isNormal()) {
+                g=styles.stroke.g*255.0
+            }
+            if(styles.stroke.r.isNormal()) {
+                b=styles.stroke.b*255.0
+            }
+            if(styles.stroke.r.isNormal()) {
+                a=styles.stroke.a
+            }
+            ctx.strokeStyle(Color(UInt8(r), UInt8(g), UInt8(b), alpha: a))
+        } else {
+            ctx.strokeStyle(Color.TRANSPARENT)
+        }
+        var strokeWidth: Float32 =0.0
+        if(styles.strokeWidth.isNormal()) {
+            strokeWidth = styles.strokeWidth
+        }
+        ctx.lineWidth(Float64(strokeWidth))
 
         match (styles.lineCap) {
             case ShapeEntity_ShapeStyle_LineCap.LineCap_BUTT => ctx.lineCap(LineCapStyle.Butt)
@@ -380,9 +400,32 @@ public class Renderer {
             case ShapeEntity_ShapeStyle_LineJoin.LineJoin_BEVEL => ctx.lineJoin(LineJoinStyle.Bevel)
             case _ => ()
         }
-        ctx.miterLimit(Float64(styles.miterLimit))
-
-        ctx.fillStyle(Color(UInt8(styles.fill.r), UInt8(styles.fill.g), UInt8(styles.fill.b), alpha: styles.fill.a))
+        var miterLimit: Float32 =0.0
+        if(styles.miterLimit.isNormal()) {
+            miterLimit = styles.miterLimit
+        }
+        ctx.miterLimit(Float64(miterLimit))
+        if(!styles.fill.isEmpty()) {
+            var r: Float32=0.0
+            var g: Float32=0.0
+            var b: Float32=0.0
+            var a: Float32=0.0
+            if(styles.fill.r.isNormal()) {
+                r=styles.fill.r*255.0
+            }
+            if(styles.fill.r.isNormal()) {
+                g=styles.fill.g*255.0
+            }
+            if(styles.fill.r.isNormal()) {
+                b=styles.fill.b*255.0
+            }
+            if(styles.fill.r.isNormal()) {
+                a=styles.fill.a
+            }
+            ctx.fillStyle(Color(UInt8(r), UInt8(g), UInt8(b), alpha: a))
+        } else {
+            ctx.fillStyle(Color.TRANSPARENT)
+        }
         //    if (styles && styles.fill) {
         //      ctx.fillStyle =
         //        `rgba(${parseInt(((styles.fill["r"] ?? 0) * 255).toString())}, ${parseInt(((styles.fill["g"] ?? 0) *
@@ -391,13 +434,15 @@ public class Renderer {
         //      ctx.fillStyle = "transparent"
         //    }
         let lineDash: ArrayList<Float64> = ArrayList<Float64>()
-        lineDash.append(Float64(styles.lineDashI))
-
-        lineDash.append(Float64(styles.lineDashII))
-
-        lineDash.append(Float64(styles.lineDashIII))
-
-        //        ctx.setLineDash(lineDash.toArray());
+        if(styles.lineDashI.isNormal()) {
+            lineDash.add(Float64(styles.lineDashI))
+        }
+        if(styles.lineDashII.isNormal()) {
+            lineDash.add(Float64(styles.lineDashII))
+        }
+        if(styles.lineDashIII.isNormal()) {
+            lineDash.append(Float64(styles.lineDashIII))
+        }
         ctx.lineDash(lineDash.toArray());
     }
 
@@ -405,29 +450,52 @@ public class Renderer {
         ctx.save();
         this.resetShapeStyles(ctx, obj);
         if (let Some(transform) <- obj.transform) {
-            ctx.transform(Float64(transform.a), Float64(transform.b), Float64(transform.c), Float64(transform.d),
+            var a1 = Float64(transform.a)
+            if(transform.a==0.0) {
+                a1 = 1.0
+            }
+            var d1 = Float64(transform.d)
+            if(transform.d==0.0) {
+                d1 = 1.0
+            }
+            ctx.transform(a1, Float64(transform.b), Float64(transform.c), d1,
                 Float64(transform.tx), Float64(transform.ty));
         }
         let currentPoint: CurrentPoint = CurrentPoint(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
         ctx.beginPath();
-        var d: String = obj.d.replace("/([a-zA-Z])/g", '|||$1 ').replace("/,/g", ' '); //BUG
+        var d: String = obj.d
+        var tmps = HashSet<String>()
+        if (let Some(v) <- Regex("[a-zA-Z]").matcher(d).findAll()) {
+            for (sc in v){
+                tmps.add(sc.matchString())
+            }
+        }
+        let tmps1 = tmps.toArray()
+        for(i in 0..tmps1.size) {
+            d = d.replace(tmps1[i],"|||${tmps1[i]} ")
+        }
+        d=Regex(",").matcher(d).replaceAll(" ")
+        //replace("/([a-zA-Z])/g", '|||$1 ').replace("/,/g", ' '); //BUG
         var list = d.split('|||')
         for (segment in list) {
             if (segment.size == 0) {
-                return;
+                continue
             }
             var firstLetter = segment[0..1];
-            if (validMethods.indexOf(firstLetter).getOrThrow() >= 0) {
-                var args = segment[1..].trimAscii().split(" ");
-                this.drawBezierElement(ctx, currentPoint, firstLetter, args);
+            if(let Some(v) <- validMethods.indexOf(firstLetter)) {
+                if (v>=0) {
+                    var args = segment[1..].trimAscii().split(" ");
+                    this.drawBezierElement(ctx, currentPoint, firstLetter, args);
+                }
             }
         }
-        if (obj.styles.isSome()) {
+        if (obj.styles.isSome() && !obj.styles.getOrThrow().fill.isEmpty()) {
             ctx.fill();
+        }
+        if (obj.styles.isSome() && !obj.styles.getOrThrow().stroke.isEmpty()) {
             ctx.stroke();
         }
-
         ctx.restore();
     }
 
@@ -528,7 +596,7 @@ public class Renderer {
                 ctx.quadraticCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x, currentPoint.y);
             case 'A' => ()
             case 'a' => ()
-            case 'Z' => ()
+            case 'Z' => ctx.closePath();
             case 'z' => ctx.closePath();
             case _ => ()
         }
@@ -538,8 +606,31 @@ public class Renderer {
         ctx.save();
         this.resetShapeStyles(ctx, obj);
         if (let Some(transform) <- obj.transform) {
-            ctx.transform(Float64(transform.a), Float64(transform.b), Float64(transform.c), Float64(transform.d),
-                Float64(transform.tx), Float64(transform.ty));
+            var a = 1.0
+            var b = 1.0
+            var c = 1.0
+            var d = 1.0
+            var tx = 1.0
+            var ty = 1.0
+            if(transform.a.isNormal()) {
+                a=Float64(transform.a)
+            }
+            if(transform.b.isNormal()) {
+                b=Float64(transform.b)
+            }
+            if(transform.c.isNormal()) {
+                c=Float64(transform.c)
+            }
+            if(transform.d.isNormal()) {
+                d=Float64(transform.d)
+            }
+            if(transform.tx.isNormal()) {
+                tx=Float64(transform.tx)
+            }
+            if(transform.ty.isNormal()) {
+                ty=Float64(transform.ty)
+            }
+            ctx.transform(a, b,c,d,tx,ty)
         }
         let x = obj._x - obj._radiusX;
         let y = obj._y - obj._radiusY;
@@ -559,10 +650,10 @@ public class Renderer {
         ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
         ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
         ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-        if (obj.styles.isSome()) {
+        if (obj.styles.isSome() && !obj.styles.getOrThrow().fill.isEmpty()) {
             ctx.fill();
         }
-        if (obj.styles.isSome()) {
+        if (obj.styles.isSome()&& !obj.styles.getOrThrow().stroke.isEmpty()) {
             ctx.stroke();
         }
         ctx.restore();
@@ -614,7 +705,7 @@ public class Renderer {
             let dynamicImageBitmap: ?PixelMap = this.transformBase64str2Bitmap(imageSource,
                 Float64(bitmapInfo.size.width), Float64(bitmapInfo.size.height))
             if (let Some(dynamicImageBitmap) <- dynamicImageBitmap) {
-                this.bitmapCache.put(forKey, dynamicImageBitmap)
+                this.bitmapCache.add(forKey, dynamicImageBitmap)
             }
         }
     }

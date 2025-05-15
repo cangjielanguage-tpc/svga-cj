@@ -61,7 +61,7 @@ public class ValueAnimator {
                     delay: 0,
                     fill: this.fillRule,
                     direction: AnimatorDirection.Normal,
-                    iterations: Int32(this.loops),
+                    iterations: this.loops,
                     begin: if (let Some(v) <- frame) {
                         v
                     } else {
@@ -70,11 +70,7 @@ public class ValueAnimator {
                     end: this.endValue
                 )
             )
-            //                        this._animator.getOrThrow().setExpectedFrameRateRange(
-            //                            0,
-            //                            120,
-            //                            this.FPS
-            //                        )
+            this._animator.getOrThrow().setExpectedFrameRateRange(ExpectedFrameRateRange(min:0,max:120,expected:Int32(this.FPS)))
         }
         this._animator.getOrThrow().onframe = {
             frame => if (let Some(function) <- this.onUpdate) {
@@ -95,7 +91,7 @@ public class ValueAnimator {
                             delay: 0,
                             fill: this.fillRule,
                             direction: AnimatorDirection.Normal,
-                            iterations: Int32(this.loops),
+                            iterations: this.loops,
                             begin: this.startValue,
                             end: this.endValue
                         )
@@ -124,12 +120,15 @@ public class ValueAnimator {
     }
 
     public func release() {
+        if(let Some(animator)<-this._animator){
+            animator.finish()
+        }
         this._animator = None
         this._status = AnimatorPlayStatus.INACTIVE
     }
 
     public func stop() {
-        this._animator.getOrThrow().cancel()
+        this._animator?.cancel()
         this._animator = None
         this._status = AnimatorPlayStatus.INACTIVE
     }
@@ -137,7 +136,7 @@ public class ValueAnimator {
     public func pause() {
         match (this._status) {
             case AnimatorPlayStatus.PLAY =>
-                this._animator.getOrThrow().pause()
+                this._animator?.pause()
                 this._status = AnimatorPlayStatus.PAUSE
             case _ => ()
         }
@@ -147,7 +146,7 @@ public class ValueAnimator {
         match (this._status) {
             case AnimatorPlayStatus.FINISH => ()
             case _ =>
-                this._animator.getOrThrow().play()
+                this._animator?.play()
                 this._status = AnimatorPlayStatus.PLAY
         }
     }

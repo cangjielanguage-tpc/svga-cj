@@ -19,7 +19,7 @@ public class RectPath <: BezierPath {
         height: Float64,
         cornerRadius: Float64,
         transform: ?Transform,
-        styles: ShapeEntity_ShapeStyle
+        styles: ?ShapeEntity_ShapeStyle
     ) {
         super('', transform, styles);
         this._x = x

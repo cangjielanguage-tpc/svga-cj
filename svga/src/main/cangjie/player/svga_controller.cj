@@ -3,7 +3,8 @@
  */
 package svga.player
 
-//import ohos.matrix4
+import ohos.matrix4
+import kit.UIkit.ScaleOptions
 import ohos.animator.*
 import svga.parser.*
 import svga.proto.*
@@ -12,11 +13,11 @@ import ohos.base.Length
 import ohos.prompt_action.PromptAction
 
 public struct SvgaPlayerProps {
-    var pageUpdateMode: PageUpdateMode
-    var loops: Int32
-    var autoRelease: Bool // true 页面销毁时自动执行清理 不传默认为true
-    var clearsAfterStop: Bool
-    var fillMode: AnimatorFill
+    public var pageUpdateMode: PageUpdateMode
+    public var loops: Int32
+    public var autoRelease: Bool // true 页面销毁时自动执行清理 不传默认为true
+    public var clearsAfterStop: Bool
+    public var fillMode: AnimatorFill
 
     public init(pageUpdateMode!: PageUpdateMode = PageUpdateMode.pause, loops!: Int32 = -1, autoRelease!: Bool = true,
         clearsAfterStop!: Bool = true, fillMode!: AnimatorFill = AnimatorFill.Forwards) {
@@ -32,7 +33,7 @@ public struct SvgaPlayerProps {
 public class CanvasSizeAndTrans {
     public var width: Length = 100.percent
     public var height: Length = 100.percent
-    //var transformValue: matrix4.Matrix4Transit = Mtrix4.identity()
+    public var transformValue: matrix4.Matrix4Transit = matrix4.Matrix4Transit(0)
     public var scaleValue: ScaleOptions = ScaleOptions(x: 1.0, y: 1.0)
 }
 
@@ -101,45 +102,32 @@ public class SvgaController {
         return this._pageUpdateMode;
     }
 
-    public func load(source: String, success!: ?SuccessFn = None, failure!: ?FailureFn = None, autoPlay!: Bool = true) {
-        var _success = success
-        var _failure = failure
+    private var _loading: Bool = false
+    public func load(source: String, autoPlay!: Bool = true) {
         if (this._player.isNone() || this._parser.isNone()) {
             PromptAction.showToast(message: '未初始化完成，请稍后再试')
             return;
         }
-        if (autoPlay) {
-            if (_success.isNone()) {
-                _success = {
-                    videoItem => if (let Some(v) <- this._player) {
-                        v.setVideoItem(videoItem)
-                        v.startAnimation(false)
-                    }
-                }
-            }
-        } else {
-            if (_success.isNone()) {
-                _success = {
-                    videoItem => this._player.getOrThrow().setVideoItem(videoItem)
-                }
+
+        if (this._loading) {
+            return
+        }
+        this._loading = true
+        let res = this._parser.getOrThrow().load(source)
+        let (let Some(v) <- res) {
+            this._loading = false
+            this._player?.setVideoItem(v)
+            if(autoPlay) {
+                this._player?.startAnimation(false)
             }
         }
-        if (_failure.isNone()) {
-            _failure = {
-                BusinessError =>
-                //                                AlertDialog.show({
-                //                                  message: JSON.stringify(err)
-                //                                })
-            }
-        }
-        this._parser.getOrThrow().load(source, _success.getOrThrow(), _failure.getOrThrow())
     }
 
     func setVideoItem(videoItem: MovieEntity) {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
-        this._player?.setVideoItem(videoItem)
+        this._player.getOrThrow().setVideoItem(videoItem)
     }
 
     public func startAnimation(reverse!: Bool = false) {
@@ -164,56 +152,56 @@ public class SvgaController {
     }
 
     public func stopAnimation(clears: Bool) {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.stopAnimation(clears)
     }
 
     public func setContentMode(mode: PLAYER_CONTENT_MODE) {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setContentMode(mode)
     }
 
     public func clear() {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone() ) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.clear()
     }
 
     public func stepToFrame(frame: Float64, andPlay!: Bool = true) {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.stepToFrame(frame, andPlay: andPlay)
     }
 
     public func stepToPercentage(percentage: Int64, andPlay: Bool) {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.stepToPercentage(percentage, andPlay)
     }
 
     public func clearDynamicObjects() {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.clearDynamicObjects()
     }
 
     public func setLoops(loops: Int32) {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setLoops(loops)
     }
 
     public func setCurRate(curRate: Float64) {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setCurRate(curRate)
@@ -221,9 +209,6 @@ public class SvgaController {
 
     //回收资源
     public func release() {
-        if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
-            throw Exception('请在资源加载后调用')
-        }
-        this._player?.release()
+
     }
 }

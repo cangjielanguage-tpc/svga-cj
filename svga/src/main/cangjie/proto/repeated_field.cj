@@ -38,43 +38,43 @@ public class RepeatedField<T> <: Collection<T> {
     }
 
     public func set(index: Int64, element: T): Unit {
-        data.set(index, element)
+        data.add(element, at:index)
         parent?.markDirty()
     }
 
     public func append(element: T): Unit {
-        data.append(element)
+        data.add(element)
         parent?.markDirty()
     }
 
     public func appendAll(elements: Collection<T>): Unit {
-        data.appendAll(elements)
+        data.add(all:elements)
         parent?.markDirty()
     }
 
     public func insert(index: Int64, element: T): Unit {
-        data.insert(index, element)
+        data.add(element, at:index)
         parent?.markDirty()
     }
 
     public func insertAll(index: Int64, elements: Collection<T>): Unit {
-        data.insertAll(index, elements)
+        data.add(all:elements, at:index)
         parent?.markDirty()
     }
 
     public func prepend(element: T): Unit {
-        data.prepend(element)
+        data.add(element,at:0)
         parent?.markDirty()
     }
 
     public func prependAll(elements: Collection<T>): Unit {
-        data.prependAll(elements)
+        data.add(all:elements,at:0)
         parent?.markDirty()
     }
 
     public func remove(index: Int64): T {
         parent?.markDirty()
-        data.remove(index)
+        data.remove(at:index)
     }
 
     public func remove(range: Range<Int64>): Unit {
@@ -119,7 +119,7 @@ public class RepeatedField<T> <: Collection<T> {
     public func sortBy(comparator: (T, T) -> Ordering, stable!: Bool = false): Unit { data.sortBy(stable: stable, comparator: comparator) }
     public func reserve(additional: Int64): Unit { data.reserve(additional) }
     public func toArray(): Array<T> { data.toArray() }
-    public func capacity(): Int64 { data.capacity() }
+    public func capacity(): Int64 { data.capacity }
     public func iterator(): Iterator<T> { data.iterator() }
     public prop size: Int64 { get() { data.size } }
     public func isEmpty(): Bool { data.isEmpty() }
@@ -127,7 +127,7 @@ public class RepeatedField<T> <: Collection<T> {
     public operator func [](index: Int64): T { data[index] }
     public operator func [](index: Int64, value!: T): Unit { data[index] = value; parent?.markDirty() }
 
-    func appendDirty(element: T): Unit { data.append(element) }
+    func appendDirty(element: T): Unit { data.add(element) }
     func setParent(parent: MessageLite): Unit { this.parent = parent }
     func getRawData() { data }
 }
@@ -234,7 +234,7 @@ public class RepeatedMessage<T> <: Collection<T> & ToString & Hashable where T <
 
     public func set(index: Int64, element: T): Unit {
         unlink(this[index])
-        data.set(index, element)
+        data.add(element, at:index)
         parent?.markDirty()
         link(element)
     }
@@ -246,37 +246,37 @@ public class RepeatedMessage<T> <: Collection<T> & ToString & Hashable where T <
     }
 
     public func append(element: T): Unit {
-        data.append(element)
+        data.add(element)
         parent?.markDirty()
         link(element)
     }
 
     public func appendAll(elements: Collection<T>): Unit {
-        data.appendAll(elements)
+        data.add(all:elements)
         parent?.markDirty()
         link(elements)
     }
 
     public func insert(index: Int64, element: T): Unit {
-        data.insert(index, element)
+        data.add(element, at:index)
         parent?.markDirty()
         link(element)
     }
 
     public func insertAll(index: Int64, elements: Collection<T>): Unit {
-        data.insertAll(index, elements)
+        data.add(all:elements, at:index)
         parent?.markDirty()
         link(elements)
     }
 
     public func prepend(element: T): Unit {
-        data.prepend(element)
+        data.add(element,at:0)
         parent?.markDirty()
         link(element)
     }
 
     public func prependAll(elements: Collection<T>): Unit {
-        data.prependAll(elements)
+        data.add(all:elements.at:0)
         parent?.markDirty()
         link(elements)
     }
@@ -284,7 +284,7 @@ public class RepeatedMessage<T> <: Collection<T> & ToString & Hashable where T <
     public func remove(index: Int64): T {
         unlink(data[index])
         parent?.markDirty()
-        data.remove(index)
+        data.remove(at:index)
     }
 
     public func remove(range: Range<Int64>): Unit {
@@ -311,7 +311,7 @@ public class RepeatedMessage<T> <: Collection<T> & ToString & Hashable where T <
         data.clear()
         for (m in rf.data) {
             let c = m.clone()
-            data.append(c)
+            data.add(c)
             link(c)
         }
         parent?.markDirty()
@@ -367,7 +367,7 @@ public class RepeatedMessage<T> <: Collection<T> & ToString & Hashable where T <
     public func sortBy(comparator: (T, T) -> Ordering, stable!: Bool = false): Unit { data.sortBy(stable: stable, comparator: comparator) }
     public func reserve(additional: Int64): Unit { data.reserve(additional) }
     public func toArray(): Array<T> { data.toArray() }
-    public func capacity(): Int64 { data.capacity() }
+    public func capacity(): Int64 { data.capacity }
     public func iterator(): Iterator<T> { data.iterator() }
     public prop size: Int64 { get() { data.size } }
     public func isEmpty(): Bool { data.isEmpty() }
@@ -379,7 +379,7 @@ public class RepeatedMessage<T> <: Collection<T> & ToString & Hashable where T <
     public operator func ==(that: RepeatedMessage<T>): Bool { data == that.data }
     public operator func !=(that: RepeatedMessage<T>): Bool { data != that.data }
 
-    func appendDirty(element: T): Unit { data.append(element); link(element) }
+    func appendDirty(element: T): Unit { data.add(element); link(element) }
     func setParent(parent: MessageLite): Unit { this.parent = parent }
 }
 

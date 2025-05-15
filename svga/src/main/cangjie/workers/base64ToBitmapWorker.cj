@@ -3,8 +3,13 @@
  */
 package svga.workers
 
+//import tpc.ImageKit.image.*
 import ohos.image.*
-import encoding.base64.*
+import ohos.resource_manager.AppResource
+import ohos.ability.*
+import ohos.base.BusinessException
+import stdx.encoding.base64.*
+//import encoding.base64.*
 
 func workerPort(data: MessageEvents) {
     var src: String = data.src
@@ -19,9 +24,7 @@ func workerPort(data: MessageEvents) {
             var img = createImageSource(buf)
             var info = img.getImageInfo()
             var pixelMap: ?PixelMap = None
-            pixelMap = img.createPixelMap(
-                options: DecodingOptions(editable: false,
-                    desiredSize: Size(height: info.size.width, width: info.size.height)))
+            pixelMap = img.createPixelMap(options: DecodingOptions(editable: false,desiredSize: Size(width: info.size.width, height: info.size.height)))
             img.Release()
             pixelMap?.Release()
             pixelMap = None

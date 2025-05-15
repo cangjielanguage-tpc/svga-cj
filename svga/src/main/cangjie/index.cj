@@ -14,9 +14,7 @@ import ohos.ability.AbilityContext
 
 @Component
 public class SvgaPlayer {
-    @State
-    @Watch[updateSource]
-    var url: String = ""
+    @State @Watch[updateSource] var url: String = ""
     @Prop
     var abilitycontext: AbilityContext
     var controller: SvgaController = SvgaController()

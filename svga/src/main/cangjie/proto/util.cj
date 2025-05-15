@@ -4,7 +4,7 @@
 
 package svga.proto
 
-import encoding.base64.*
+import stdx.encoding.base64.*
 
 struct StructPrinter <: ToString {
     private let stb = StringBuilder("{")

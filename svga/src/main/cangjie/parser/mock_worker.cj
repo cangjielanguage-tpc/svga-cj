@@ -7,7 +7,10 @@ import svga.proto.*
 import svga.utils.*
 import ohos.resource_manager.*
 import std.collection.HashMap
-import encoding.base64.*
+//import encoding.base64.*
+import stdx.encoding.base64.*
+import std.io.ByteBuffer
+import ohos.hilog.Hilog
 import ohos.prompt_action.PromptAction
 import ohos.component.AlertDialog
 import ohos.component.AlertDialogParamWithConfirm
@@ -17,22 +20,41 @@ public type CbFn = (MockWorkerResponseData) -> Unit
 public type DecodeCbFn = (MockWorkerDecodeResponseData) -> Unit
 
 public class MockWorker {
-    public static func load(url: String, cb: CbFn, fn: FailureFn) {
+//    public static func load(url: String, cb: CbFn, fn: FailureFn) {
+//        try {
+//            let stageContext = getStageContext(globalcontext.getOrThrow())
+//            let rm = ResourceManager.getResourceManager(stageContext)
+//            let buffer: Array<UInt8> = rm.getRawFileContent(url)
+//            MockWorker.load_viaProto(buffer, cb)
+//        } catch (e: Exception) {
+//            AlertDialog.show(AlertDialogParamWithConfirm("地址错误请输入完整沙盒路径"))
+//            fn(e)
+//        }
+//    }
+//
+//    public static func load_viaProto(arraybuffer: Array<Byte>, cb: CbFn) {
+//        var res: MovieEntity = Inflate(arraybuffer).get()
+//        cb(MockWorkerResponseData(res, HashMap<String, String>()))
+//    }
+
+        public static func load(url: String):?MovieEntity {
         try {
             let stageContext = getStageContext(globalcontext.getOrThrow())
             let rm = ResourceManager.getResourceManager(stageContext)
             let buffer: Array<UInt8> = rm.getRawFileContent(url)
-            MockWorker.load_viaProto(buffer, cb)
+           return  MockWorker.load_viaProto(buffer)
         } catch (e: Exception) {
             AlertDialog.show(AlertDialogParamWithConfirm("地址错误请输入完整沙盒路径"))
-            fn(e)
+            Hilog.error(0,"ERROR","read file error ${e.toString()}")
+            None
         }
     }
 
-    public static func load_viaProto(arraybuffer: Array<Byte>, cb: CbFn) {
+    public static func load_viaProto(arraybuffer: Array<Byte>) {
         var res: MovieEntity = Inflate(arraybuffer).get()
-        cb(MockWorkerResponseData(res, HashMap<String, String>()))
+        return res
     }
+
 
     public static func decode(key: String, src: String, types: String, dir: String, cb: DecodeCbFn, failure: ?FailureFn): Unit {
         try {

@@ -17,7 +17,7 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
 ## 特性
 
 - 支持加载svga格式的动画
-- 支持动画播放，暂停，快进等功能
+- 支持动画播放，暂停，清理等功能
 
 ### 源码目录
 
@@ -93,7 +93,7 @@ class Index {
     var controller: SvgaController = SvgaController()
     public func build() {
         Column {
-              SvgaPlayer(url: "angel.svga",abilitycontext: getContext(),controller: controller)
+              SvgaPlayer(url: "angel.svga",abilitycontext: getContext(),controller: Option<SvgaController>.Some(controller))
         }
     }
 }

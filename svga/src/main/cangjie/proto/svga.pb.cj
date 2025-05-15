@@ -1619,7 +1619,7 @@ public class FrameEntity <: MessageLite & TypedMessage<FrameEntity> {
     private var p_layout: PbMessage<Layout>
     private var p_transform: PbMessage<Transform>
     private var p_clipPath: String
-    public let shapes: RepeatedMessage<ShapeEntity>
+    public var shapes: RepeatedMessage<ShapeEntity>
 
     public init(
         alpha!: Float32 = Float32(.0),
@@ -1822,7 +1822,7 @@ public class MovieEntity <: MessageLite & TypedMessage<MovieEntity> {
     public func mergeFrom(src: MovieEntity): Unit {
         if (!src.p_version.isEmpty()) { p_version = src.p_version }
         if (let Some(_v) <- src.p_params.data) { p_params.getOrDefault(this).mergeFrom(_v) }
-        if (!src.images.isEmpty()) { images.putAll(src.images) }
+        if (!src.images.isEmpty()) { images.add(all:src.images) }
         if (!src.sprites.isEmpty()) { sprites.appendAll(src.sprites) }
         if (!src.audios.isEmpty()) { audios.appendAll(src.audios) }
         if (!src.unknownFields.isEmpty()) { unknownFields.appendAll(src.unknownFields) }

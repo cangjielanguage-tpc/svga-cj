@@ -3,35 +3,52 @@
  */
 package svga.utils
 
-import ohos.component.*
-import ohos.image.*
 import svga.proto.MovieEntity
-import svga.global.globalcontext
-import zlib4cj.*
-import std.io.*
+import std.io.ByteBuffer
+import std.io.readToEnd
 import std.collection.ArrayList
 import std.collection.HashMap
-import std.convert.*
+import ohos.hilog.*
+import zlib4cj.*
+import svga.global.*
 import std.regex.*
-
+import ohos.image.*
+import ohos.component.*
+import std.convert.*
+import svga.proto.RepeatedMessage
+import svga.proto.ShapeEntity_ShapeType
+import svga.proto.ShapeEntity
 public func Inflate(src: Array<Byte>): Future<MovieEntity> {
     let fut: Future<MovieEntity> = spawn {
         =>
-        var ubuf = src.slice(0, 4)
+        var ubuf: Array<Byte> = Array<Byte>()
+        try {
+            ubuf = src.slice(0, 4)
+        } catch (e: Exception) {
+        }
         if (ubuf.size == 4 && ubuf[0] == 80 && ubuf[1] == 75 && ubuf[2] == 3 && ubuf[3] == 4) {
             try {
                 var result = InflateV1(src)
-                let res = MovieEntity()
-                res.unpack(src)
-                return res
             } catch (e: Exception) {
                 AlertDialog.show(AlertDialogParamWithConfirm('1.x版本解析失败' + e.toString()))
-                return MovieEntity()
             }
+            let res = MovieEntity()
+            res.unpack(src.toArray())
+            return res
         } else {
             let result: ArrayList<Byte> = Zlib.uncompress(src, wrap: ZLIB)
-            let res = MovieEntity()
+            var res = MovieEntity()
             res.unpack(result.toArray())
+            var lastShapes = RepeatedMessage<ShapeEntity>()
+            for (sprite in res.sprites) {
+                for(frame in sprite.frames) {
+                    if(frame.shapes.size>0 && frame.shapes[0].type_ == ShapeEntity_ShapeType.KEEP) {
+                        frame.shapes=lastShapes
+                    } else {
+                    	lastShapes = frame.shapes
+                    }
+                }
+            }
             return res
         }
     }
@@ -39,7 +56,8 @@ public func Inflate(src: Array<Byte>): Future<MovieEntity> {
 }
 
 func InflateV1(src: Array<Byte>): Unit {
-    var filePath = globalcontext.getOrThrow().filesDir + '/'
+    let m:Random=Random(3)
+    var filePath = globalcontext.getOrThrow().cacheDir + '/'+ "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
     let paths = FileManager.saveAndUnzipFile(src, filePath)
     if (let Some(path) <- paths) {
         let files = FileManager.getFiles(path)
@@ -85,24 +103,24 @@ func InflateV1(src: Array<Byte>): Unit {
             //查找并提取 width、height、FPS 和 frames 的值
             var width: Int64 = 0
             try {
-                var scc = Regex(#""width":(\d+)"#).matcher(str).find().getOrThrow().matchStr()
+                var scc = Regex(#""width":(\d+)"#).matcher(str).find().getOrThrow().matchString()
                 width = Int64.parse(scc[#""width":"#.size..scc.size])
             } catch (e: Exception) {}
             var height: Int64 = 0
             try {
-                var scc = Regex(#""height":(\d+)"#).matcher(str).find().getOrThrow().matchStr()
+                var scc = Regex(#""height":(\d+)"#).matcher(str).find().getOrThrow().matchString()
                 height = Int64.parse(scc[#""height":"#.size..scc.size])
             } catch (e: Exception) {
             }
             var fps: Int64 = 0
             try {
-                var scc = Regex(#""FPS":(\d+)"#).matcher(str).find().getOrThrow().matchStr()
+                var scc = Regex(#""FPS":(\d+)"#).matcher(str).find().getOrThrow().matchString()
                 fps = Int64.parse(scc[#""FPS":"#.size..scc.size])
             } catch (e: Exception) {
             }
             var frames: Int64 = 0
             try {
-                var scc = Regex(#""frames":(\d+)"#).matcher(str).find().getOrThrow().matchStr()
+                var scc = Regex(#""frames":(\d+)"#).matcher(str).find().getOrThrow().matchString()
                 frames = Int64.parse(scc[#""frames":"#.size..scc.size])
             } catch (e: Exception) {
             }
