@@ -72,16 +72,16 @@ public class Renderer {
                     var img = createImageSource(src)
                     var info = img.getImageInfo()
                     let pixelMap: PixelMap = img.createPixelMap()
-                    let bitMapKey = key.replace('.matte', '')
-                    this.bitmapCache.add(bitMapKey, pixelMap)
-                    if (this.dynamicImage.get(bitMapKey).isSome()) {
-                        let dynamicImage = this.dynamicImage.get(bitMapKey)
-                        this.handleDynamicImage(dynamicImage.getOrThrow(), bitMapKey)
+                    let bitmapKey = key.replace('.matte', '')
+                    this.bitmapCache.add(bitmapKey, pixelMap)
+                    if (this.dynamicImage.get(bitmapKey).isSome()) {
+                        let dynamicImage = this.dynamicImage.get(bitmapKey)
+                        this.handleDynamicImage(dynamicImage.getOrThrow(), bitmapKey)
                     }
                 } catch (e: Exception) {
-//                    var player = AVPlayerClass()
-                    //this.avplayerCache.add(key, player)
-                    continue
+                    // var player = AVPlayerClass()
+                    // this.avplayerCache.add(key, player)
+                    // continue
                 }
             }
         }
@@ -153,7 +153,6 @@ public class Renderer {
     }
 
     public func release() {
-        //console.log('执行了清理2')
         for (it in this.soundsQueue) {
             it.player.release()
         }
@@ -165,10 +164,10 @@ public class Renderer {
             this.bitmapCache.clear()
         } catch (error: Exception) {
         }
+        this.lastShape.clear()
         for ((k,v) in this.dynamicImage) {
             v.Release()
         }
-        this.lastShape.clear()
     }
 
     public func clearAudios() {
@@ -214,7 +213,6 @@ public class Renderer {
                     )
                     item.player.play()
                     item.player.seek(audio.startTime / 1000)
-                    //console.log('audio触发了：播放')
                     this.soundsQueue.add(item)
                 }
             }
@@ -224,7 +222,6 @@ public class Renderer {
                 if (frame >= it.endFrame) {
                     deleted = true
                     it.player.stop()
-                    //console.log('audio触发了：回收333')
                 }
             }
             if (deleted) {
@@ -312,12 +309,10 @@ public class Renderer {
 
         for (shape in sprite.frames[Int64(this.owner.currentFrame())].shapes) {
             if (shape.type_ == ShapeEntity_ShapeType.SHAPE) {
-                this.lastShape.add(index, shape)
                 var shapeArgs = shape.shape;
                 this.drawBezier(ctx, BezierPath(shapeArgs.d, shape.transform, shape.styles))
             }
             if (shape.type_ == ShapeEntity_ShapeType.ELLIPSE) {
-                this.lastShape.add(index, shape)
                 var ellipseArgs = shape.ellipse;
                 this.drawEllipse(
                     ctx,
@@ -326,7 +321,6 @@ public class Renderer {
                 )
             }
             if (shape.type_ == ShapeEntity_ShapeType.RECT) {
-                this.lastShape.add(index, shape)
                 var rectArgs = shape.rect;
                 this.drawRect(
                     ctx,
@@ -353,43 +347,46 @@ public class Renderer {
 
     private func resetShapeStyles(ctx: CanvasRenderingContext2D, obj: BezierPath) {
         if (obj.styles.isNone()) {
-            return;
+            return
         }
-        var styles: ShapeEntity_ShapeStyle = obj.styles.getOrThrow();
-        if(!styles.stroke.isEmpty()) {
+        let styles:?ShapeEntity_ShapeStyle = obj.styles
+        if(styles.isNone()){
+            return
+        }
+        if(!styles.getOrThrow().stroke.isEmpty()) {
             var r: Float32=0.0
             var g: Float32=0.0
             var b: Float32=0.0
             var a: Float32=0.0
-            if(styles.stroke.r.isNormal()) {
-                r=styles.stroke.r*255.0
+            if(styles.getOrThrow().stroke.r.isNormal()) {
+                r=styles.getOrThrow().stroke.r*255.0
             }
-            if(styles.stroke.r.isNormal()) {
-                g=styles.stroke.g*255.0
+            if(styles.getOrThrow().stroke.g.isNormal()) {
+                g=styles.getOrThrow().stroke.g*255.0
             }
-            if(styles.stroke.r.isNormal()) {
-                b=styles.stroke.b*255.0
+            if(styles.getOrThrow().stroke.b.isNormal()) {
+                b=styles.getOrThrow().stroke.b*255.0
             }
-            if(styles.stroke.r.isNormal()) {
-                a=styles.stroke.a
+            if(styles.getOrThrow().stroke.a.isNormal()) {
+                a=styles.getOrThrow().stroke.a
             }
             ctx.strokeStyle(Color(UInt8(r), UInt8(g), UInt8(b), alpha: a))
         } else {
             ctx.strokeStyle(Color.TRANSPARENT)
         }
         var strokeWidth: Float32 =0.0
-        if(styles.strokeWidth.isNormal()) {
-            strokeWidth = styles.strokeWidth
+        if(styles.getOrThrow().strokeWidth.isNormal()) {
+            strokeWidth = styles.getOrThrow().strokeWidth
         }
         ctx.lineWidth(Float64(strokeWidth))
 
-        match (styles.lineCap) {
+        match (styles.getOrThrow().lineCap) {
             case ShapeEntity_ShapeStyle_LineCap.LineCap_BUTT => ctx.lineCap(LineCapStyle.Butt)
             case ShapeEntity_ShapeStyle_LineCap.LineCap_ROUND => ctx.lineCap(LineCapStyle.Round)
             case ShapeEntity_ShapeStyle_LineCap.LineCap_SQUARE => ctx.lineCap(LineCapStyle.Square)
             case _ => ()
         }
-        match (styles.lineJoin) {
+        match (styles.getOrThrow().lineJoin) {
             case ShapeEntity_ShapeStyle_LineJoin.LineJoin_MITER => ctx.lineJoin(LineJoinStyle.Miter)
             case ShapeEntity_ShapeStyle_LineJoin.LineJoin_ROUND => ctx.lineJoin(LineJoinStyle.Round)
             case ShapeEntity_ShapeStyle_LineJoin.LineJoin_BEVEL => ctx.lineJoin(LineJoinStyle.Bevel)

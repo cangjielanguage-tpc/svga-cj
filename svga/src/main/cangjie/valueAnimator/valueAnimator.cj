@@ -102,7 +102,6 @@ public class ValueAnimator {
         this._animator.getOrThrow().onfinish = {
             =>
             this._status = AnimatorPlayStatus.FINISH
-            //console.log("动画状态11:" + this._status)
             this.onEnd()
         }
 

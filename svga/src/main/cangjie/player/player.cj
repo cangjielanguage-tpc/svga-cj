@@ -461,7 +461,6 @@ public class Player {
         try {
             this._renderer?.setDynamicImage(urlOrResource, forKey)
         } catch (e: Exception) {
-            //            console.error('svga', 'setImage err:' + e)
         }
         this._renderer?.setDynamicImage(urlOrResource, forKey)
         if (let Some(v) <- transform) {
@@ -534,7 +533,6 @@ public class Player {
         try {
             imageResource = createImageSource(pixelBuffer)
         } catch (e: Exception) {
-            //      console.error('svga', 'parseResourceStr err:' + e)
         }
         return imageResource
     }

@@ -36,7 +36,7 @@ public func Inflate(src: Array<Byte>): Future<MovieEntity> {
             res.unpack(src.toArray())
             return res
         } else {
-            let result: ArrayList<Byte> = Zlib.uncompress(src, wrap: ZLIB)
+            let result: ArrayList<UInt8> = Zlib.uncompress(src, wrap: ZLIB)
             var res = MovieEntity()
             res.unpack(result.toArray())
             var lastShapes = RepeatedMessage<ShapeEntity>()
@@ -57,11 +57,10 @@ public func Inflate(src: Array<Byte>): Future<MovieEntity> {
 
 func InflateV1(src: Array<Byte>): Unit {
     let m:Random=Random(3)
-    var filePath = globalcontext.getOrThrow().cacheDir + '/'+ "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
+    var filePath = globalcontext.getOrThrow().cacheDir + '/'+ "${DateTime.now().nanosecond} "+" ${m.nextUInt64()}"
     let paths = FileManager.saveAndUnzipFile(src, filePath)
     if (let Some(path) <- paths) {
         let files = FileManager.getFiles(path)
-        //        console.log("解压结果==" + files?.toString())
         var version: String = "1.0"
         if (let Some(v) <- files) {
             if (v.contains("movie.binary")) {
@@ -145,13 +144,9 @@ func InflateV1(src: Array<Byte>): Unit {
 
             // 删除 "images" 字段，获取键值对
             imagesString = imagesString.replace('"images":', '')
-
             // 输出提取的 images 内容
-            //          console.log(imagesString);
-
             // 如果需要将其转换为对象，可以再解析一次
-            //          imageObj = JSON.parse(imagesString) as Record<string, string>;
-
+            //   imageObj = JSON.parse(imagesString) as Record<string, string>;
         }
         var imgMap: HashMap<String, PixelMap> = HashMap<String, PixelMap>()
 
