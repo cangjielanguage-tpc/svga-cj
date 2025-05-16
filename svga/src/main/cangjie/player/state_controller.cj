@@ -57,8 +57,8 @@ public class StateController {
 //    }
 //
 //    private func ListenPageStateChange() {
-//        on.(ObserverEventType.OBSERVER_NAV_DESTINATIN_UPDATE,EventCallback1(this))
-//        on.(ObserverEventType.OBSERVER_ROUTER_PAGE_UPDATE,EventCallback1(this))
+//        on.(ObserverType.OBSERVER_NAV_DESTINATION_UPDATE,EventCallback1(this))
+//        on.(ObserverType.OBSERVER_ROUTER_PAGE_UPDATE,EventCallback1(this))
 //    }
 
     func pageUpdateCallback(flag: Bool) {// true 为页面重写显示

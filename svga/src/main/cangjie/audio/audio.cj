@@ -64,7 +64,7 @@ class AVDataCallback <: Callback3ArgumentWithReturn<Array<UInt8>, UInt32, Int64,
     public init(sc: AVPlayerClass) {
         this.src = sc
     }
-    public open func invoke(buffer: Array<UInt8>, lenght: UInt32, poss: Int64): Int32 {
+    public open func invoke(buffer: Array<UInt8>, length: UInt32, poss: Int64): Int32 {
         var pos = poss
         if (pos == 0) {
             pos = 0

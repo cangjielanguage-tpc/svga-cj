@@ -40,7 +40,7 @@ public class SvgaPlayer {
         this.controller.getplayer().parentSize(Sizes(width: Int32(this.context.width().value),height: Int32(this.context.height().value)))
     }
 
-    public func aboutToDisappear:Unit{
+    public func aboutToDisappear():Unit{
         this.controller.release()
     }
 

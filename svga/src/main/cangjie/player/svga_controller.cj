@@ -208,6 +208,6 @@ public class SvgaController {
 
     //回收资源
     public func release() {
-        this._player.release()
+        this._player?.release()
     }
 }

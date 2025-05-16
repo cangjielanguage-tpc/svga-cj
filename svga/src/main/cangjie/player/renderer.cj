@@ -13,6 +13,7 @@ import std.collection.*
 import std.convert.*
 import ohos.advertising.advertising.ValueType
 import std.regex.Regex
+
 var validMethods = 'MLHVCSQAZmlhvcsqaz'
 
 public class Renderer {
@@ -158,14 +159,14 @@ public class Renderer {
         }
         this.soundsQueue = ArrayList<SoundsItem>()
         try {
-            for ((k,v) in this.bitmapCache) {
+            for ((k, v) in this.bitmapCache) {
                 v.Release()
             }
             this.bitmapCache.clear()
         } catch (error: Exception) {
         }
         this.lastShape.clear()
-        for ((k,v) in this.dynamicImage) {
+        for ((k, v) in this.dynamicImage) {
             v.Release()
         }
     }
@@ -349,33 +350,33 @@ public class Renderer {
         if (obj.styles.isNone()) {
             return
         }
-        let styles:?ShapeEntity_ShapeStyle = obj.styles
-        if(styles.isNone()){
+        let styles: ?ShapeEntity_ShapeStyle = obj.styles
+        if (styles.isNone()) {
             return
         }
-        if(!styles.getOrThrow().stroke.isEmpty()) {
-            var r: Float32=0.0
-            var g: Float32=0.0
-            var b: Float32=0.0
-            var a: Float32=0.0
-            if(styles.getOrThrow().stroke.r.isNormal()) {
-                r=styles.getOrThrow().stroke.r*255.0
+        if (!styles.getOrThrow().stroke.isEmpty()) {
+            var r: Float32 = 0.0
+            var g: Float32 = 0.0
+            var b: Float32 = 0.0
+            var a: Float32 = 0.0
+            if (styles.getOrThrow().stroke.r.isNormal()) {
+                r = styles.getOrThrow().stroke.r * 255.0
             }
-            if(styles.getOrThrow().stroke.g.isNormal()) {
-                g=styles.getOrThrow().stroke.g*255.0
+            if (styles.getOrThrow().stroke.g.isNormal()) {
+                g = styles.getOrThrow().stroke.g * 255.0
             }
-            if(styles.getOrThrow().stroke.b.isNormal()) {
-                b=styles.getOrThrow().stroke.b*255.0
+            if (styles.getOrThrow().stroke.b.isNormal()) {
+                b = styles.getOrThrow().stroke.b * 255.0
             }
-            if(styles.getOrThrow().stroke.a.isNormal()) {
-                a=styles.getOrThrow().stroke.a
+            if (styles.getOrThrow().stroke.a.isNormal()) {
+                a = styles.getOrThrow().stroke.a
             }
             ctx.strokeStyle(Color(UInt8(r), UInt8(g), UInt8(b), alpha: a))
         } else {
             ctx.strokeStyle(Color.TRANSPARENT)
         }
-        var strokeWidth: Float32 =0.0
-        if(styles.getOrThrow().strokeWidth.isNormal()) {
+        var strokeWidth: Float32 = 0.0
+        if (styles.getOrThrow().strokeWidth.isNormal()) {
             strokeWidth = styles.getOrThrow().strokeWidth
         }
         ctx.lineWidth(Float64(strokeWidth))
@@ -392,48 +393,41 @@ public class Renderer {
             case ShapeEntity_ShapeStyle_LineJoin.LineJoin_BEVEL => ctx.lineJoin(LineJoinStyle.Bevel)
             case _ => ()
         }
-        var miterLimit: Float32 =0.0
-        if(styles.miterLimit.isNormal()) {
-            miterLimit = styles.miterLimit
+        var miterLimit: Float32 = 0.0
+        if (styles.getOrThrow().miterLimit.isNormal()) {
+            miterLimit = styles.getOrThrow().miterLimit
         }
         ctx.miterLimit(Float64(miterLimit))
-        if(!styles.fill.isEmpty()) {
-            var r: Float32=0.0
-            var g: Float32=0.0
-            var b: Float32=0.0
-            var a: Float32=0.0
-            if(styles.fill.r.isNormal()) {
-                r=styles.fill.r*255.0
+        if (!styles.getOrThrow().fill.isEmpty()) {
+            var r: Float32 = 0.0
+            var g: Float32 = 0.0
+            var b: Float32 = 0.0
+            var a: Float32 = 0.0
+            if (styles.getOrThrow().fill.r.isNormal()) {
+                r = styles.getOrThrow().fill.r * 255.0
             }
-            if(styles.fill.r.isNormal()) {
-                g=styles.fill.g*255.0
+            if (styles.getOrThrow().fill.g.isNormal()) {
+                g = styles.getOrThrow().fill.g * 255.0
             }
-            if(styles.fill.r.isNormal()) {
-                b=styles.fill.b*255.0
+            if (styles.getOrThrow().fill.b.isNormal()) {
+                b = styles.getOrThrow().fill.b * 255.0
             }
-            if(styles.fill.r.isNormal()) {
-                a=styles.fill.a
+            if (styles.getOrThrow().fill.a.isNormal()) {
+                a = styles.getOrThrow().fill.a
             }
             ctx.fillStyle(Color(UInt8(r), UInt8(g), UInt8(b), alpha: a))
         } else {
             ctx.fillStyle(Color.TRANSPARENT)
         }
-        //    if (styles && styles.fill) {
-        //      ctx.fillStyle =
-        //        `rgba(${parseInt(((styles.fill["r"] ?? 0) * 255).toString())}, ${parseInt(((styles.fill["g"] ?? 0) *
-        //          255).toString())}, ${parseInt(((styles.fill["b"] ?? 0) * 255).toString())}, ${styles.fill["a"]})`
-        //    } else {
-        //      ctx.fillStyle = "transparent"
-        //    }
         let lineDash: ArrayList<Float64> = ArrayList<Float64>()
-        if(styles.lineDashI.isNormal()) {
-            lineDash.add(Float64(styles.lineDashI))
+        if (styles.getOrThrow().lineDashI.isNormal()) {
+            lineDash.add(Float64(styles.getOrThrow().lineDashI))
         }
-        if(styles.lineDashII.isNormal()) {
-            lineDash.add(Float64(styles.lineDashII))
+        if (styles.getOrThrow().lineDashII.isNormal()) {
+            lineDash.add(Float64(styles.getOrThrow().lineDashII))
         }
-        if(styles.lineDashIII.isNormal()) {
-            lineDash.add(Float64(styles.lineDashIII))
+        if (styles.getOrThrow().lineDashIII.isNormal()) {
+            lineDash.add(Float64(styles.getOrThrow().lineDashIII))
         }
         ctx.lineDash(lineDash.toArray());
     }
@@ -443,15 +437,15 @@ public class Renderer {
         this.resetShapeStyles(ctx, obj);
         if (let Some(transform) <- obj.transform) {
             var a1 = Float64(transform.a)
-            if(transform.a==0.0) {
+            if (transform.a == 0.0) {
                 a1 = 1.0
             }
             var d1 = Float64(transform.d)
-            if(transform.d==0.0) {
+            if (transform.d == 0.0) {
                 d1 = 1.0
             }
-            ctx.transform(a1, Float64(transform.b), Float64(transform.c), d1,
-                Float64(transform.tx), Float64(transform.ty));
+            ctx.transform(a1, Float64(transform.b), Float64(transform.c), d1, Float64(transform.tx),
+                Float64(transform.ty));
         }
         let currentPoint: CurrentPoint = CurrentPoint(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
@@ -459,24 +453,23 @@ public class Renderer {
         var d: String = obj.d
         var tmps = HashSet<String>()
         if (let Some(v) <- Regex("[a-zA-Z]").matcher(d).findAll()) {
-            for (sc in v){
+            for (sc in v) {
                 tmps.add(sc.matchString())
             }
         }
         let tmps1 = tmps.toArray()
-        for(i in 0..tmps1.size) {
-            d = d.replace(tmps1[i],"|||${tmps1[i]} ")
+        for (i in 0..tmps1.size) {
+            d = d.replace(tmps1[i], "|||${tmps1[i]} ")
         }
-        d=Regex(",").matcher(d).replaceAll(" ")
-        //replace("/([a-zA-Z])/g", '|||$1 ').replace("/,/g", ' '); //BUG
+        d = Regex(",").matcher(d).replaceAll(" ")
         var list = d.split('|||')
         for (segment in list) {
             if (segment.size == 0) {
                 continue
             }
             var firstLetter = segment[0..1];
-            if(let Some(v) <- validMethods.indexOf(firstLetter)) {
-                if (v>=0) {
+            if (let Some(v) <- validMethods.indexOf(firstLetter)) {
+                if (v >= 0) {
                     var args = segment[1..].trimAscii().split(" ");
                     this.drawBezierElement(ctx, currentPoint, firstLetter, args);
                 }
@@ -596,33 +589,16 @@ public class Renderer {
 
     private func drawEllipse(ctx: CanvasRenderingContext2D, obj: EllipsePath) {
         ctx.save();
-        this.resetShapeStyles(ctx, obj);
+        this.resetShapeStyles(ctx, obj)
         if (let Some(transform) <- obj.transform) {
-            var a = 1.0
-            var b = 1.0
-            var c = 1.0
-            var d = 1.0
-            var tx = 1.0
-            var ty = 1.0
-            if(transform.a.isNormal()) {
-                a=Float64(transform.a)
-            }
-            if(transform.b.isNormal()) {
-                b=Float64(transform.b)
-            }
-            if(transform.c.isNormal()) {
-                c=Float64(transform.c)
-            }
-            if(transform.d.isNormal()) {
-                d=Float64(transform.d)
-            }
-            if(transform.tx.isNormal()) {
-                tx=Float64(transform.tx)
-            }
-            if(transform.ty.isNormal()) {
-                ty=Float64(transform.ty)
-            }
-            ctx.transform(a, b,c,d,tx,ty)
+            ctx.transform(
+                Float64(transform.a),
+                Float64(transform.b),
+                Float64(transform.c),
+                Float64(transform.d),
+                Float64(transform.tx),
+                Float64(transform.ty),
+            )
         }
         let x = obj._x - obj._radiusX;
         let y = obj._y - obj._radiusY;
@@ -645,7 +621,7 @@ public class Renderer {
         if (obj.styles.isSome() && !obj.styles.getOrThrow().fill.isEmpty()) {
             ctx.fill();
         }
-        if (obj.styles.isSome()&& !obj.styles.getOrThrow().stroke.isEmpty()) {
+        if (obj.styles.isSome() && !obj.styles.getOrThrow().stroke.isEmpty()) {
             ctx.stroke();
         }
         ctx.restore();
@@ -655,8 +631,31 @@ public class Renderer {
         ctx.save();
         this.resetShapeStyles(ctx, obj);
         if (let Some(transform) <- obj.transform) {
-            ctx.transform(Float64(transform.a), Float64(transform.b), Float64(transform.c), Float64(transform.d),
-                Float64(transform.tx), Float64(transform.ty));
+            var a = 1.0
+            var b = 0.0
+            var c = 0.0
+            var d = 1.0
+            var tx = 0.0
+            var ty = 0.0
+            if (transform.a.isNormal()) {
+                a = Float64(transform.a)
+            }
+            if (transform.b.isNormal()) {
+                b = Float64(transform.b)
+            }
+            if (transform.c.isNormal()) {
+                c = Float64(transform.c)
+            }
+            if (transform.d.isNormal()) {
+                d = Float64(transform.d)
+            }
+            if (transform.tx.isNormal()) {
+                tx = Float64(transform.tx)
+            }
+            if (transform.ty.isNormal()) {
+                ty = Float64(transform.ty)
+            }
+            ctx.transform(a, b, c, d, tx, ty)
         }
 
         let x = obj._x;
@@ -680,10 +679,10 @@ public class Renderer {
         ctx.arcTo(x, y, x + width, y, radius);
         ctx.closePath();
 
-        if (obj.styles.isSome()) {
+        if (obj.styles.isSome() && !obj.styles.getOrThrow().fill.isEmpty()) {
             ctx.fill();
         }
-        if (obj.styles.isSome()) {
+        if (obj.styles.isSome() && !obj.styles.getOrThrow().stroke.isEmpty()) {
             ctx.stroke();
         }
         ctx.restore();
@@ -693,9 +692,9 @@ public class Renderer {
         let cachedBitmap = this.bitmapCache.get(forKey)
         if (let Some(bitmap) <- cachedBitmap) {
             let originBitmap = bitmap
-            var bitmapInfo = originBitmap.getImageInfo()
+            var imageInfo = originBitmap.getImageInfo()
             let dynamicImageBitmap: ?PixelMap = this.transformBase64str2Bitmap(imageSource,
-                Float64(bitmapInfo.size.width), Float64(bitmapInfo.size.height))
+                Float64(imageInfo.size.width), Float64(imageInfo.size.height))
             if (let Some(dynamicImageBitmap) <- dynamicImageBitmap) {
                 this.bitmapCache.add(forKey, dynamicImageBitmap)
             }
