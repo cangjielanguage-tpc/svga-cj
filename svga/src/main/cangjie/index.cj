@@ -50,9 +50,13 @@ public class SvgaPlayer {
                 .width(this.canvasValue.width)
                 .height(this.canvasValue.height)
                 .transform(this.canvasValue.transformValue)
-                .scale(x: this.canvasValue.scaleValue.x, y: this.canvasValue.scaleValue.x,
-                    z: this.canvasValue.scaleValue.x, centerX: this.canvasValue.scaleValue.centerX,
-                    centerY: this.canvasValue.scaleValue.centerY)
+                .scale(
+                    x: this.canvasValue.scaleValue.x,
+                    y: this.canvasValue.scaleValue.y,
+                    z: this.canvasValue.scaleValue.z,
+                    centerX: this.canvasValue.scaleValue.centerX,
+                    centerY: this.canvasValue.scaleValue.centerY
+                )
                 .backgroundColor(Color.TRANSPARENT)
                 .onReady {
                     this.controller.getplayer().parentSize(Sizes(width: Int32(this.context.width()),height: Int32(this.context.height())))
