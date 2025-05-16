@@ -40,7 +40,7 @@ public class SvgaPlayerProps {
      * 参数 autoRelease - 页面销毁时自动执行清理，默认值为true
      * 参数 clearsAfterStop - 设置是否在停止后释放资源，默认值为true
      * 参数 fillMode - 动画结束时的动画状态，默认值为AnimatorFill.Forwards
-     **/
+     */
     public init(pageUpdateMode!: PageUpdateMode = PageUpdateMode.pause, loops!: Int32 = -1, autoRelease!: Bool = true,
         clearsAfterStop!: Bool = true, fillMode!: AnimatorFill = AnimatorFill.Forwards) 
 
@@ -136,7 +136,7 @@ public class SvgaController {
     
     /**
      * 停止动画
-     * 参数 clear - Bool类型，设置为true,停止播放后自动清理资源，设置false，则相反
+     * 参数 clears - Bool类型，设置为true,停止播放后自动清理资源，设置false，则相反
      */
     public func stopAnimation(clears: Bool)
     
@@ -171,7 +171,7 @@ public class SvgaController {
     public func clearDynamicObjects() 
     
     /**
-     * 设置重复次数。需在播放前调用
+     * 设置播放次数。需在播放前调用
      * 参数 loops - Int32类型，循环次数
      */
     public func setLoops(loops: Int32)
@@ -186,25 +186,24 @@ public class SvgaController {
      * 清理动画资源
      */
     public func release()
+}
+public enum PLAYER_CONTENT_MODE{
+    |AspectFit // 选取长宽里面较大的一个作为依据 填充整个容器
+    |Fill // 填充整个容器
+    |AspectFill // 选取长宽里面较小的一个作为依据 填充整个容器
+    /*判等*/
+    public operator func ==
+    /*判不等*/
+    public operator func !=
+}
 	
-	public enum PLAYER_CONTENT_MODE{
-	  |AspectFit // 选取长宽里面较大的一个作为依据 填充整个容器
-	  |Fill // 填充整个容器
-      |AspectFile // 选取长宽里面较小的一个作为依据 填充整个容器
-	  /*判等*/
-	  public operator func ==
-	  /*判不等*/
-	  public operator func !==
-	}
-	
-	public class SvgaRange{
-	 /**
-     * SvgaRange构造器
-	 * 参数location - Float64类型，动画起始位置
-	 * 参数length - Float64类型，动画播放长度
-     */
-	public init(location:Float64,length:Float64)
-	}
+public class SvgaRange{
+    /**
+    * SvgaRange构造器
+    * 参数location - Float64类型，动画起始位置
+    * 参数length - Float64类型，动画播放长度
+    */
+    public init(location:Float64,length:Float64)
 }
 ```
 

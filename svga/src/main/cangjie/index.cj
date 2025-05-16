@@ -9,8 +9,8 @@ import svga.player.SvgaController
 import svga.player.CanvasSizeAndTrans
 import svga.parser.Parser
 import svga.player.*
-import svga.global.globalcontext
-import ohos.ability.AbilityContext
+import svga.global.*
+import ohos.ability.*
 
 @Component
 public class SvgaPlayer {
@@ -19,7 +19,7 @@ public class SvgaPlayer {
     var abilitycontext: AbilityContext
     var controller: SvgaController = SvgaController()
     var setting: RenderingContextSettings = RenderingContextSettings(antialias: true)
-    var context: CanvasRenderingContext2D = CanvasRenderingContext2D(this.setting)
+    var context: CanvasRenderingContext2D = CanvasRenderingContext2D(this.setting,LengthMetricsUnit.PX)
     @State
     var canvasValue: CanvasSizeAndTrans = CanvasSizeAndTrans()
     public var onReady: ?() -> Unit = None
@@ -37,12 +37,11 @@ public class SvgaPlayer {
 
         this.controller.setplayer(Player(globalcontext.getOrThrow(), this.context))
         this.controller.getplayer().canvasValue(this.canvasValue)
-        this
-            .controller
-            .getplayer()
-            .parentSize(
-                Sizes(width: Int32(vp2px(Length(this.context.width)).getOrThrow().value),
-                    height: Int32(vp2px(Length(this.context.height)).getOrThrow().value)))
+        this.controller.getplayer().parentSize(Sizes(width: Int32(this.context.width().value),height: Int32(this.context.height().value)))
+    }
+
+    public func aboutToDisappear:Unit{
+        this.controller.release()
     }
 
     public func build() {
@@ -56,12 +55,7 @@ public class SvgaPlayer {
                     centerY: this.canvasValue.scaleValue.centerY)
                 .backgroundColor(Color.TRANSPARENT)
                 .onReady {
-                    this
-                        .controller
-                        .getplayer()
-                        .parentSize(
-                            Sizes(width: Int32(vp2px(Length(this.context.width)).getOrThrow().value),
-                                height: Int32(vp2px(Length(this.context.height)).getOrThrow().value)))
+                    this.controller.getplayer().parentSize(Sizes(width: Int32(this.context.width()),height: Int32(this.context.height())))
                     if (this.onreadyIsLose) {
                         return
                     }
@@ -71,28 +65,30 @@ public class SvgaPlayer {
                         return
                     }
                     if (this.url == "") {
-                        AlertDialog.show(AlertDialogParamWithConfirm("地址错误 请输入完整沙盒路径地址"))
+                        AlertDialog.show(AlertDialogParamWithConfirm("地址错误 请输入完整沙箱路径"))
                         return
                     }
                     this.playAnim()
                 }
         }
-            .width("100%")
-            .height("100%")
+            .width(100.percent)
+            .height(100.percent)
             .onAreaChange(
                 {
-                    old, area => this
-                        .controller
-                        .getplayer()
-                        .parentSize(
+                    old, area => this.controller.getplayer().parentSize(
                             Sizes(
-                                width: Int32(vp2px(Length(area.width)).getOrThrow().value),
-                                height: Int32(vp2px(Length(area.height)).getOrThrow().value)
+                                width: Int32(vp2px(area.width).getOrThrow().value),
+                                height: Int32(vp2px(area.height).getOrThrow().value)
                             )
                         )
                 })
     }
-    public func playAnim() {
+
+    public func width(width:Float64):This{
+        return this
+    }
+
+    func playAnim() {
         this.controller.stopAnimation(true)
         this.controller.load(this.url)
     }

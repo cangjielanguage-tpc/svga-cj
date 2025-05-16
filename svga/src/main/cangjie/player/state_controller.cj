@@ -2,13 +2,12 @@
  * Created on 2025/1/9
  */
 package svga.player
-import tpc.AbilityKit.kit_common.ApplicationStateChangeCallback
-import tpc.AbilityKit.ability_common.ApplicationContextType
-import tpc.TelephonyKit.observer.ObserverEventType
-import ohos.emitter.EventCallback
-import tpc.UIKit.Observer.TabContentInfo
-
-//import ohos.observer.*
+//import tpc.AbilityKit.kit_common.ApplicationStateChangeCallback
+//import tpc.AbilityKit.ability_common.ApplicationContextType
+//import tpc.TelephonyKit.observer.ObserverEventType
+//import ohos.emitter.EventCallback
+//import tpc.UIKit.Observer.TabContentInfo
+import ohos.observer.*
 
 public enum PlayerStatus {
     | NORMAL
@@ -38,25 +37,29 @@ public class StateController {
             var applicationContext = v.getApplicationContext()
             applicationContext.on(ApplicationContextType.APPLICATION_STATE_CHANGE,this.applicationStateChangeCallback)
         }
-        this.initfunc()
+//        this.initfunc()
     }
 
     func release() {
         if(let Some(v) <- this.owner.uiContext()) {
             var applicationContext = v.getApplicationContext()
-            applicationContext.on(ApplicationContextType.APPLICATION_STATE_CHANGE,callback:this.applicationStateChangeCallback)
+            applicationContext.off(ApplicationContextType.APPLICATION_STATE_CHANGE,callback:this.applicationStateChangeCallback)
         }
     }
 
-    func initfunc() {
+//    func initfunc() {
 //        this.ListenAppStateChange()
 //        this.ListenPageStateChange()
-    }
+//    }
 
-    private func ListenAppStateChange() {
-        on.(ObserverEventType.OBSERVER_NAV_DESTINATIN_UPDATE,EventCallback1(this))
-        on.(ObserverEventType.OBSERVER_ROUTER_PAGE_UPDATE,EventCallback1(this))
-    }
+//    private func ListenAppStateChange() {
+//        var applicationContext=this.owner.uiContext().getOrThrow().getApplicationContext()
+//    }
+//
+//    private func ListenPageStateChange() {
+//        on.(ObserverEventType.OBSERVER_NAV_DESTINATIN_UPDATE,EventCallback1(this))
+//        on.(ObserverEventType.OBSERVER_ROUTER_PAGE_UPDATE,EventCallback1(this))
+//    }
 
     func pageUpdateCallback(flag: Bool) {// true 为页面重写显示
         match (this.owner.pageUpdateMode()) {
@@ -69,16 +72,15 @@ public class StateController {
             case _=> ()
         }
     }
-    
-    
 }
+
 class EventCallback1 <: Callback1Argument<TabContentInfo> {
     var con: StateController
     public init(con: StateController){
         this.con = con
     }
 
-    public open func invoke(val: TabContentInfo) {
+    public open func invoke(val: TabContentInfo):Unit {
         con.pageUpdateCallback(true)
     }
 }

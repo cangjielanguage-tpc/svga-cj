@@ -159,15 +159,11 @@ public class Renderer {
         }
         this.soundsQueue = ArrayList<SoundsItem>()
         try {
-            for (v in this.bitmapCache) {
-//                if (v is AVPlayerClass) {
-//                    (v as AVPlayerClass).getOrThrow().release()
-//                } else {}
+            for ((k,v) in this.bitmapCache) {
                 v.Release()
             }
             this.bitmapCache.clear()
         } catch (error: Exception) {
-            //console.error('svga', error)
         }
         for ((k,v) in this.dynamicImage) {
             v.Release()
@@ -177,7 +173,6 @@ public class Renderer {
 
     public func clearAudios() {
         for (it in this.soundsQueue) {
-            //console.log('audio触发了：回收')
             it.player.stop()
         }
         this.soundsQueue = ArrayList<SoundsItem>()
@@ -441,7 +436,7 @@ public class Renderer {
             lineDash.add(Float64(styles.lineDashII))
         }
         if(styles.lineDashIII.isNormal()) {
-            lineDash.append(Float64(styles.lineDashIII))
+            lineDash.add(Float64(styles.lineDashIII))
         }
         ctx.lineDash(lineDash.toArray());
     }

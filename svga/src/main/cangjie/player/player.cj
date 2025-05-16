@@ -736,16 +736,16 @@ public class Player {
                     scaleY = Float64(targetSize.height) / Float64(imageSize.height)
                     translateX = (Float64(imageSize.width) * scaleX - Float64(imageSize.width)) / 2.0
                     translateY = (Float64(imageSize.height) * scaleY - Float64(imageSize.height)) / 2.0
-                    this._canvasValue.transformValue.translate(
-                          TranslateOption(
-                            x: Float32(translateX),
-                            y: Float32(translateY)
-                          ))
+//                    this._canvasValue.transformValue.translate(
+//                          TranslateOption(
+//                            x: Float32(translateX),
+//                            y: Float32(translateY)
+//                          ))
                     this._canvasValue.scaleValue = ScaleOptions(
                         x: Float32(scaleX),
                         y: Float32(scaleY),
                         centerX: 0.0,
-                        centerY: 0.0,
+                        centerY: 0.0
                     )
                 } else if (this._contentMode == PLAYER_CONTENT_MODE.AspectFit || this._contentMode == PLAYER_CONTENT_MODE
                     .AspectFill) {
@@ -775,17 +775,17 @@ public class Player {
                         scaleX = scaleY
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
                         translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
-                        //                                                this._canvasValue.transformValue.translate(
-                        //                                                    TranslateOption(
-                        //                                                        x: translateX,
-                        //                                                        y: translateY
-                        //                                                    )
-                        //                                                )
+                        this._canvasValue.transformValue.translate(
+                            TranslateOption(
+                                x: Float32(translateX),
+                                y: Float32(translateY)
+                            )
+                        )
                         this._canvasValue.scaleValue = ScaleOptions(
                             x: Float32(scaleX),
                             y: Float32(scaleY),
-                            centerX: Length(0.0),
-                            centerY: Length(0.0)
+                            centerX: 0.0,
+                            centerY: 0.0
                         )
                     }
                 }

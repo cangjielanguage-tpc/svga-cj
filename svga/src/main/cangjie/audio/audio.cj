@@ -40,7 +40,7 @@ class StateChangeCallback <: OnAVPlayerStateChangeHandle {
     public init(sc: AVPlayerClass) {
         this.src = sc
     }
-    public open func invoke(state: OnAVPlayerState, reason: StateChangeReason): Unit {
+    public open func invoke(state: AVPlayerState, reason: StateChangeReason): Unit {
         match (state) {
             case idle =>
                 //                if(src.dataSrc){
@@ -59,12 +59,12 @@ class StateChangeCallback <: OnAVPlayerStateChangeHandle {
     }
 }
 
-class AVDataCallback <: Callback3ArgumentWithReturn<Array<UInt8>, Uint32, Int64, Int32> {
+class AVDataCallback <: Callback3ArgumentWithReturn<Array<UInt8>, UInt32, Int64, Int32> {
     var src: AVPlayerClass
     public init(sc: AVPlayerClass) {
         this.src = sc
     }
-    public open func invoke(buffer: Array<UInt8>, lenght: Uint32, poss: Int64): Int32 {
+    public open func invoke(buffer: Array<UInt8>, lenght: UInt32, poss: Int64): Int32 {
         var pos = poss
         if (pos == 0) {
             pos = 0
@@ -93,71 +93,72 @@ public class AVPlayerClass {
     public var buf: Array<Byte> = Array<Byte>()
     public var dataSrc: ?AVDataSrcDescriptor = None
     public init() {
-        let m1:Random=Random(3)
-        this.id="${DateTime.now()nanosecond}+${m1.nextUint64()}"
+        let m1: Random = Random(3)
+        this.id = "${DateTime.now().nanosecond}+${m1.nextUInt64()}"
     }
-    public func initPlayer(buf:Array<Byte>):Bool{
-        this.bug=buf
-try{
-this.play=createAVPlayer()
-this.player.getOrThrow().on(AVPlayerCallbackType.SeekDone,SeekDoneCallback(this.player.getOrThrow()))
-this.player.getOrThrow().on(AVPlayerCallbackType.AVError,ErrorCallback(this.player.getOrThrow()))
-this.player.getOrThrow().on(AVPlayerCallbackType.StateChange,StateChangeCallback(this))
-this.dataSrc=AVDataSrcDesciptor(this.bug.size,AVDataCallback(this))
-var AVMetadata=createAVMetadataExtractor()
-AVMetadata.dataSrc=this.dataSrc.getOrThrow()
-this.player.getOrThrow().fdSrc=AVMetadata.fdSrc
-return true
-}
-        catch(e:Exception){
+    public func initPlayer(buf: Array<Byte>): Bool {
+        this.buf = buf
+        try {
+            this.player = createAVPlayer()
+            this.player.getOrThrow().on(AVPlayerCallbackType.SeekDone, SeekDoneCallback(this.player.getOrThrow()))
+            this.player.getOrThrow().on(AVPlayerCallbackType.AVError, ErrorCallback(this.player.getOrThrow()))
+            this.player.getOrThrow().on(AVPlayerCallbackType.StateChange, StateChangeCallback(this))
+            this.dataSrc = AVDataSrcDescriptor(this.buf.size, AVDataCallback(this))
+            var AVMetadata = createAVMetadataExtractor()
+            AVMetadata.dataSrc = this.dataSrc.getOrThrow()
+            this.player.getOrThrow().fdSrc = AVMetadata.fdSrc
+            return true
+        } catch (e: Exception) {
             return false
         }
     }
 
     // 单曲播放
     public func play() {
-        var states:Array<AVPlayerState>=[AVPlayerState.Prepared,AVPlayerState.Paused,AVPlayerState.Completed]
-         if(let Some(v)<-this.player){
-            if(states.contains(v.state)){
+        var states: Array<AVPlayerState> = [AVPlayerState.Prepared, AVPlayerState.Paused, AVPlayerState.Completed]
+        if (let Some(v) <- this.player) {
+            if (states.contains(v.state)) {
                 v.play()
             }
-       }
+        }
     }
 
     // 设置进度
     public func seek(seek: Int32, autoplay!: Bool = true) {
-         var states:Array<AVPlayerState>=[AVPlayerState.Prepared,AVPlayerState.Paused,AVPlayerState.Completed,AVPlayerState.Playing]
-         if(let Some(v)<-this.player){
-            if(states.contains(v.state)){
-                this.seekPlay=autoplay
+        var states: Array<AVPlayerState> = [AVPlayerState.Prepared, AVPlayerState.Paused, AVPlayerState.Completed,
+            AVPlayerState.Playing]
+        if (let Some(v) <- this.player) {
+            if (states.contains(v.state)) {
+                this.seekPlay = autoplay
                 v.seek(seek)
             }
-       }
+        }
     }
 
     // 暂停
     public func pause() {
-         if(let Some(v)<-this.player){
-            if(v.state==AVPlayerState.Playing){
+        if (let Some(v) <- this.player) {
+            if (v.state == AVPlayerState.Playing) {
                 v.pause()
             }
-       }
+        }
     }
 
     // 停止
     public func stop() {
-            var states:Array<AVPlayerState>=[AVPlayerState.Completed,AVPlayerState.Playing,AVPlayerState.Prepared,AVPlayerState.Paused]
-             if(let Some(v)<-this.player){
-             if(states.contains(v.state)){
+        var states: Array<AVPlayerState> = [AVPlayerState.Completed, AVPlayerState.Playing, AVPlayerState.Prepared,
+            AVPlayerState.Paused]
+        if (let Some(v) <- this.player) {
+            if (states.contains(v.state)) {
                 v.stop()
             }
-       }
+        }
     }
 
     // 删除
     public func release() {
-        if(let Some(v)<-this.player){
-         v.release()
-       }
+        if (let Some(v) <- this.player) {
+            v.release()
+        }
     }
 }

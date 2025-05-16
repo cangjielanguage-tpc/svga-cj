@@ -106,7 +106,7 @@ public class MapField<K, V> <: Map<K, V> where K <: Hashable & Equatable<K> {
         data = temp
         parent?.markDirty()
     }
-    public func entryView(k:k) {return data.entryView(k)}
+    public func entryView(k:K) {return data.entryView(k)}
     public func reserve(additional: Int64): Unit { data.reserve(additional) }
     public func capacity(): Int64 { data.capacity }
     public func clone(): MapField<K, V> { MapField(this) }
@@ -198,7 +198,7 @@ public class MapMessage<K, V> <: Map<K, V> where K <: Hashable & Equatable<K>, V
         parent = None
         data = HashMap(elements)
     }
-    public func entryView(k:k) {return data.entryView(k)}
+    public func entryView(k:K) {return data.entryView(k)}
     public func get(key: K): ?V {
         data.get(key)
     }

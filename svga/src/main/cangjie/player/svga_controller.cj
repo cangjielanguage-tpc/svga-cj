@@ -4,13 +4,12 @@
 package svga.player
 
 import ohos.matrix4
-import kit.UIkit.ScaleOptions
+import kit.UIKit.ScaleOptions
 import ohos.animator.*
 import svga.parser.*
 import svga.proto.*
 import std.math.*
 import ohos.base.Length
-import ohos.prompt_action.PromptAction
 
 public struct SvgaPlayerProps {
     public var pageUpdateMode: PageUpdateMode
@@ -114,7 +113,7 @@ public class SvgaController {
         }
         this._loading = true
         let res = this._parser.getOrThrow().load(source)
-        let (let Some(v) <- res) {
+        if (let Some(v) <- res) {
             this._loading = false
             this._player?.setVideoItem(v)
             if(autoPlay) {
@@ -134,10 +133,10 @@ public class SvgaController {
         if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
             throw Exception('请在资源加载后调用')
         }
-        this._player?.startAnimation(reverse)
+        this._player.getOrThrow().startAnimation(reverse)
     }
 
-    public func startAnimationWithRane(range: SvgaRange, reverse!: Bool = false) {
+    public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false) {
         if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
             throw Exception('请在资源加载后调用')
         }
@@ -209,6 +208,6 @@ public class SvgaController {
 
     //回收资源
     public func release() {
-
+        this._player.release()
     }
 }

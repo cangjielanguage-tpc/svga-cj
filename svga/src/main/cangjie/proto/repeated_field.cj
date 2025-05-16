@@ -276,7 +276,7 @@ public class RepeatedMessage<T> <: Collection<T> & ToString & Hashable where T <
     }
 
     public func prependAll(elements: Collection<T>): Unit {
-        data.add(all:elements.at:0)
+        data.add(all:elements,at:0)
         parent?.markDirty()
         link(elements)
     }

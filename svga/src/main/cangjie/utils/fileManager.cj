@@ -6,7 +6,7 @@ package svga.utils
 import ohos.file_fs.*
 import ohos.component.AlertDialog
 import ohos.component.AlertDialogParamWithConfirm
-import stdx.encoding.base64
+import stdx.encoding.base64.*
 internal import std.random.*
 internal import std.time.DateTime
 import kit.AbilityKit.*
@@ -39,7 +39,7 @@ public class FileManager {
             // 创建目录
             FileFs.mkdir(p)
             let m: Random = Random(3)
-            var filePath = p + '/' + "${DateTime.now().nanosecond} + ${m.nextUInt64()}" + '.zip'
+            var filePath = p + '/' + "${DateTime.now().nanosecond}"+" ${m.nextUInt64()}" + '.zip'
             var file1 = FileFs.open(filePath, mode: (READ_WRITE.mode | CREATE.mode))
             FileFs.close(file1.fd)
             var file = stdfs.File(filePath,stdfs.OpenMode.ReadWrite)
@@ -49,8 +49,8 @@ public class FileManager {
             var res=readToEnd(file2)
             file2.close()
             let m1: Random = Random(3)
-            var path = p + '/' + "${DateTime.now().nanosecond} + ${m1.nextUInt64()}"
-            FileFs.mkdir(oath)
+            var path = p + '/' + "${DateTime.now().nanosecond}"+"${m1.nextUInt64()}"
+            FileFs.mkdir(path)
             Zip.deCompressFile(filePath,path)
             return path
         } catch (e: Exception) {
