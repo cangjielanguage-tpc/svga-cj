@@ -17,7 +17,7 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
 ## 特性
 
 - 支持加载svga格式的动画
-- 支持动画播放，暂停，快进等功能
+- 支持动画播放，暂停，清理等功能
 
 ### 源码目录
 
@@ -93,7 +93,7 @@ class Index {
     var controller: SvgaController = SvgaController()
     public func build() {
         Column {
-              SvgaPlayer(url: "angel.svga",abilitycontext: getContext(),controller: controller)
+              SvgaPlayer(url: "angel.svga",abilitycontext: getContext(),controller: Option<SvgaController>.Some(controller))
         }
     }
 }
@@ -103,8 +103,8 @@ class Index {
 
 在下述版本验证通过：
 
-    DevEco Studio 5.0.2 Release(5.0.7.200) 
-    Cangjie Support Plugin 5.0.7.100
+    DevEco Studio 5.0.2 Release(5.0.9.300) 
+    Cangjie Support Plugin 5.0.9.100
 
 1. 只支持2.0版本svga资源
 2. 不支持音频动画播放

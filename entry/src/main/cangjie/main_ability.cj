@@ -9,9 +9,10 @@ import tpc.UIKit.window
 import ohos.hybrid_base.CJPageEntry
 
 let ENTRYABILITY_REGISTER_RESULT = UIAbility.registerCreator("EntryAbility", {=> EntryAbility()})
-
+public var globalcontext: ?UIAbilityContext = None
 class EntryAbility <: UIAbility {
     public override func onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): Unit {
+        globalcontext = this.context
         AppLog.info("Ability OnCreated.${want.abilityName}")
         match (launchParam.launchReason) {
             case AbilityConstant.LaunchReason.START_ABILITY => AppLog.info("START_ABILITY")

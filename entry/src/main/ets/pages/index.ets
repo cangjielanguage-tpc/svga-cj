@@ -1,4 +1,7 @@
 import { CJHybridComponentV2 } from 'cjhybridview'
+import { register_hsp_api } from 'cjhyapiregister';
+
+register_hsp_api()
 
 @Entry
 @Component

@@ -1,0 +1,95 @@
+/**
+ * Created on 2025/2/6
+ */
+package svga.parser
+
+import tpc.ImageKit.image.*
+import tpc.UIKit.AlertDialog
+import tpc.UIKit.AlertDialogParamWithConfirm
+import svga.proto.*
+import svga.utils.*
+//import ohos.resource_manager.*
+import std.collection.HashMap
+import encoding.base64.*
+//import ohos.hilog.Hilog
+//import ohos.prompt_action.PromptAction
+//import ohos.component.AlertDialog
+//import ohos.component.AlertDialogParamWithConfirm
+
+public type CbFn = (MockWorkerResponseData) -> Unit
+
+public type DecodeCbFn = (MockWorkerDecodeResponseData) -> Unit
+
+public class MockWorker {
+    public static func load(url: String): ?MovieEntity {
+        try {
+//            let stageContext = getStageContext(globalcontext.getOrThrow())
+//            let rm = ResourceManager.getResourceManager(stageContext)
+//            let buffer: Array<UInt8> = rm.getRawFileContent(url)
+            let buffer = globalcontext.getOrThrow().resourceManager.getRawFileContent(url)
+            return MockWorker.load_viaProto(buffer)
+        } catch (e: Exception) {
+            AlertDialog.show(AlertDialogParamWithConfirm("地址错误请输入完整沙箱路径"))
+//            Hilog.error(0, "ERROR", "read file error ${e.toString()}")
+            None
+        }
+    }
+
+    public static func load_viaProto(arraybuffer: Array<Byte>) {
+        var res: MovieEntity = Inflate(arraybuffer).get()
+        return res
+    }
+
+    public static func decode(key: String, src: String, types: String, dir: String, cb: DecodeCbFn, failure: ?FailureFn): Unit {
+        try {
+            spawn {
+                => cb(base64ToBitmap(key, src, types, dir))
+            }
+        } catch (error: Exception) {
+            if (let Some(failure) <- failure) {
+                failure(error)
+            }
+        }
+    }
+}
+
+public open class MockWorkerResponseData {
+    public var movie: MovieEntity
+    public var images: HashMap<String, String>
+    public init(movie: MovieEntity, images: HashMap<String, String>) {
+        this.movie = movie
+        this.images = images
+    }
+}
+
+public open class MockWorkerDecodeResponseData {
+    public var key: String = ""
+
+    public var bitmap: ?PixelMap = None
+
+    public var fd: Int32 = 0
+}
+
+func base64ToBitmap(key: String, src: String, types: String, dir: String) {
+    let response: MockWorkerDecodeResponseData = MockWorkerDecodeResponseData()
+    response.key = key
+    try {
+        if (types == "image") {
+            var buf = fromBase64String(src).getOrThrow()
+            // 1, 创建imageSource
+            var img = createImageSource(buf)
+            var info = img.getImageInfo()
+
+            let pixelMap: PixelMap = img.createPixelMap(
+                options: DecodingOptions(editable: false,
+                    desiredSize: Size(info.size.width, info.size.height)))
+            response.bitmap = pixelMap
+            img.release({a,b =>})
+        } else {
+            var fd = FileManager.saveAudio(src, dir)
+            response.fd = fd
+        }
+    } catch (e: Exception) {
+    }
+    return response
+}

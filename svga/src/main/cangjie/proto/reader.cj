@@ -172,12 +172,8 @@ public interface BytesReader {
         Int32(parseFixed32())
     }
 
-    func parseFloat64() {
-        unsafe { ltod(parseFixed64()) }
-    }
-
     func parseFloat32() {
-        unsafe { itof(parseFixed32()) }
+        Float32.fromBits(parseFixed32())
     }
 
     func parseBytesSlice() {

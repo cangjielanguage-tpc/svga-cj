@@ -43,7 +43,7 @@ public class RepeatedField<T> <: Collection<T> {
     }
 
     public func append(element: T): Unit {
-        data.append(element)
+         data.append(element)
         parent?.markDirty()
     }
 
