@@ -105,6 +105,7 @@ class Index {
 
     DevEco Studio 5.0.2 Release(5.0.9.300) 
     Cangjie Support Plugin 5.0.9.100
+    Cangjie TPC Deveco Plugin 5.0.1.12
 
 1. 只支持2.0版本svga资源
 2. 不支持音频动画播放
