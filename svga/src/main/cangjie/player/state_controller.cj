@@ -18,6 +18,7 @@ public enum PlayerStatus {
 }
 
 public class StateController {
+    private var applicationContext: ?ApplicationContext = None
     private var owner: Player
     private var status: PlayerStatus = PlayerStatus.NORMAL
     private var applicationStateChangeCallback: ApplicationStateChangeCallback
@@ -34,16 +35,15 @@ public class StateController {
             }
         )
         if(let Some(v) <- this.owner.uiContext()) {
-            var applicationContext = v.getApplicationContext()
-            applicationContext.on(ApplicationContextType.APPLICATION_STATE_CHANGE,this.applicationStateChangeCallback)
+             this.applicationContext = v.getApplicationContext()
+            this.applicationContext.getOrThrow().on(ApplicationContextType.APPLICATION_STATE_CHANGE,this.applicationStateChangeCallback)
         }
 //        this.initfunc()
     }
 
     func release() {
-        if(let Some(v) <- this.owner.uiContext()) {
-            var applicationContext = v.getApplicationContext()
-            applicationContext.off(ApplicationContextType.APPLICATION_STATE_CHANGE,callback:this.applicationStateChangeCallback)
+        if(let Some(v) <- this.applicationContext) {
+            v.off(ApplicationContextType.APPLICATION_STATE_CHANGE,callback:this.applicationStateChangeCallback)
         }
     }
 
