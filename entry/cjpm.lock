@@ -1,0 +1,5 @@
+version = 0
+
+[requires]
+  zlib4cj = {git = "https://gitcode.com/Cangjie-TPC/zlib4cj", commitId = "e68101ebfd4ce7727e11aa7d00b2402c2cda26e5", tag = "zlib-1.0.3_plugin5.1.0.828"}
+  protobuf = {git = "https://gitcode.com/Cangjie-TPC/protobuf4cj", commitId = "0c4a3e3e2f079a96362c5c55e8f786f5241d403c", tag = "protobuf4cj-1.0.1_plugin_5.1.0.828"}

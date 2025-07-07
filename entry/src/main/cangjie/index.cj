@@ -1,32 +1,44 @@
 package ohos_app_cangjie_entry
 
-import tpc.UIKit.Text
-import tpc.UIKit.Button
-import tpc.UIKit.Column
-import tpc.UIKit.CustomView
+internal import ohos.base.LengthProp
+internal import ohos.component.Column
+internal import ohos.component.Row
+internal import ohos.component.Text
+internal import ohos.component.CustomView
+internal import ohos.component.CJEntry
+internal import ohos.component.loadNativeView
+internal import ohos.component.FontWeight
+internal import ohos.state_manage.SubscriberManager
+internal import ohos.state_manage.ObservedProperty
+internal import ohos.state_manage.LocalStorage
 import ohos.state_macro_manage.State
 import ohos.state_macro_manage.Component
 import ohos.state_manage.LocalStorage
 import ohos.state_manage.ObservedProperty
 import ohos.state_manage.SubscriberManager
 import ohos.state_manage.ViewStackProcessor
-import ohos.state_macro_manage.HybridComponentEntry
-import ohos.hybrid_base.CJPageEntry
-import ohos.hybrid_base.HybridComponentBase
-import cj_res_entry.app
-
-@HybridComponentEntry
+import ohos.state_macro_manage.Entry
+import ohos.state_macro_manage.Component
+import ohos.state_macro_manage.State
+import ohos.state_macro_manage.r
+internal import ohos.ability.UIAbilityContext
+import svga.*
+import svga.player.*
+@Entry
 @Component
-class Index {
+class EntryView {
     @State
-    var msg: String = "Hello"
-
-    public func build() {
+    var message: String = "Hello World"
+    var controller: SvgaController = SvgaController()
+    func build() {
         Column {
-            Text(msg)
-            Button("click to change Text").onClick {
-                => msg = "world"
-            }
+              SvgaPlayer(url: "angel.svga",abilitycontext: getContext(),controller: Option<SvgaController>.Some(controller))
         }
+    }
+}
+func getContext(): UIAbilityContext {
+    match (globalcontext) {
+        case Some(context)  => context
+    	case _=> throw Exception("can not get globalcontext")
     }
 }
