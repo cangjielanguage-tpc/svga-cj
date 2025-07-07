@@ -5,7 +5,7 @@
 <p align="center">
 <img alt="" src="https://img.shields.io/badge/release-v1.0.0-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjc-v0.53.18-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v1.0.0-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/cjcov-NA-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
@@ -52,7 +52,7 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
        "srcPath": "./svga"
        }
        ```
-    4. 修改自身应用 entry 下的 oh-package.json5 文件，在 dependencies 字段添加 "svga": "file:../svga"
+    4. 修改自身应用 entry 下的 oh-package.json5 文件，在 dependencies 字段添加 "@cangjie-tpc/svga": "file:../svga"
        ```json
        {
           "name": "entry",
@@ -61,15 +61,16 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
           "main": "",
           "author": "",
           "license": "",
-         "dependencies": {
-             "svga": "file:../svga"
-         }
-       }
+          "dependencies": {
+            "@cangjie-tpc/svga": "file:../svga"
+          }
+        }
        ```
-    5. 修改自身应用 entry/src/main/cangjie 下的 cjpm.toml 文件，在 [dependencies] 字段下添加 svga = {path = "../../../../svga/src/main/cangjie", version = "1.0.0"}
+    5. 修改自身应用 entry/src/main/cangjie 下的 cjpm.toml 文件，在 [dependencies] 字段下添加 svga = {path = "${cangjie_tpc_svga}"}
        ```toml
        [dependencies]
-           svga = {path = "../../../../svga/src/main/cangjie", version = "1.0.0"}
+        [dependencies.svga]
+        path = "${cangjie_tpc_svga}"
        ```
     6. 在项目中使用 import svga.* 引用svga项目
        ```cangjie
@@ -103,8 +104,8 @@ class Index {
 
 在下述版本验证通过：
 
-    DevEco Studio 5.0.2 Release(5.0.7.200) 
-    Cangjie Support Plugin 5.0.7.100
+    IDE: DevEco Studio 5.1.0 Release(Build Version: 5.1.0.828)
+    Cangjie Support Plugin: DevEco Studio-Cangjie Support Plugin 5.1.0.828
 
 1. 只支持2.0版本svga资源
 2. 不支持音频动画播放

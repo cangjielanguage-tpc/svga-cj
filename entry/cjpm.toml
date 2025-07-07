@@ -37,4 +37,4 @@
 
 [dependencies]
   [dependencies.svga]
-    path = "${svga}"
+    path = "${cangjie_tpc_svga}"
