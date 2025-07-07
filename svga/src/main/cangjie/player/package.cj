@@ -13,4 +13,5 @@ internal import ohos.file_fs.*
 internal import ohos.matrix4.*
 internal import ohos.ability.*
 internal import ohos.hilog.*
+internal import svga.global.*
 internal import kit.UIKit.PromptAction

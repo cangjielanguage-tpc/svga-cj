@@ -3,6 +3,6 @@
  */
 package svga.global
 
-internal import ohos.ability.UIAbilityContext
+internal import ohos.ability.AbilityContext
 
-public var globalcontext: Option<UIAbilityContext> = Option<UIAbilityContext>.None
+public var globalcontext: Option<AbilityContext> = Option<AbilityContext>.None

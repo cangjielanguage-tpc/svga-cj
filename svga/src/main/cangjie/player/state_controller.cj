@@ -28,17 +28,17 @@ public class StateController {
                 player.animator()?.pause()
             }
         )
-        if(let Some(v) <- this.owner.uiContext()) {
-            var applicationContext = v.getApplicationContext()
-            applicationContext.on(ApplicationContextType.APPLICATION_STATE_CHANGE,this.applicationStateChangeCallback)
-        }
+//        if(let Some(v) <- this.owner.uiContext()) {
+//            var applicationContext = v.getApplicationContext()
+//            applicationContext.on(ApplicationContextType.APPLICATION_STATE_CHANGE,this.applicationStateChangeCallback)
+//        }
     }
 
     func release() {
-        if(let Some(v) <- this.owner.uiContext()) {
-            var applicationContext = v.getApplicationContext()
-            applicationContext.off(ApplicationContextType.APPLICATION_STATE_CHANGE,callback:this.applicationStateChangeCallback)
-        }
+//        if(let Some(v) <- this.owner.uiContext()) {
+//            var applicationContext = v.getApplicationContext()
+//            applicationContext.off(ApplicationContextType.APPLICATION_STATE_CHANGE,callback:this.applicationStateChangeCallback)
+//        }
     }
 
     func pageUpdateCallback(flag: Bool) {

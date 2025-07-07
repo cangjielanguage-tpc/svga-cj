@@ -15,7 +15,8 @@ public class SourceManager {
 
     init(context: Context) {
         let m: Random = Random(3)
-        this._basePath = context.cacheDir + '/svga' + "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
+//        this._basePath = context.cacheDir + '/svga' + "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
+        this._basePath ="svga" + "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
         initSourceManager()
     }
 

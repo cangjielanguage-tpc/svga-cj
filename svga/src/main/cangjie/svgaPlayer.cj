@@ -10,16 +10,15 @@ import svga.player.CanvasSizeAndTrans
 import svga.parser.Parser
 import svga.player.*
 import svga.global.*
-import ohos.ability.*
 import ohos.hilog.*
-
+import ohos.ability.AbilityContext
 @Component
 public class SvgaPlayer {
     @State
     @Watch[updateSource]
     var url: String = ""
     @Prop
-    var abilitycontext: UIAbilityContext
+    var abilitycontext: AbilityContext
     var controller: SvgaController = SvgaController()
     var setting: RenderingContextSettings = RenderingContextSettings(antialias: true)
     var context: CanvasRenderingContext2D = CanvasRenderingContext2D(this.setting,LengthMetricsUnit.PX)
