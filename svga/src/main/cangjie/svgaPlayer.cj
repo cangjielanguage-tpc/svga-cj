@@ -12,6 +12,7 @@ import svga.player.*
 import svga.global.*
 import ohos.hilog.*
 import ohos.ability.AbilityContext
+import ohos.system_date_time.*
 @Component
 public class SvgaPlayer {
     @State
@@ -40,6 +41,9 @@ public class SvgaPlayer {
         this.controller.setplayer(Player(globalcontext.getOrThrow(), this.context))
         this.controller.getplayer().canvasValue(this.canvasValue)
         this.controller.getplayer().parentSize(Sizes(width: Int32(this.context.width().value),height: Int32(this.context.height().value)))
+        controller.getplayer().onFinished(test666)
+        let start=SystemDateTime.getTime(isNano:true)
+        Hilog.error(10, "123", "------------------111------------->>${start} ns/op\n")
     }
 
     public func aboutToDisappear():Unit{
@@ -98,4 +102,10 @@ public class SvgaPlayer {
         this.controller.stopAnimation(true)
         this.controller.load(this.url)
     }
+}
+
+public func test666(): Unit {
+    let end = SystemDateTime.getTime(isNano:true)
+    Hilog.error(10, "123", "------------------end------------->>${end} ns/op\n")
+//    AppLog.info("[ PASSED ] CASE: test_queryDupes_02_${count} :${(end-start)/count} ns/op\n")
 }
