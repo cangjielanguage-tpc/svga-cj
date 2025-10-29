@@ -12,11 +12,12 @@ import svga.player.*
 import svga.global.*
 import ohos.hilog.*
 import ohos.ability.AbilityContext
+import ohos.matrix4
+import ohos.matrix4.Matrix4
 @Component
 public class SvgaPlayer {
-    @State
-    @Watch[updateSource]
-    var url: String = ""
+
+    @Link @Watch[updateSource] var url: String = ""
     @Prop
     var abilitycontext: AbilityContext
     var controller: SvgaController = SvgaController()
@@ -27,7 +28,28 @@ public class SvgaPlayer {
     public var onReady: ?() -> Unit = None
     var onreadyIsLose: Bool = false
 
-    public func updateSource() {
+
+    @State var w: Float64 = 1.0
+    @State var h: Float64 = 1.0
+    @State var x: Float32 = 1.0
+    @State var y: Float32 = 1.0
+    @State var z: Float32= 0.0
+    @State var centerX: Length = 0.0
+    @State var centerY:Length = 0.0
+    @State var transformValue: matrix4.Matrix4Transit = Matrix4.identity()
+    func canvasValueCallback(value: CanvasSizeAndTrans): Unit {
+        w=value.width.value
+        h=value.height.value
+        x=value.scaleValue.x
+        y=value.scaleValue.y
+        z=value.scaleValue.z
+        centerX=value.scaleValue.centerX.value
+        centerY=value.scaleValue.centerY.value
+        transformValue=value.transformValue
+
+    }
+    func updateSource() {
+        this.controller.getplayer().animator()?.release()
         this.playAnim()
         return
     }
@@ -38,8 +60,7 @@ public class SvgaPlayer {
         var player = Player(uiContext, this.context)
 
         this.controller.setplayer(Player(globalcontext.getOrThrow(), this.context))
-        this.controller.getplayer().canvasValue(this.canvasValue)
-        this.controller.getplayer().parentSize(Sizes(width: Int32(this.context.width().value),height: Int32(this.context.height().value)))
+        this.controller.getplayer().canvasValue(this.canvasValue,canvasValueCallback)
     }
 
     public func aboutToDisappear():Unit{
@@ -49,19 +70,18 @@ public class SvgaPlayer {
     public func build() {
         Stack(Alignment.TopStart) {
             Canvas(this.context)
-                .width(this.canvasValue.width)
-                .height(this.canvasValue.height)
-                .transform(this.canvasValue.transformValue)
+                .width(w)
+                .height(h)
+                .transform(transformValue)
                 .scale(
-                    x: this.canvasValue.scaleValue.x,
-                    y: this.canvasValue.scaleValue.y,
-                    z: this.canvasValue.scaleValue.z,
-                    centerX: this.canvasValue.scaleValue.centerX,
-                    centerY: this.canvasValue.scaleValue.centerY
+                    x: x,
+                    y: y,
+                    z: z,
+                    centerX: centerX,
+                    centerY: centerY
                 )
                 .backgroundColor(Color.TRANSPARENT)
                 .onReady {
-                    this.controller.getplayer().parentSize(Sizes(width: Int32(this.context.width()),height: Int32(this.context.height())))
                     if (this.onreadyIsLose) {
                         return
                     }
@@ -81,7 +101,8 @@ public class SvgaPlayer {
             .height(100.percent)
             .onAreaChange(
                 {
-                    old, area => this.controller.getplayer().parentSize(
+                    old, area =>
+                        this.controller.getplayer().parentSize(
                             Sizes(
                                 width: Int32(vp2px(area.width).getOrThrow().value),
                                 height: Int32(vp2px(area.height).getOrThrow().value)
@@ -89,11 +110,6 @@ public class SvgaPlayer {
                         )
                 })
     }
-
-    public func width(width:Float64):This{
-        return this
-    }
-
     func playAnim() {
         this.controller.stopAnimation(true)
         this.controller.load(this.url)

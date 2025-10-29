@@ -8,7 +8,10 @@ import svga.*
 import svga.player.*
 import ohos.hilog.*
 internal import ohos.ability.AbilityContext
-
+import ohos.system_date_time.*
+import svga.parser.PLAYER_CONTENT_MODE
+import svga.proto.*
+import ohos.router.Router
 @Entry
 @Component
 class EntryView {
@@ -18,9 +21,11 @@ class EntryView {
 
     public func build() {
         Column {
-            SvgaPlayer(url: "angel.svga", abilitycontext: globalcontext.getOrThrow(), controller: controller)
-        }.width(100.percent)
-        .aspectRatio(1)
-        .backgroundColor(Color.BLUE)
+            Column {
+                    SvgaPlayer(url: "angel.svga", abilitycontext: globalcontext.getOrThrow(), controller: controller)
+            }
+            .width(30.percent)
+        }
+
     }
 }

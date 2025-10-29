@@ -10,6 +10,7 @@ import svga.parser.*
 import svga.proto.*
 import std.math.*
 import ohos.base.Length
+import svga.model.TextMap
 
 public struct SvgaPlayerProps {
     public var pageUpdateMode: PageUpdateMode
@@ -31,7 +32,7 @@ public struct SvgaPlayerProps {
 public class CanvasSizeAndTrans {
     public var width: Length = 100.percent
     public var height: Length = 100.percent
-    public var transformValue: matrix4.Matrix4Transit = matrix4.Matrix4Transit(0)
+    public var transformValue: matrix4.Matrix4Transit = Matrix4.identity()
     public var scaleValue: ScaleOptions = ScaleOptions(x: 1.0, y: 1.0)
 }
 
@@ -184,11 +185,61 @@ public class SvgaController {
         this._player?.stepToPercentage(percentage, andPlay)
     }
 
+
+    public func setImage(urlOrResource: ImageSource, forKey: String, transform!: ?Transform = None) {
+        if (this._player.isNone()) {
+            throw Exception('请在资源加载后调用')
+        }
+        this._player?.setImage(urlOrResource,forKey,transform)
+    }
+
+    public func setImage(urlOrResource: String, forKey: String, transform!: ?Transform = None) {
+        if (this._player.isNone()) {
+            throw Exception('请在资源加载后调用')
+        }
+        this._player?.setImage(urlOrResource,forKey,transform)
+    }
+
+    public func setText(textORMap: String, forKey: String) {
+        if (this._player.isNone()) {
+            throw Exception('请在资源加载后调用')
+        }
+        this._player?.setText(textORMap,forKey)
+    }
+
+    public func setText(textORMap: TextMap, forKey: String) {
+        if (this._player.isNone()) {
+            throw Exception('请在资源加载后调用')
+        }
+        this._player?.setText(textORMap,forKey)
+    }
+
     public func clearDynamicObjects() {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.clearDynamicObjects()
+    }
+
+    public func onFinished(callback: () -> Unit) {
+        if (this._player.isNone()) {
+            throw Exception('请在资源加载后调用')
+        }
+        this._player?.onFinished(callback)
+    }
+
+    public func onFrame(callback: (Float64) -> Unit) {
+        if (this._player.isNone()) {
+            throw Exception('请在资源加载后调用')
+        }
+        this._player?.onFrame(callback)
+    }
+
+    public func onPercentage(callback: (Float64) -> Unit) {
+        if (this._player.isNone()) {
+            throw Exception('请在资源加载后调用')
+        }
+        this._player?.onPercentage(callback)
     }
 
     public func setLoops(loops: Int32) {

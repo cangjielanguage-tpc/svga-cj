@@ -207,13 +207,17 @@ public class Player {
      */
     private var _canvasValue: CanvasSizeAndTrans = CanvasSizeAndTrans()
 
+    private var canvasValueCallback: (CanvasSizeAndTrans) -> Unit={_: CanvasSizeAndTrans => ()}
+
     public func canvasValue(): CanvasSizeAndTrans {
         return this._canvasValue
     }
 
-    public func canvasValue(value: CanvasSizeAndTrans) {
+    public func canvasValue(value: CanvasSizeAndTrans,callback: (CanvasSizeAndTrans) -> Unit) {
         this._canvasValue = value
+        this.canvasValueCallback=callback
     }
+
 
     private var _globalTransform: ?Transform = None
 
@@ -314,7 +318,7 @@ public class Player {
         if (cleares.isNone()) {
             cleares = this._clearsAfterStop
         }
-        if (cleares.isSome()) {
+        if (cleares.getOrThrow()) {
             this.clear()
         }
     }
@@ -458,14 +462,7 @@ public class Player {
     }
 
     public func setImage(urlOrResource: String, forKey: String, transform: ?Transform) {
-        var imageArray: Array<UInt8> = Array<UInt8>()
-        let stageContext = getStageContext(globalcontext.getOrThrow())
-        let rm = ResourceManager.getResourceManager(stageContext)
-        imageArray = rm.getRawFileContent(urlOrResource)
-        if (imageArray.isEmpty()) {
-            return
-        }
-        let imageResource = createImageSource(imageArray)
+        let imageResource = createImageSource(urlOrResource)
         this._renderer?.setDynamicImage(imageResource, forKey)
         if (let Some(v) <- transform) {
             this._dynamicImageTransform.add(forKey, v)
@@ -479,29 +476,23 @@ public class Player {
      */
     public func setText(textORMap: String, forKey: String) {
         let text = textORMap
-        let size = "${fp2px(14.0)?.value}.px"
+        let size = vp2px(14.0.vp)
         let family = "Arial"
-        let color = "#000000"
-        let weight = "normal"
+        let color = Color(0x000000)
+        let weight = FontWeight.Normal
         let offset: TextOffset = TextOffset()
-        this._dynamicText.add(forKey, TextMap(text: text, style: FontStyle.Normal, color: color, offset: offset))
+        this._dynamicText.add(forKey, TextMap(text: text,size:size, color: color, offset: offset,family: family,style: FontStyle.Normal,weight: weight))
     }
 
     public func setText(textORMap: TextMap, forKey: String) {
-        let text = textORMap.text
-        var size: String
-        let family = textORMap.family
-        let color = textORMap.color
-        let weight = textORMap.weight
-        if (textORMap.size.isSome()) {
-            size = "${fp2px(textORMap.size.getOrThrow())?.value}.px"
-        } else {
-            size = "${fp2px(14.0)?.value}.px"
+        let size = if (let Some(v) <- textORMap.size) {
+            vp2px(v.value)
+        }else {
+            vp2px(14.0.vp)
         }
-        let offset: ?TextOffset = textORMap.offset
         this._dynamicText.add(
             forKey,
-            TextMap(text: text, style: FontStyle.Normal, color: color, offset: offset)
+            TextMap(text: textORMap.text,size:size, color: textORMap.color, offset: textORMap.offset,family: textORMap.family,style: FontStyle.Normal,weight: textORMap.weight)
         )
     }
 
@@ -644,7 +635,7 @@ public class Player {
      * 设置尺寸
      */
     private func _resize() {
-        this._canvasValue.transformValue=matrix4.Matrix4Transit(0)
+        this._canvasValue.transformValue=Matrix4.identity()
         this._globalTransform = None
         this._canvasValue.scaleValue = ScaleOptions(
             x: 1.0,
@@ -658,21 +649,8 @@ public class Player {
             var translateX = 0.0;
             var translateY = 0.0;
             var targetSize: Sizes = Sizes(height: 0, width: 0)
-            if (this._parentSize.width != 0 && this._parentSize.height != 0) {
-                targetSize = Sizes(height: this._parentSize.height, width: this._parentSize.width)
-            } else {
-                let width_1: Int32 = if (let Some(v) <- this._videoItem) {
-                    Int32(v.params.viewBoxWidth)
-                } else {
-                    0
-                }
-                let height_1: Int32 = if (let Some(v) <- this._videoItem) {
-                    Int32(v.params.viewBoxHeight)
-                } else {
-                    0
-                }
-                targetSize = Sizes(height: height_1, width: width_1)
-            }
+
+           targetSize = Sizes(height: this._parentSize.height, width: this._parentSize.width)
             var width_imageSize: Int32 = if (let Some(v) <- this._videoItem) {
                 Int32(v.params.viewBoxWidth)
             } else {
@@ -715,8 +693,8 @@ public class Player {
                     ty: Float32(translateY)
                 )
             } else {
-                this._canvasValue.width = px2vp(Float64(imageSize.width)).getOrThrow()
-                this._canvasValue.height = px2vp(Float64(imageSize.height)).getOrThrow()
+                this._canvasValue.width = px2vp(Float64(imageSize.width).px).getOrThrow()
+                this._canvasValue.height = px2vp(Float64(imageSize.height).px).getOrThrow()
                 if (this._contentMode == PLAYER_CONTENT_MODE.Fill) {
                     scaleX = Float64(targetSize.width) / Float64(imageSize.width)
                     scaleY = Float64(targetSize.height) / Float64(imageSize.height)
@@ -730,8 +708,8 @@ public class Player {
                     )
                 } else if (this._contentMode == PLAYER_CONTENT_MODE.AspectFit || this._contentMode == PLAYER_CONTENT_MODE
                     .AspectFill) {
-                    let imageRatio = imageSize.width / imageSize.height;
-                    let viewRatio = targetSize.width / targetSize.height;
+                    let imageRatio = Float64(imageSize.width) / Float64(imageSize.height);
+                    let viewRatio = Float64(targetSize.width) / Float64(targetSize.height);
                     if ((imageRatio >= viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio <=
                         viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit)) {
                         scaleY = Float64(targetSize.width) / Float64(imageSize.width)
@@ -772,6 +750,7 @@ public class Player {
                 }
             }
         }
+        this.canvasValueCallback(this._canvasValue)
     }
 
     private func _update() {
@@ -780,6 +759,7 @@ public class Player {
         }
         this._renderer?.drawFrame(this._currentFrame)
         this._renderer?.playAudio(this._currentFrame)
+        this._resize()
     }
 }
 
