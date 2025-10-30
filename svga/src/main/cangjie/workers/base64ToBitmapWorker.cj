@@ -4,9 +4,6 @@
 package svga.workers
 
 import ohos.image.*
-import ohos.resource_manager.AppResource
-import ohos.ability.*
-import ohos.base.BusinessException
 import stdx.encoding.base64.*
 
 func workerPort(data: MessageEvents) {
@@ -22,7 +19,8 @@ func workerPort(data: MessageEvents) {
             var img = createImageSource(buf)
             var info = img.getImageInfo()
             var pixelMap: ?PixelMap = None
-            pixelMap = img.createPixelMap(options: DecodingOptions(editable: false,desiredSize: Size(width: info.size.width, height: info.size.height)))
+            pixelMap = img.createPixelMap(options: DecodingOptions(editable: false,
+                desiredSize: Size(width: info.size.width, height: info.size.height)))
             img.Release()
             pixelMap?.Release()
             pixelMap = None

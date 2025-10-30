@@ -7,6 +7,7 @@ import ohos.base.Length
 import ohos.component.FontStyle
 import ohos.base.Color
 import kit.UIKit.*
+
 public class TextMap {
     public var text: String
     public var size: ?Length
@@ -17,7 +18,7 @@ public class TextMap {
     public var weight: ?FontWeight
 
     public init(text!: String = "", size!: ?Length = None, color!: ?Color = None, offset!: ?TextOffset = None,
-        family!: ?String = None, style!: FontStyle = FontStyle.Normal, weight!: ?FontWeight  = None) {
+        family!: ?String = None, style!: FontStyle = FontStyle.Normal, weight!: ?FontWeight = None) {
         this.text = text
         this.size = size
         this.color = color
@@ -33,8 +34,7 @@ public class TextOffset {
     public var y: Float64
 
     public init(x!: Float64 = 0.0, y!: Float64 = 0.0) {
-        this.x=x
-        this.y=y
+        this.x = x
+        this.y = y
     }
 }
-

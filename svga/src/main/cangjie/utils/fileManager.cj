@@ -7,7 +7,6 @@ import ohos.file_fs.*
 import stdx.encoding.base64.*
 internal import std.random.*
 internal import std.time.DateTime
-import kit.AbilityKit.*
 import std.fs as stdfs
 import ohos.hilog.Hilog
 import std.io.readToEnd
@@ -36,19 +35,18 @@ public class FileManager {
         try {
             FileFs.mkdir(p)
             let m: Random = Random(3)
-            var filePath = p + '/' + "${DateTime.now().nanosecond}"+" ${m.nextUInt64()}" + '.zip'
+            var filePath = p + '/' + "${DateTime.now().nanosecond}" + " ${m.nextUInt64()}" + '.zip'
             var file1 = FileFs.open(filePath, mode: (READ_WRITE.mode | CREATE.mode))
             FileFs.close(file1.fd)
-            var file = stdfs.File(filePath,stdfs.OpenMode.ReadWrite)
+            var file = stdfs.File(filePath, stdfs.OpenMode.ReadWrite)
             file.write(data)
             file.close()
-            var file2 = stdfs.File(filePath,stdfs.OpenMode.Read)
-            var res=readToEnd(file2)
+            var file2 = stdfs.File(filePath, stdfs.OpenMode.Read)
+            var res = readToEnd(file2)
             file2.close()
             let m1: Random = Random(3)
-            var path = p + '/' + "${DateTime.now().nanosecond}"+"${m1.nextUInt64()}"
+            var path = p + '/' + "${DateTime.now().nanosecond}" + "${m1.nextUInt64()}"
             FileFs.mkdir(path)
-//            Zip.deCompressFile(filePath,path)
             return path
         } catch (e: Exception) {
             return None

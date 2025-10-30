@@ -2,7 +2,9 @@
  * Copyright (c) Huawei Technologies Co., Ltd. 2025-2025. All rights reserved.
  */
 package svga.parser
+
 import svga.proto.*
+
 public type Tag = UInt32
 
 public type SuccessFn = (MovieEntity) -> Unit

@@ -4,8 +4,6 @@
 package svga.utils
 
 import svga.proto.*
-import std.io.ByteBuffer
-import std.io.readToEnd
 import std.collection.ArrayList
 import std.collection.HashMap
 import ohos.hilog.*
@@ -13,12 +11,9 @@ import zlib4cj.*
 import svga.global.*
 import std.regex.*
 import ohos.image.*
-import ohos.component.*
 import std.convert.*
-//import svga.proto.RepeatedMessage
-//import svga.proto.ShapeEntity_ShapeType
-//import svga.proto.ShapeEntity
 import protobuf.*
+
 public func Inflate(src: Array<Byte>): Future<MovieEntity> {
     let fut: Future<MovieEntity> = spawn {
         =>
@@ -42,11 +37,11 @@ public func Inflate(src: Array<Byte>): Future<MovieEntity> {
             res.unpack(result.toArray())
             var lastShapes = RepeatedMessage<ShapeEntity>()
             for (sprite in res.sprites) {
-                for(frame in sprite.frames) {
-                    if(frame.shapes.size>0 && frame.shapes[0].type_ == ShapeEntity_ShapeType.KEEP) {
-                        frame.shapes=lastShapes
+                for (frame in sprite.frames) {
+                    if (frame.shapes.size > 0 && frame.shapes[0].type_ == ShapeEntity_ShapeType.KEEP) {
+                        frame.shapes = lastShapes
                     } else {
-                    	lastShapes = frame.shapes
+                        lastShapes = frame.shapes
                     }
                 }
             }
@@ -57,8 +52,8 @@ public func Inflate(src: Array<Byte>): Future<MovieEntity> {
 }
 
 func InflateV1(src: Array<Byte>): Unit {
-    let m:Random=Random(3)
-    var filePath = globalcontext.getOrThrow().cacheDir + '/'+ "${DateTime.now().nanosecond} "+" ${m.nextUInt64()}"
+    let m: Random = Random(3)
+    var filePath = globalcontext.getOrThrow().cacheDir + '/' + "${DateTime.now().nanosecond} " + " ${m.nextUInt64()}"
     let paths = FileManager.saveAndUnzipFile(src, filePath)
     if (let Some(path) <- paths) {
         let files = FileManager.getFiles(path)
@@ -79,12 +74,10 @@ func InflateV1(src: Array<Byte>): Unit {
         let movieStartIndex = str.indexOf('"movie":').getOrThrow() + '"movie":'.size;
         let movieEndIndex = str.indexOf('}', movieStartIndex).getOrThrow() + 1;
         let movieContent = str[movieStartIndex..movieEndIndex]
-
         // 获取 viewBox 的宽度和高度
         let viewBoxStartIndex = movieContent.indexOf('"viewBox":').getOrThrow() + '"viewBox":'.size;
         let viewBoxEndIndex = movieContent.indexOf('}', viewBoxStartIndex).getOrThrow() + 1;
         let viewBoxContent = movieContent[viewBoxStartIndex..viewBoxEndIndex]
-
         // 提取 width 和 height
         let widthStartIndex = viewBoxContent.indexOf('"width":').getOrThrow() + '"width":'.size;
         let widthEndIndex = viewBoxContent.indexOf(',', widthStartIndex).getOrThrow();

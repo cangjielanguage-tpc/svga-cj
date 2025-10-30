@@ -11,9 +11,7 @@ import svga.parser.RectPath
 import svga.audio.*
 import std.collection.*
 import std.convert.*
-import ohos.advertising.advertising.ValueType
 import std.regex.Regex
-import ohos.contact.Holder
 
 var validMethods = 'MLHVCSQAZmlhvcsqaz'
 
@@ -153,7 +151,10 @@ public class Renderer {
         }
         this.lastShape.clear()
         for ((k, v) in this.dynamicImage) {
-            v.Release()
+            try {
+                v.Release()
+            } catch (error: Exception) {
+            }
         }
     }
 
@@ -227,7 +228,7 @@ public class Renderer {
         if (sprite.frames.size == 0) {
             return;
         }
-        if(sprite.frames.get(Int64(this.owner.currentFrame())).isNone()) {
+        if (sprite.frames.get(Int64(this.owner.currentFrame())).isNone()) {
             return;
         }
         if (sprite.frames[Int64(this.owner.currentFrame())].alpha < 0.05) {
@@ -322,32 +323,32 @@ public class Renderer {
         let dynamicText = this.owner.dynamicText().get(sprite.imageKey)
         if (let Some(dynamicText) <- dynamicText) {
             ctx.textBaseline(TextBaseline.Middle)
-            let weights: FontWeight =  if (let Some(v) <- dynamicText.weight) {
+            let weights: FontWeight = if (let Some(v) <- dynamicText.weight) {
                 v
             } else {
                 FontWeight.Normal
             }
-            let sizes =  if (let Some(v) <- dynamicText.size) {
+            let sizes = if (let Some(v) <- dynamicText.size) {
                 v
             } else {
                 vp2px(14.0.vp).getOrThrow()
             }
-            ctx.font(style: dynamicText.style,weight: weights,size: sizes, family: dynamicText.family ?? "sans-serif")
+            ctx.font(style: dynamicText.style, weight: weights, size: sizes, family: dynamicText.family ?? "sans-serif")
             let textWidth = ctx.measureText(dynamicText.text).width
             let offsetX = if (let Some(v) <- dynamicText.offset) {
-            	v.x
-            }else {
-            	0.0
+                v.x
+            } else {
+                0.0
             }
             let offsetY = if (let Some(v) <- dynamicText.offset) {
-            	v.y
-            }else {
-            	0.0
+                v.y
+            } else {
+                0.0
             }
             if (let Some(v) <- dynamicText.color) {
                 ctx.fillStyle(v)
-            }else {
-            	ctx.fillStyle(0x000000)
+            } else {
+                ctx.fillStyle(0x000000)
             }
             ctx.fillText(
                 dynamicText.text,

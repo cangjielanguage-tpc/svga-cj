@@ -8,9 +8,7 @@ import svga.utils.*
 import ohos.resource_manager.*
 import std.collection.HashMap
 import stdx.encoding.base64.*
-import std.io.ByteBuffer
 import ohos.hilog.Hilog
-import ohos.prompt_action.PromptAction
 
 public type CbFn = (MockWorkerResponseData) -> Unit
 

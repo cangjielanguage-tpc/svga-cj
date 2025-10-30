@@ -4,13 +4,11 @@
 package svga.audio
 
 import kit.MediaKit.*
-import std.collection.*
 import ohos.base.BusinessException
 import std.random.*
 import std.time.DateTime
 import ohos.base.Callback1Argument
 import ohos.base.Callback3ArgumentWithReturn
-import ohos.hilog.Hilog
 
 class SeekDoneCallback <: Callback1Argument<Int32> {
     var src: AVPlayer
@@ -39,8 +37,7 @@ class StateChangeCallback <: OnAVPlayerStateChangeHandle {
     }
     public open func invoke(state: AVPlayerState, reason: StateChangeReason): Unit {
         match (state) {
-            case idle =>
-                ()
+            case idle => ()
             case initialized => src.player?.prepare()
             case prepared =>
                 if (src.seekPlay) {

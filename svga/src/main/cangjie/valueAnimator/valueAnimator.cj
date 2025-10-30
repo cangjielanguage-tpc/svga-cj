@@ -5,8 +5,6 @@ package svga.valueAnimator
 
 import ohos.component.ExpectedFrameRateRange
 import ohos.animator.*
-import std.math.*
-import svga.parser.*
 import ohos.ability.*
 
 public enum AnimatorPlayStatus {
@@ -70,7 +68,8 @@ public class ValueAnimator {
                     end: this.endValue
                 )
             )
-            this._animator.getOrThrow().setExpectedFrameRateRange(ExpectedFrameRateRange(min:0,max:120,expected:Int32(this.FPS)))
+            this._animator.getOrThrow().setExpectedFrameRateRange(ExpectedFrameRateRange(min: 0, max: 120,
+                expected: Int32(this.FPS)))
         }
         this._animator.getOrThrow().onframe = {
             frame => if (let Some(function) <- this.onUpdate) {
@@ -119,7 +118,7 @@ public class ValueAnimator {
     }
 
     public func release() {
-        if(let Some(animator)<-this._animator){
+        if (let Some(animator) <- this._animator) {
             animator.finish()
         }
         this._animator = None

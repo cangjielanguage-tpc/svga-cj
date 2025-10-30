@@ -11,11 +11,8 @@ import svga.proto.*
 import svga.parser.*
 import svga.model.*
 import ohos.component.*
-import svga.global.*
-import ohos.state_macro_manage.*
 import ohos.matrix4
 import kit.UIKit.*
-import kit.LocalizationKit.*
 
 public class Player {
     private var _onFinished: ?() -> Unit = None
@@ -23,7 +20,7 @@ public class Player {
     private var _onPercentage: ?(Float64) -> Unit = None
     // 倍率
     private var _speed: Float64 = 1.0
-    private var _playerController:? StateController=None
+    private var _playerController: ?StateController = None
 
     public init(UIContext: AbilityContext, canvasRenderer: CanvasRenderingContext2D) {
         this._uiContext = UIContext
@@ -35,7 +32,7 @@ public class Player {
         this._renderer = Renderer(this)
     }
 
-    private var _sourceManager:? SourceManager=None
+    private var _sourceManager: ?SourceManager = None
 
     public func sourceManager(): ?SourceManager {
         return this._sourceManager
@@ -101,9 +98,8 @@ public class Player {
     }
 
     /**
-     * 播放完成时页面停留模式
+     * 播放完成时页面停留模式。使用 AnimatorFill 代替 PLAYER_FILL_MODE
      */
-    //使用 AnimatorFill 代替 PLAYER_FILL_MODE
     private var _fillMode: AnimatorFill = AnimatorFill.Forwards
 
     public func fillMode(): AnimatorFill {
@@ -207,17 +203,16 @@ public class Player {
      */
     private var _canvasValue: CanvasSizeAndTrans = CanvasSizeAndTrans()
 
-    private var canvasValueCallback: (CanvasSizeAndTrans) -> Unit={_: CanvasSizeAndTrans => ()}
+    private var canvasValueCallback: (CanvasSizeAndTrans) -> Unit = {_: CanvasSizeAndTrans => ()}
 
     public func canvasValue(): CanvasSizeAndTrans {
         return this._canvasValue
     }
 
-    public func canvasValue(value: CanvasSizeAndTrans,callback: (CanvasSizeAndTrans) -> Unit) {
+    public func canvasValue(value: CanvasSizeAndTrans, callback: (CanvasSizeAndTrans) -> Unit) {
         this._canvasValue = value
-        this.canvasValueCallback=callback
+        this.canvasValueCallback = callback
     }
-
 
     private var _globalTransform: ?Transform = None
 
@@ -361,14 +356,14 @@ public class Player {
      * @param percentage
      * @param andPlay
      */
-    public func stepToPercentage(percentage: Int64, andPlay: Bool) {
+    public func stepToPercentage(percentage: Float64, andPlay: Bool) {
         var src = if (let Some(v) <- this._videoItem) {
             Float64(v.params.frames)
         } else {
             1.0
         }
-        //parseInt用于将给定字符串转化为指定进制的整数。
-        var frame: Float64 = (Float64(percentage) * src)
+        // parseInt用于将给定字符串转化为指定进制的整数。
+        var frame: Float64 = percentage * src
         if (frame >= src && frame > 0.0) {
             frame = src - 1.0
         }
@@ -406,9 +401,9 @@ public class Player {
         this._renderer?.release()
         this._renderer = None
         this._playerController?.release()
-        this._playerController=None
+        this._playerController = None
         this._sourceManager?.release()
-        this._sourceManager=None
+        this._sourceManager = None
         this._uiContext = None
         this.clearDynamicObjects()
         this._globalTransform = None
@@ -481,19 +476,18 @@ public class Player {
         let color = Color(0x000000)
         let weight = FontWeight.Normal
         let offset: TextOffset = TextOffset()
-        this._dynamicText.add(forKey, TextMap(text: text,size:size, color: color, offset: offset,family: family,style: FontStyle.Normal,weight: weight))
+        this._dynamicText.add(forKey, TextMap(text: text, size: size, color: color, offset: offset, family: family,
+            style: FontStyle.Normal, weight: weight))
     }
 
     public func setText(textORMap: TextMap, forKey: String) {
         let size = if (let Some(v) <- textORMap.size) {
             vp2px(v.value)
-        }else {
+        } else {
             vp2px(14.0.vp)
         }
-        this._dynamicText.add(
-            forKey,
-            TextMap(text: textORMap.text,size:size, color: textORMap.color, offset: textORMap.offset,family: textORMap.family,style: FontStyle.Normal,weight: textORMap.weight)
-        )
+        this._dynamicText.add(forKey, TextMap(text: textORMap.text, size: size, color: textORMap.color,
+            offset: textORMap.offset, family: textORMap.family, style: FontStyle.Normal, weight: textORMap.weight))
     }
 
     /**
@@ -517,7 +511,7 @@ public class Player {
         return imageResource
     }
 
-    private func getFps():Float64 {
+    private func getFps(): Float64 {
         var src = if (let Some(v) <- this._videoItem) {
             Float64(v.params.fps)
         } else {
@@ -635,7 +629,7 @@ public class Player {
      * 设置尺寸
      */
     private func _resize() {
-        this._canvasValue.transformValue=Matrix4.identity()
+        this._canvasValue.transformValue = Matrix4.identity()
         this._globalTransform = None
         this._canvasValue.scaleValue = ScaleOptions(
             x: 1.0,
@@ -650,7 +644,7 @@ public class Player {
             var translateY = 0.0;
             var targetSize: Sizes = Sizes(height: 0, width: 0)
 
-           targetSize = Sizes(height: this._parentSize.height, width: this._parentSize.width)
+            targetSize = Sizes(height: this._parentSize.height, width: this._parentSize.width)
             var width_imageSize: Int32 = if (let Some(v) <- this._videoItem) {
                 Int32(v.params.viewBoxWidth)
             } else {
@@ -717,11 +711,11 @@ public class Player {
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
                         translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
                         this._canvasValue.transformValue.translate(
-                        TranslateOption(
-                               x:Float32(translateX) ,
-                               y:Float32(translateY)
-                           )
-                          )
+                                TranslateOption(
+                                    x: Float32(translateX),
+                                    y: Float32(translateY)
+                                )
+                            )
                         this._canvasValue.scaleValue = ScaleOptions(
                             x: Float32(scaleX),
                             y: Float32(scaleY),
@@ -735,11 +729,11 @@ public class Player {
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0
                         translateY = (Float64(targetSize.height) - Float64(imageSize.height) * scaleY) / 2.0
                         this._canvasValue.transformValue.translate(
-                            TranslateOption(
-                                x: Float32(translateX),
-                                y: Float32(translateY)
+                                TranslateOption(
+                                    x: Float32(translateX),
+                                    y: Float32(translateY)
+                                )
                             )
-                        )
                         this._canvasValue.scaleValue = ScaleOptions(
                             x: Float32(scaleX),
                             y: Float32(scaleY),
@@ -764,8 +758,8 @@ public class Player {
 }
 
 public class SvgaRange {
-     var location: Float64
-     var length: Float64
+    var location: Float64
+    var length: Float64
 
     public init(location: Float64, length: Float64) {
         this.length = length

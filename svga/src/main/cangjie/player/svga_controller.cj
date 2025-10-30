@@ -8,7 +8,6 @@ import kit.UIKit.ScaleOptions
 import ohos.animator.*
 import svga.parser.*
 import svga.proto.*
-import std.math.*
 import ohos.base.Length
 import svga.model.TextMap
 
@@ -116,7 +115,7 @@ public class SvgaController {
         if (let Some(v) <- res) {
             this._loading = false
             this._player?.setVideoItem(v)
-            if(autoPlay) {
+            if (autoPlay) {
                 this._player?.startAnimation(false)
             }
         }
@@ -165,7 +164,7 @@ public class SvgaController {
     }
 
     public func clear() {
-        if (this._player.isNone() ) {
+        if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.clear()
@@ -178,40 +177,39 @@ public class SvgaController {
         this._player?.stepToFrame(frame, andPlay: andPlay)
     }
 
-    public func stepToPercentage(percentage: Int64, andPlay: Bool) {
+    public func stepToPercentage(percentage: Float64, andPlay: Bool) {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.stepToPercentage(percentage, andPlay)
     }
 
-
     public func setImage(urlOrResource: ImageSource, forKey: String, transform!: ?Transform = None) {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
-        this._player?.setImage(urlOrResource,forKey,transform)
+        this._player?.setImage(urlOrResource, forKey, transform)
     }
 
     public func setImage(urlOrResource: String, forKey: String, transform!: ?Transform = None) {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
-        this._player?.setImage(urlOrResource,forKey,transform)
+        this._player?.setImage(urlOrResource, forKey, transform)
     }
 
     public func setText(textORMap: String, forKey: String) {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
-        this._player?.setText(textORMap,forKey)
+        this._player?.setText(textORMap, forKey)
     }
 
     public func setText(textORMap: TextMap, forKey: String) {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
-        this._player?.setText(textORMap,forKey)
+        this._player?.setText(textORMap, forKey)
     }
 
     public func clearDynamicObjects() {
@@ -256,7 +254,7 @@ public class SvgaController {
         this._player?.setCurRate(curRate)
     }
 
-    //回收资源
+    // 回收资源
     public func release() {
         this._player?.release()
     }
