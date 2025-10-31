@@ -90,6 +90,25 @@ public class SvgaController {
     public func getfillMode(): AnimatorFill
     
     /**
+     * 获取Player动画播放器
+     *
+     * @return Player类型
+     */
+    public func getplayer(): Player
+    
+    /**
+     * 设置Player动画播放器
+     * 参数 value - Player类型
+     */
+    public func setplayer(value: Player) 
+    
+    /**
+     * 设置Parser动画解析器
+     * 参数 value - Parser类型
+     */
+    public func setparser(value: Parser)
+    
+    /**
      * 加载动画资源
      *
      * @param source - 动画资源的文件路径
@@ -148,9 +167,58 @@ public class SvgaController {
     public func stepToPercentage(percentage: Float64, andPlay: Bool)
     
     /**
+     * 设置动画播放器中图像内容
+     * 参数 urlOrResource - String 类型，图像内容的地址支持resfile文件夹路径
+     * 参数 forKey - String 类型，指定文本的标识键
+     * 参数 transform - Transform 类型，对图像进行变换处
+     */
+    public func setImage(urlOrResource: String, forKey: String, transform!: ?Transform = None)
+    
+    /**
+     * 设置动画播放器中图像内容
+     * 参数 urlOrResource - ImageSource 类型，图片源类
+     * 参数 forKey - String 类型，指定文本的标识键
+     * 参数 transform - Transform 类型，对图像进行变换处
+     */
+    public func setImage(urlOrResource: ImageSource, forKey: String, transform!: ?Transform = None)
+    /**
+     * 设置动画播放中文本内容
+     * 参数 textORMap - String 类型，文本内容
+     * 参数 forKey - String 类型，指定文本的标识键
+     */
+    public func setText(textORMap: String, forKey: String)
+    
+    
+    /**
+     * 设置动画播放中文本内容
+     * 参数 textORMap - TextMap 类型，文本内容格式设置
+     * 参数 forKey - String 类型，指定文本的标识键
+     */
+    public func setText(textORMap: TextMap, forKey: String)
+    
+    /**
      * 清理动态资源
      */
     public func clearDynamicObjects() 
+    
+    /**
+     * 动画完成后的回调接口
+     * 参数 callback - 回调接口
+     */
+    public func onFinished(callback: () -> Unit)
+    
+    /**
+     * 获取当前播放的帧数回调接口
+     * 参数 callback - 回调接口
+     */
+    public func onPercentage(callback: (Float64) -> Unit)
+    
+    /**
+     * 监听播放进度百分比回调接口
+     * 参数 callback - 回调接口
+     */
+    public func onPercentage(callback: (Float64) -> Unit)
+    
     
     /**
      * 设置播放次数。需在播放前调用
@@ -186,6 +254,32 @@ public class SvgaRange{
     * 参数length - Float64类型，动画播放长度
     */
     public init(location:Float64,length:Float64)
+}
+
+public class TextMap {
+    
+    /**
+    * TextMap构造器
+    * 参数 text - String 类型，字体的内容
+    * 参数 size - Length 类型，字体的大小
+    * 参数 color - Color 类型，字体的颜色
+    * 参数 offset - TextOffset 类型，字体的起始位置
+    * 参数 family - String 类型，文本的字体列表
+    * 参数 style - FontStyle 类型，文本字体样式
+    * 参数 weight - FontWeight 类型，文本的字体粗细
+    */
+    public init(text!: String = "", size!: ?Length = None, color!: ?Color = None, offset!: ?TextOffset = None,
+        family!: ?String = None, style!: FontStyle = FontStyle.Normal, weight!: ?FontWeight = None) 
+}
+
+public class TextOffset {
+    
+    /**
+    * TextOffset 构造器
+    * 参数x - Float64类型，字体的x坐标
+    * 参数y - Float64类型，字体的y坐标
+    */
+    public init(x!: Float64 = 0.0, y!: Float64 = 0.0)
 }
 ```
 
