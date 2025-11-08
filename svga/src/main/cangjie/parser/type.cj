@@ -26,7 +26,6 @@ public enum PageUpdateMode {
             case pause => "pause"
             case play => "play"
             case release => "release"
-            case _ => "none"
         }
     }
 }

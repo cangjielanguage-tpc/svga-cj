@@ -12,22 +12,22 @@ import svga.audio.*
 import std.collection.*
 import std.convert.*
 import std.regex.Regex
-
+import ohos.hilog.Hilog
 var validMethods = 'MLHVCSQAZmlhvcsqaz'
 
 public class Renderer {
-    private var owner: Player
+    public var owner: Player
     private var unDrawFrame: ?Float64 = Option<Float64>.None;
     private var dynamicImage: HashMap<String, ImageSource> = HashMap<String, ImageSource>()
     public var bitmapCache: HashMap<String, PixelMap> = HashMap<String, PixelMap>()
     public var avplayerCache: HashMap<String, AVPlayerClass> = HashMap<String, AVPlayerClass>()
-    private var soundsQueue: ArrayList<SoundsItem> = ArrayList<SoundsItem>();
+    public var soundsQueue: ArrayList<SoundsItem> = ArrayList<SoundsItem>();
     private var lastShape: HashMap<Int64, ShapeEntity> = HashMap<Int64, ShapeEntity>()
     init(owner: Player) {
         this.owner = owner
     }
 
-    private var _prepared: Bool = false
+    public var _prepared: Bool = false
 
     public func getprepared(): Bool {
         return this._prepared
@@ -147,8 +147,7 @@ public class Renderer {
                 v.Release()
             }
             this.bitmapCache.clear()
-        } catch (error: Exception) {
-        }
+        } catch (error: Exception) {}
         this.lastShape.clear()
         for ((k, v) in this.dynamicImage) {
             try {
@@ -196,7 +195,7 @@ public class Renderer {
                     .bitmapCache
                     .contains(audio.audioKey) && this.bitmapCache.get(audio.audioKey).isSome()) {
                     var item: SoundsItem = SoundsItem(
-                        (this.bitmapCache.get(audio.audioKey).getOrThrow() as AVPlayerClass).getOrThrow(),
+                        AVPlayerClass(),
                         Float64(audio.endFrame)
                     )
                     item.player.play()
@@ -224,7 +223,7 @@ public class Renderer {
         }
     }
 
-    private func drawSprite(sprite: SpriteEntity, ctx: CanvasRenderingContext2D, _: Float64, index: Int64) {
+    public func drawSprite(sprite: SpriteEntity, ctx: CanvasRenderingContext2D, _: Float64, index: Int64) {
         if (sprite.frames.size == 0) {
             return;
         }
@@ -359,7 +358,7 @@ public class Renderer {
         ctx.restore()
     }
 
-    private func resetShapeStyles(ctx: CanvasRenderingContext2D, obj: BezierPath) {
+    public func resetShapeStyles(ctx: CanvasRenderingContext2D, obj: BezierPath) {
         if (obj.styles.isNone()) {
             return
         }
@@ -445,7 +444,7 @@ public class Renderer {
         ctx.lineDash(lineDash.toArray());
     }
 
-    private func drawBezier(ctx: CanvasRenderingContext2D, obj: BezierPath) {
+    public func drawBezier(ctx: CanvasRenderingContext2D, obj: BezierPath) {
         ctx.save();
         this.resetShapeStyles(ctx, obj);
         if (let Some(transform) <- obj.transform) {
@@ -497,7 +496,7 @@ public class Renderer {
         ctx.restore();
     }
 
-    private func drawBezierElement(ctx: CanvasRenderingContext2D, currentPoint: CurrentPoint, method: String,
+    public func drawBezierElement(ctx: CanvasRenderingContext2D, currentPoint: CurrentPoint, method: String,
         args: Array<String>) {
         match (method) {
             case 'M' =>
@@ -600,7 +599,7 @@ public class Renderer {
         }
     }
 
-    private func drawEllipse(ctx: CanvasRenderingContext2D, obj: EllipsePath) {
+    public func drawEllipse(ctx: CanvasRenderingContext2D, obj: EllipsePath) {
         ctx.save();
         this.resetShapeStyles(ctx, obj)
         if (let Some(transform) <- obj.transform) {

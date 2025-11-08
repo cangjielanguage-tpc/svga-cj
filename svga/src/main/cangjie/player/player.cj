@@ -13,7 +13,7 @@ import svga.model.*
 import ohos.component.*
 import ohos.matrix4
 import kit.UIKit.*
-
+import ohos.hilog.Hilog
 public class Player {
     private var _onFinished: ?() -> Unit = None
     private var _onFrame: ?(Float64) -> Unit = None
@@ -73,7 +73,7 @@ public class Player {
     /**
      * 数据源
      */
-    private var _videoItem: ?MovieEntity = None
+    public var _videoItem: ?MovieEntity = None
 
     public func videoItem(): ?MovieEntity {
         return this._videoItem
@@ -82,7 +82,7 @@ public class Player {
     /**
      * canvas绘制工具
      */
-    private var _context2D: ?CanvasRenderingContext2D = None
+    public var _context2D: ?CanvasRenderingContext2D = None
 
     public func context2D(): ?CanvasRenderingContext2D {
         return this._context2D
@@ -135,7 +135,7 @@ public class Player {
     /**
      * 是否正在正向播放
      */
-    private var _forwardAnimating: Bool = false
+    public var _forwardAnimating: Bool = false
 
     public func forwardAnimating(): Bool {
         return this._forwardAnimating
@@ -446,10 +446,6 @@ public class Player {
      * @param transform 变换参数
      */
     public func setImage(urlOrResource: ImageSource, forKey: String, transform: ?Transform) {
-        try {
-            this._renderer?.setDynamicImage(urlOrResource, forKey)
-        } catch (e: Exception) {
-        }
         this._renderer?.setDynamicImage(urlOrResource, forKey)
         if (let Some(v) <- transform) {
             this._dynamicImageTransform.add(forKey, v)
@@ -490,26 +486,6 @@ public class Player {
             offset: textORMap.offset, family: textORMap.family, style: FontStyle.Normal, weight: textORMap.weight))
     }
 
-    /**
-     * 初始化
-     */
-    private func _init() {
-        this._renderer = Renderer(this)
-    }
-
-    /**
-     * 处理资源
-     * @param pixelBuffer
-     * @returns
-     */
-    private func parseResourceStr(pixelBuffer: Array<UInt8>): ?ImageSource {
-        var imageResource: ?ImageSource = None
-        try {
-            imageResource = createImageSource(pixelBuffer)
-        } catch (e: Exception) {
-        }
-        return imageResource
-    }
 
     private func getFps(): Float64 {
         var src = if (let Some(v) <- this._videoItem) {
@@ -520,7 +496,7 @@ public class Player {
         return src * this._speed
     }
 
-    private func _doStart(range: ?SvgaRange, reverse: Bool, fromFrame: ?Float64) {
+    public func _doStart(range: ?SvgaRange, reverse: Bool, fromFrame: ?Float64) {
         try {
             this._animator = ValueAnimator(this._uiContext)
             if (let Some(v) <- range) {
@@ -577,9 +553,7 @@ public class Player {
             }
             this._currentFrame = (this._animator?.startValue).getOrThrow()
             this._update()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        } catch (e: Exception) { e.printStackTrace()}
     }
 
     /**
@@ -664,8 +638,8 @@ public class Player {
                     scaleY = Float64(targetSize.height) / Float64(imageSize.height)
                 } else if (this._contentMode == PLAYER_CONTENT_MODE.AspectFit || this._contentMode == PLAYER_CONTENT_MODE
                     .AspectFill) {
-                    let imageRatio = imageSize.width / imageSize.height;
-                    let viewRatio = targetSize.width / targetSize.height;
+                    let imageRatio = Float64(imageSize.width) / Float64(imageSize.height);
+                    let viewRatio = Float64(targetSize.width) / Float64(targetSize.height);
                     if ((imageRatio >= viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio <=
                         viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
                         scaleY = Float64(targetSize.width) / Float64(imageSize.width)

@@ -10,6 +10,7 @@ import svga.parser.*
 import svga.proto.*
 import ohos.base.Length
 import svga.model.TextMap
+import ohos.hilog.Hilog
 
 public struct SvgaPlayerProps {
     public var pageUpdateMode: PageUpdateMode
@@ -121,12 +122,6 @@ public class SvgaController {
         }
     }
 
-    func setVideoItem(videoItem: MovieEntity) {
-        if (this._player.isNone()) {
-            throw Exception('请在资源加载后调用')
-        }
-        this._player.getOrThrow().setVideoItem(videoItem)
-    }
 
     public func startAnimation(reverse!: Bool = false) {
         if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {

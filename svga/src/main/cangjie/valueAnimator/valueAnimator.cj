@@ -80,17 +80,7 @@ public class ValueAnimator {
             =>
             // 在启动动画时 指定开始位置 在一次结束后要重置动画参数 确保动画能够播放完整
             if (this.resetFlag) {
-                this
-                    ._animator
-                    .getOrThrow()
-                    .reset(
-                        AnimatorOptions(
-                            duration: Int32(this.duration),
-                            easing: "linear",
-                            delay: 0,
-                            fill: this.fillRule,
-                            direction: AnimatorDirection.Normal,
-                            iterations: this.loops,
+                this._animator.getOrThrow().reset(AnimatorOptions(duration: Int32(this.duration),easing: "linear",delay: 0,fill: this.fillRule,direction: AnimatorDirection.Normal,iterations: this.loops,
                             begin: this.startValue,
                             end: this.endValue
                         )
