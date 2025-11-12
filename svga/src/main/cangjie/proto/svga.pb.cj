@@ -131,29 +131,29 @@ public class MovieParams <: MessageLite & TypedMessage<MovieParams> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { MovieParams() }
-    public static func newBuilder() { MovieParams__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = MovieParams(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = MovieParams(); _x.unpack(src); _x }
+    public static func empty(): MovieParams { MovieParams() }
+    public static func newBuilder(): Unit { MovieParams__Builder() }
+    public static func fromBytes(src: Collection<Byte>): MovieParams { let _x = MovieParams(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): MovieParams { let _x = MovieParams(); _x.unpack(src); _x }
 }
 
 public class MovieParams__Builder {
     public var viewBoxWidth: Float32 = Float32(.0)
-    public func setViewBoxWidth(viewBoxWidth: Float32) { this.viewBoxWidth = viewBoxWidth; return this }
+    public func setViewBoxWidth(viewBoxWidth: Float32): MovieParams__Builder { this.viewBoxWidth = viewBoxWidth; return this }
 
     public var viewBoxHeight: Float32 = Float32(.0)
-    public func setViewBoxHeight(viewBoxHeight: Float32) { this.viewBoxHeight = viewBoxHeight; return this }
+    public func setViewBoxHeight(viewBoxHeight: Float32): MovieParams__Builder { this.viewBoxHeight = viewBoxHeight; return this }
 
     public var fps: Int32 = Int32(0)
-    public func setFps(fps: Int32) { this.fps = fps; return this }
+    public func setFps(fps: Int32): MovieParams__Builder { this.fps = fps; return this }
 
     public var frames: Int32 = Int32(0)
-    public func setFrames(frames: Int32) { this.frames = frames; return this }
+    public func setFrames(frames: Int32): MovieParams__Builder { this.frames = frames; return this }
 
-    public func build() { MovieParams(this) }
+    public func build(): MovieParams { MovieParams(this) }
 }
 
 public class SpriteEntity <: MessageLite & TypedMessage<SpriteEntity> {
@@ -268,26 +268,26 @@ public class SpriteEntity <: MessageLite & TypedMessage<SpriteEntity> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { SpriteEntity() }
-    public static func newBuilder() { SpriteEntity__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = SpriteEntity(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = SpriteEntity(); _x.unpack(src); _x }
+    public static func empty(): SpriteEntity { SpriteEntity() }
+    public static func newBuilder(): SpriteEntity__Builder { SpriteEntity__Builder() }
+    public static func fromBytes(src: Collection<Byte>): SpriteEntity { let _x = SpriteEntity(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): SpriteEntity { let _x = SpriteEntity(); _x.unpack(src); _x }
 }
 
 public class SpriteEntity__Builder {
     public var imageKey: String = ""
-    public func setImageKey(imageKey: String) { this.imageKey = imageKey; return this }
+    public func setImageKey(imageKey: String): SpriteEntity__Builder { this.imageKey = imageKey; return this }
 
     public var frames: Array<FrameEntity> = []
-    public func setFrames(frames: Array<FrameEntity>) { this.frames = frames; return this }
+    public func setFrames(frames: Array<FrameEntity>): SpriteEntity__Builder { this.frames = frames; return this }
 
     public var matteKey: String = ""
-    public func setMatteKey(matteKey: String) { this.matteKey = matteKey; return this }
+    public func setMatteKey(matteKey: String): SpriteEntity__Builder { this.matteKey = matteKey; return this }
 
-    public func build() { SpriteEntity(this) }
+    public func build(): SpriteEntity { SpriteEntity(this) }
 }
 
 public class AudioEntity <: MessageLite & TypedMessage<AudioEntity> {
@@ -432,32 +432,32 @@ public class AudioEntity <: MessageLite & TypedMessage<AudioEntity> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { AudioEntity() }
-    public static func newBuilder() { AudioEntity__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = AudioEntity(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = AudioEntity(); _x.unpack(src); _x }
+    public static func empty(): AudioEntity { AudioEntity() }
+    public static func newBuilder(): AudioEntity__Builder { AudioEntity__Builder() }
+    public static func fromBytes(src: Collection<Byte>): AudioEntity { let _x = AudioEntity(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): AudioEntity { let _x = AudioEntity(); _x.unpack(src); _x }
 }
 
 public class AudioEntity__Builder {
     public var audioKey: String = ""
-    public func setAudioKey(audioKey: String) { this.audioKey = audioKey; return this }
+    public func setAudioKey(audioKey: String): AudioEntity__Builder { this.audioKey = audioKey; return this }
 
     public var startFrame: Int32 = Int32(0)
-    public func setStartFrame(startFrame: Int32) { this.startFrame = startFrame; return this }
+    public func setStartFrame(startFrame: Int32): AudioEntity__Builder { this.startFrame = startFrame; return this }
 
     public var endFrame: Int32 = Int32(0)
-    public func setEndFrame(endFrame: Int32) { this.endFrame = endFrame; return this }
+    public func setEndFrame(endFrame: Int32): AudioEntity__Builder { this.endFrame = endFrame; return this }
 
     public var startTime: Int32 = Int32(0)
-    public func setStartTime(startTime: Int32) { this.startTime = startTime; return this }
+    public func setStartTime(startTime: Int32): AudioEntity__Builder { this.startTime = startTime; return this }
 
     public var totalTime: Int32 = Int32(0)
-    public func setTotalTime(totalTime: Int32) { this.totalTime = totalTime; return this }
+    public func setTotalTime(totalTime: Int32): AudioEntity__Builder { this.totalTime = totalTime; return this }
 
-    public func build() { AudioEntity(this) }
+    public func build(): AudioEntity { AudioEntity(this) }
 }
 
 public class Layout <: MessageLite & TypedMessage<Layout> {
@@ -587,29 +587,29 @@ public class Layout <: MessageLite & TypedMessage<Layout> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { Layout() }
-    public static func newBuilder() { Layout__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = Layout(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = Layout(); _x.unpack(src); _x }
+    public static func empty(): Layout { Layout() }
+    public static func newBuilder(): Layout__Builder { Layout__Builder() }
+    public static func fromBytes(src: Collection<Byte>): Layout { let _x = Layout(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): Layout { let _x = Layout(); _x.unpack(src); _x }
 }
 
 public class Layout__Builder {
     public var x: Float32 = Float32(.0)
-    public func setX(x: Float32) { this.x = x; return this }
+    public func setX(x: Float32): Layout__Builder { this.x = x; return this }
 
     public var y: Float32 = Float32(.0)
-    public func setY(y: Float32) { this.y = y; return this }
+    public func setY(y: Float32): Layout__Builder { this.y = y; return this }
 
     public var width: Float32 = Float32(.0)
-    public func setWidth(width: Float32) { this.width = width; return this }
+    public func setWidth(width: Float32): Layout__Builder { this.width = width; return this }
 
     public var height: Float32 = Float32(.0)
-    public func setHeight(height: Float32) { this.height = height; return this }
+    public func setHeight(height: Float32): Layout__Builder { this.height = height; return this }
 
-    public func build() { Layout(this) }
+    public func build(): Layout { Layout(this) }
 }
 
 public class Transform <: MessageLite & TypedMessage<Transform> {
@@ -767,35 +767,35 @@ public class Transform <: MessageLite & TypedMessage<Transform> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { Transform() }
-    public static func newBuilder() { Transform__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = Transform(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = Transform(); _x.unpack(src); _x }
+    public static func empty(): Transform { Transform() }
+    public static func newBuilder(): Transform__Builder { Transform__Builder() }
+    public static func fromBytes(src: Collection<Byte>): Transform { let _x = Transform(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): Transform { let _x = Transform(); _x.unpack(src); _x }
 }
 
 public class Transform__Builder {
     public var a: Float32 = Float32(.0)
-    public func setA(a: Float32) { this.a = a; return this }
+    public func setA(a: Float32): Transform__Builder { this.a = a; return this }
 
     public var b: Float32 = Float32(.0)
-    public func setB(b: Float32) { this.b = b; return this }
+    public func setB(b: Float32): Transform__Builder { this.b = b; return this }
 
     public var c: Float32 = Float32(.0)
-    public func setC(c: Float32) { this.c = c; return this }
+    public func setC(c: Float32): Transform__Builder { this.c = c; return this }
 
     public var d: Float32 = Float32(.0)
-    public func setD(d: Float32) { this.d = d; return this }
+    public func setD(d: Float32): Transform__Builder { this.d = d; return this }
 
     public var tx: Float32 = Float32(.0)
-    public func setTx(tx: Float32) { this.tx = tx; return this }
+    public func setTx(tx: Float32): Transform__Builder { this.tx = tx; return this }
 
     public var ty: Float32 = Float32(.0)
-    public func setTy(ty: Float32) { this.ty = ty; return this }
+    public func setTy(ty: Float32): Transform__Builder { this.ty = ty; return this }
 
-    public func build() { Transform(this) }
+    public func build(): Transform { Transform(this) }
 }
 
 public class ShapeEntity_ShapeArgs <: MessageLite & TypedMessage<ShapeEntity_ShapeArgs> {
@@ -882,20 +882,20 @@ public class ShapeEntity_ShapeArgs <: MessageLite & TypedMessage<ShapeEntity_Sha
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { ShapeEntity_ShapeArgs() }
-    public static func newBuilder() { ShapeEntity_ShapeArgs__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = ShapeEntity_ShapeArgs(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = ShapeEntity_ShapeArgs(); _x.unpack(src); _x }
+    public static func empty(): ShapeEntity_ShapeArgs { ShapeEntity_ShapeArgs() }
+    public static func newBuilder(): ShapeEntity_ShapeArgs__Builder { ShapeEntity_ShapeArgs__Builder() }
+    public static func fromBytes(src: Collection<Byte>): ShapeEntity_ShapeArgs { let _x = ShapeEntity_ShapeArgs(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): ShapeEntity_ShapeArgs { let _x = ShapeEntity_ShapeArgs(); _x.unpack(src); _x }
 }
 
 public class ShapeEntity_ShapeArgs__Builder {
     public var d: String = ""
-    public func setD(d: String) { this.d = d; return this }
+    public func setD(d: String): ShapeEntity_ShapeArgs__Builder { this.d = d; return this }
 
-    public func build() { ShapeEntity_ShapeArgs(this) }
+    public func build(): ShapeEntity_ShapeArgs { ShapeEntity_ShapeArgs(this) }
 }
 
 public class ShapeEntity_RectArgs <: MessageLite & TypedMessage<ShapeEntity_RectArgs> {
@@ -1039,32 +1039,32 @@ public class ShapeEntity_RectArgs <: MessageLite & TypedMessage<ShapeEntity_Rect
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { ShapeEntity_RectArgs() }
-    public static func newBuilder() { ShapeEntity_RectArgs__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = ShapeEntity_RectArgs(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = ShapeEntity_RectArgs(); _x.unpack(src); _x }
+    public static func empty(): ShapeEntity_RectArgs { ShapeEntity_RectArgs() }
+    public static func newBuilder(): ShapeEntity_RectArgs__Builder { ShapeEntity_RectArgs__Builder() }
+    public static func fromBytes(src: Collection<Byte>): ShapeEntity_RectArgs { let _x = ShapeEntity_RectArgs(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): ShapeEntity_RectArgs { let _x = ShapeEntity_RectArgs(); _x.unpack(src); _x }
 }
 
 public class ShapeEntity_RectArgs__Builder {
     public var x: Float32 = Float32(.0)
-    public func setX(x: Float32) { this.x = x; return this }
+    public func setX(x: Float32): ShapeEntity_RectArgs__Builder { this.x = x; return this }
 
     public var y: Float32 = Float32(.0)
-    public func setY(y: Float32) { this.y = y; return this }
+    public func setY(y: Float32): ShapeEntity_RectArgs__Builder { this.y = y; return this }
 
     public var width: Float32 = Float32(.0)
-    public func setWidth(width: Float32) { this.width = width; return this }
+    public func setWidth(width: Float32): ShapeEntity_RectArgs__Builder { this.width = width; return this }
 
     public var height: Float32 = Float32(.0)
-    public func setHeight(height: Float32) { this.height = height; return this }
+    public func setHeight(height: Float32): ShapeEntity_RectArgs__Builder { this.height = height; return this }
 
     public var cornerRadius: Float32 = Float32(.0)
-    public func setCornerRadius(cornerRadius: Float32) { this.cornerRadius = cornerRadius; return this }
+    public func setCornerRadius(cornerRadius: Float32): ShapeEntity_RectArgs__Builder { this.cornerRadius = cornerRadius; return this }
 
-    public func build() { ShapeEntity_RectArgs(this) }
+    public func build(): ShapeEntity_RectArgs { ShapeEntity_RectArgs(this) }
 }
 
 public class ShapeEntity_EllipseArgs <: MessageLite & TypedMessage<ShapeEntity_EllipseArgs> {
@@ -1194,29 +1194,29 @@ public class ShapeEntity_EllipseArgs <: MessageLite & TypedMessage<ShapeEntity_E
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { ShapeEntity_EllipseArgs() }
-    public static func newBuilder() { ShapeEntity_EllipseArgs__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = ShapeEntity_EllipseArgs(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = ShapeEntity_EllipseArgs(); _x.unpack(src); _x }
+    public static func empty(): ShapeEntity_EllipseArgs { ShapeEntity_EllipseArgs() }
+    public static func newBuilder(): ShapeEntity_EllipseArgs__Builder { ShapeEntity_EllipseArgs__Builder() }
+    public static func fromBytes(src: Collection<Byte>): ShapeEntity_EllipseArgs { let _x = ShapeEntity_EllipseArgs(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): ShapeEntity_EllipseArgs { let _x = ShapeEntity_EllipseArgs(); _x.unpack(src); _x }
 }
 
 public class ShapeEntity_EllipseArgs__Builder {
     public var x: Float32 = Float32(.0)
-    public func setX(x: Float32) { this.x = x; return this }
+    public func setX(x: Float32): ShapeEntity_EllipseArgs__Builder { this.x = x; return this }
 
     public var y: Float32 = Float32(.0)
-    public func setY(y: Float32) { this.y = y; return this }
+    public func setY(y: Float32): ShapeEntity_EllipseArgs__Builder { this.y = y; return this }
 
     public var radiusX: Float32 = Float32(.0)
-    public func setRadiusX(radiusX: Float32) { this.radiusX = radiusX; return this }
+    public func setRadiusX(radiusX: Float32): ShapeEntity_EllipseArgs__Builder { this.radiusX = radiusX; return this }
 
     public var radiusY: Float32 = Float32(.0)
-    public func setRadiusY(radiusY: Float32) { this.radiusY = radiusY; return this }
+    public func setRadiusY(radiusY: Float32): ShapeEntity_EllipseArgs__Builder { this.radiusY = radiusY; return this }
 
-    public func build() { ShapeEntity_EllipseArgs(this) }
+    public func build(): ShapeEntity_EllipseArgs { ShapeEntity_EllipseArgs(this) }
 }
 
 public class ShapeEntity_ShapeStyle_RGBAColor <: MessageLite & TypedMessage<ShapeEntity_ShapeStyle_RGBAColor> {
@@ -1346,29 +1346,29 @@ public class ShapeEntity_ShapeStyle_RGBAColor <: MessageLite & TypedMessage<Shap
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { ShapeEntity_ShapeStyle_RGBAColor() }
-    public static func newBuilder() { ShapeEntity_ShapeStyle_RGBAColor__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = ShapeEntity_ShapeStyle_RGBAColor(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = ShapeEntity_ShapeStyle_RGBAColor(); _x.unpack(src); _x }
+    public static func empty(): ShapeEntity_ShapeStyle_RGBAColor { ShapeEntity_ShapeStyle_RGBAColor() }
+    public static func newBuilder(): ShapeEntity_ShapeStyle_RGBAColor__Builder { ShapeEntity_ShapeStyle_RGBAColor__Builder() }
+    public static func fromBytes(src: Collection<Byte>): ShapeEntity_ShapeStyle_RGBAColor { let _x = ShapeEntity_ShapeStyle_RGBAColor(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): ShapeEntity_ShapeStyle_RGBAColor { let _x = ShapeEntity_ShapeStyle_RGBAColor(); _x.unpack(src); _x }
 }
 
 public class ShapeEntity_ShapeStyle_RGBAColor__Builder {
     public var r: Float32 = Float32(.0)
-    public func setR(r: Float32) { this.r = r; return this }
+    public func setR(r: Float32): ShapeEntity_ShapeStyle_RGBAColor__Builder { this.r = r; return this }
 
     public var g: Float32 = Float32(.0)
-    public func setG(g: Float32) { this.g = g; return this }
+    public func setG(g: Float32): ShapeEntity_ShapeStyle_RGBAColor__Builder { this.g = g; return this }
 
     public var b: Float32 = Float32(.0)
-    public func setB(b: Float32) { this.b = b; return this }
+    public func setB(b: Float32): ShapeEntity_ShapeStyle_RGBAColor__Builder { this.b = b; return this }
 
     public var a: Float32 = Float32(.0)
-    public func setA(a: Float32) { this.a = a; return this }
+    public func setA(a: Float32): ShapeEntity_ShapeStyle_RGBAColor__Builder { this.a = a; return this }
 
-    public func build() { ShapeEntity_ShapeStyle_RGBAColor(this) }
+    public func build(): ShapeEntity_ShapeStyle_RGBAColor { ShapeEntity_ShapeStyle_RGBAColor(this) }
 }
 
 public enum ShapeEntity_ShapeStyle_LineCap <: Enum<ShapeEntity_ShapeStyle_LineCap> {
@@ -1399,7 +1399,7 @@ public enum ShapeEntity_ShapeStyle_LineCap <: Enum<ShapeEntity_ShapeStyle_LineCa
         }
     }
 
-    public func isEmpty() { match (this) { case LineCap_BUTT => true case _ => false } }
+    public func isEmpty(): Bool { match (this) { case LineCap_BUTT => true case _ => false } }
 
     public static func empty(): ShapeEntity_ShapeStyle_LineCap { LineCap_BUTT }
 
@@ -1450,7 +1450,7 @@ public enum ShapeEntity_ShapeStyle_LineJoin <: Enum<ShapeEntity_ShapeStyle_LineJ
         }
     }
 
-    public func isEmpty() { match (this) { case LineJoin_MITER => true case _ => false } }
+    public func isEmpty(): Bool { match (this) { case LineJoin_MITER => true case _ => false } }
 
     public static func empty(): ShapeEntity_ShapeStyle_LineJoin { LineJoin_MITER }
 
@@ -1675,44 +1675,44 @@ public class ShapeEntity_ShapeStyle <: MessageLite & TypedMessage<ShapeEntity_Sh
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { ShapeEntity_ShapeStyle() }
-    public static func newBuilder() { ShapeEntity_ShapeStyle__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = ShapeEntity_ShapeStyle(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = ShapeEntity_ShapeStyle(); _x.unpack(src); _x }
+    public static func empty(): ShapeEntity_ShapeStyle { ShapeEntity_ShapeStyle() }
+    public static func newBuilder(): ShapeEntity_ShapeStyle__Builder { ShapeEntity_ShapeStyle__Builder() }
+    public static func fromBytes(src: Collection<Byte>): ShapeEntity_ShapeStyle { let _x = ShapeEntity_ShapeStyle(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): ShapeEntity_ShapeStyle { let _x = ShapeEntity_ShapeStyle(); _x.unpack(src); _x }
 }
 
 public class ShapeEntity_ShapeStyle__Builder {
     public var fill: ?ShapeEntity_ShapeStyle_RGBAColor = None
-    public func setFill(fill: ShapeEntity_ShapeStyle_RGBAColor) { this.fill = fill; return this }
+    public func setFill(fill: ShapeEntity_ShapeStyle_RGBAColor): ShapeEntity_ShapeStyle__Builder { this.fill = fill; return this }
 
     public var stroke: ?ShapeEntity_ShapeStyle_RGBAColor = None
-    public func setStroke(stroke: ShapeEntity_ShapeStyle_RGBAColor) { this.stroke = stroke; return this }
+    public func setStroke(stroke: ShapeEntity_ShapeStyle_RGBAColor) : ShapeEntity_ShapeStyle__Builder{ this.stroke = stroke; return this }
 
     public var strokeWidth: Float32 = Float32(.0)
-    public func setStrokeWidth(strokeWidth: Float32) { this.strokeWidth = strokeWidth; return this }
+    public func setStrokeWidth(strokeWidth: Float32): ShapeEntity_ShapeStyle__Builder { this.strokeWidth = strokeWidth; return this }
 
     public var lineCap: ShapeEntity_ShapeStyle_LineCap = ShapeEntity_ShapeStyle_LineCap.empty()
-    public func setLineCap(lineCap: ShapeEntity_ShapeStyle_LineCap) { this.lineCap = lineCap; return this }
+    public func setLineCap(lineCap: ShapeEntity_ShapeStyle_LineCap): ShapeEntity_ShapeStyle__Builder { this.lineCap = lineCap; return this }
 
     public var lineJoin: ShapeEntity_ShapeStyle_LineJoin = ShapeEntity_ShapeStyle_LineJoin.empty()
-    public func setLineJoin(lineJoin: ShapeEntity_ShapeStyle_LineJoin) { this.lineJoin = lineJoin; return this }
+    public func setLineJoin(lineJoin: ShapeEntity_ShapeStyle_LineJoin): ShapeEntity_ShapeStyle__Builder { this.lineJoin = lineJoin; return this }
 
     public var miterLimit: Float32 = Float32(.0)
-    public func setMiterLimit(miterLimit: Float32) { this.miterLimit = miterLimit; return this }
+    public func setMiterLimit(miterLimit: Float32): ShapeEntity_ShapeStyle__Builder { this.miterLimit = miterLimit; return this }
 
     public var lineDashI: Float32 = Float32(.0)
-    public func setLineDashI(lineDashI: Float32) { this.lineDashI = lineDashI; return this }
+    public func setLineDashI(lineDashI: Float32): ShapeEntity_ShapeStyle__Builder { this.lineDashI = lineDashI; return this }
 
     public var lineDashII: Float32 = Float32(.0)
-    public func setLineDashII(lineDashII: Float32) { this.lineDashII = lineDashII; return this }
+    public func setLineDashII(lineDashII: Float32): ShapeEntity_ShapeStyle__Builder { this.lineDashII = lineDashII; return this }
 
     public var lineDashIII: Float32 = Float32(.0)
-    public func setLineDashIII(lineDashIII: Float32) { this.lineDashIII = lineDashIII; return this }
+    public func setLineDashIII(lineDashIII: Float32): ShapeEntity_ShapeStyle__Builder { this.lineDashIII = lineDashIII; return this }
 
-    public func build() { ShapeEntity_ShapeStyle(this) }
+    public func build(): ShapeEntity_ShapeStyle { ShapeEntity_ShapeStyle(this) }
 }
 
 public enum ShapeEntity_ShapeType <: Enum<ShapeEntity_ShapeType> {
@@ -1746,7 +1746,7 @@ public enum ShapeEntity_ShapeType <: Enum<ShapeEntity_ShapeType> {
         }
     }
 
-    public func isEmpty() { match (this) { case SHAPE => true case _ => false } }
+    public func isEmpty(): Bool { match (this) { case SHAPE => true case _ => false } }
 
     public static func empty(): ShapeEntity_ShapeType { SHAPE }
 
@@ -1923,29 +1923,29 @@ public class ShapeEntity <: MessageLite & TypedMessage<ShapeEntity> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { ShapeEntity() }
-    public static func newBuilder() { ShapeEntity__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = ShapeEntity(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = ShapeEntity(); _x.unpack(src); _x }
+    public static func empty(): ShapeEntity { ShapeEntity() }
+    public static func newBuilder(): ShapeEntity__Builder { ShapeEntity__Builder() }
+    public static func fromBytes(src: Collection<Byte>): ShapeEntity { let _x = ShapeEntity(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): ShapeEntity { let _x = ShapeEntity(); _x.unpack(src); _x }
 }
 
 public class ShapeEntity__Builder {
     public var type_: ShapeEntity_ShapeType = ShapeEntity_ShapeType.empty()
-    public func setType(type_: ShapeEntity_ShapeType) { this.type_ = type_; return this }
+    public func setType(type_: ShapeEntity_ShapeType): ShapeEntity__Builder { this.type_ = type_; return this }
 
     public var styles: ?ShapeEntity_ShapeStyle = None
-    public func setStyles(styles: ShapeEntity_ShapeStyle) { this.styles = styles; return this }
+    public func setStyles(styles: ShapeEntity_ShapeStyle): ShapeEntity__Builder { this.styles = styles; return this }
 
     public var transform: ?Transform = None
-    public func setTransform(transform: Transform) { this.transform = transform; return this }
+    public func setTransform(transform: Transform): ShapeEntity__Builder { this.transform = transform; return this }
 
-    public var args = ShapeEntity_Oneof_Args.None
-    public func setArgs(args: ShapeEntity_Oneof_Args) { this.args = args; return this }
+    public var args: ShapeEntity_Oneof_Args = ShapeEntity_Oneof_Args.None
+    public func setArgs(args: ShapeEntity_Oneof_Args): ShapeEntity__Builder { this.args = args; return this }
 
-    public func build() { ShapeEntity(this) }
+    public func build(): ShapeEntity { ShapeEntity(this) }
 }
 
 public enum ShapeEntity_Oneof_Args <: OneofGroup & Equatable<ShapeEntity_Oneof_Args> {
@@ -1987,7 +1987,7 @@ public enum ShapeEntity_Oneof_Args <: OneofGroup & Equatable<ShapeEntity_Oneof_A
         }
     }
 
-    public func toString() {
+    public func toString(): String {
         match (this) {
             case SHAPE(v) => v.toString()
             case RECT(v) => v.toString()
@@ -2005,7 +2005,7 @@ public enum ShapeEntity_Oneof_Args <: OneofGroup & Equatable<ShapeEntity_Oneof_A
         }
     }
 
-    public func which() {
+    public func which(): String {
         match (this) {
             case SHAPE(_) => "shape"
             case RECT(_) => "rect"
@@ -2158,32 +2158,32 @@ public class FrameEntity <: MessageLite & TypedMessage<FrameEntity> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { FrameEntity() }
-    public static func newBuilder() { FrameEntity__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = FrameEntity(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = FrameEntity(); _x.unpack(src); _x }
+    public static func empty(): FrameEntity { FrameEntity() }
+    public static func newBuilder(): FrameEntity__Builder { FrameEntity__Builder() }
+    public static func fromBytes(src: Collection<Byte>): FrameEntity { let _x = FrameEntity(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): FrameEntity { let _x = FrameEntity(); _x.unpack(src); _x }
 }
 
 public class FrameEntity__Builder {
     public var alpha: Float32 = Float32(.0)
-    public func setAlpha(alpha: Float32) { this.alpha = alpha; return this }
+    public func setAlpha(alpha: Float32): FrameEntity__Builder { this.alpha = alpha; return this }
 
     public var layout: ?Layout = None
-    public func setLayout(layout: Layout) { this.layout = layout; return this }
+    public func setLayout(layout: Layout): FrameEntity__Builder { this.layout = layout; return this }
 
     public var transform: ?Transform = None
-    public func setTransform(transform: Transform) { this.transform = transform; return this }
+    public func setTransform(transform: Transform): FrameEntity__Builder { this.transform = transform; return this }
 
     public var clipPath: String = ""
-    public func setClipPath(clipPath: String) { this.clipPath = clipPath; return this }
+    public func setClipPath(clipPath: String): FrameEntity__Builder { this.clipPath = clipPath; return this }
 
     public var shapes: Array<ShapeEntity> = []
-    public func setShapes(shapes: Array<ShapeEntity>) { this.shapes = shapes; return this }
+    public func setShapes(shapes: Array<ShapeEntity>): FrameEntity__Builder { this.shapes = shapes; return this }
 
-    public func build() { FrameEntity(this) }
+    public func build(): FrameEntity { FrameEntity(this) }
 }
 
 public class MovieEntity <: MessageLite & TypedMessage<MovieEntity> {
@@ -2326,30 +2326,30 @@ public class MovieEntity <: MessageLite & TypedMessage<MovieEntity> {
         return _x.done().toString()
     }
 
-    public func packi(out: BytesWriter) { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
-    public func unpacki(src: BytesReader) { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
+    public func packi(out: BytesWriter): Unit { match (out) { case _x: SimpleWriter => pack(_x) case _ => pack(out) } }
+    public func unpacki(src: BytesReader): Unit { match (src) { case _x: SimpleReader => unpack(_x) case _ => unpack(src) } }
 
-    public static func empty() { MovieEntity() }
-    public static func newBuilder() { MovieEntity__Builder() }
-    public static func fromBytes(src: Collection<Byte>) { let _x = MovieEntity(); _x.unpack(src); _x }
-    public static func fromBytes(src: BytesReader) { let _x = MovieEntity(); _x.unpack(src); _x }
+    public static func empty(): MovieEntity { MovieEntity() }
+    public static func newBuilder(): MovieEntity__Builder { MovieEntity__Builder() }
+    public static func fromBytes(src: Collection<Byte>): MovieEntity { let _x = MovieEntity(); _x.unpack(src); _x }
+    public static func fromBytes(src: BytesReader): MovieEntity { let _x = MovieEntity(); _x.unpack(src); _x }
 }
 
 public class MovieEntity__Builder {
     public var version: String = ""
-    public func setVersion(version: String) { this.version = version; return this }
+    public func setVersion(version: String): MovieEntity__Builder { this.version = version; return this }
 
     public var params: ?MovieParams = None
-    public func setParams(params: MovieParams) { this.params = params; return this }
+    public func setParams(params: MovieParams): MovieEntity__Builder { this.params = params; return this }
 
     public var images: Array<(String, BytesSlice)> = []
-    public func setImages(images: Array<(String, BytesSlice)>) { this.images = images; return this }
+    public func setImages(images: Array<(String, BytesSlice)>): MovieEntity__Builder { this.images = images; return this }
 
     public var sprites: Array<SpriteEntity> = []
-    public func setSprites(sprites: Array<SpriteEntity>) { this.sprites = sprites; return this }
+    public func setSprites(sprites: Array<SpriteEntity>): MovieEntity__Builder { this.sprites = sprites; return this }
 
     public var audios: Array<AudioEntity> = []
-    public func setAudios(audios: Array<AudioEntity>) { this.audios = audios; return this }
+    public func setAudios(audios: Array<AudioEntity>): MovieEntity__Builder { this.audios = audios; return this }
 
-    public func build() { MovieEntity(this) }
+    public func build(): MovieEntity { MovieEntity(this) }
 }

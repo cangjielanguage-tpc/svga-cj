@@ -16,6 +16,7 @@ public class SourceManager {
     init(context: Context) {
         let m: Random = Random(3)
         this._basePath = "svga" + "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
+        Hilog.error(10, "svga--", "svga----------->${context.tempDir}")
         initSourceManager()
     }
 
@@ -25,7 +26,7 @@ public class SourceManager {
         }
     }
 
-    public func release() {
+    public func release(): Unit {
         spawn {
             => if (FileFs.access(this._basePath)) {
                 FileFs.rmdir(this._basePath)

@@ -27,7 +27,7 @@ public class MockWorker {
         }
     }
 
-    public static func load_viaProto(arraybuffer: Array<Byte>) {
+    public static func load_viaProto(arraybuffer: Array<Byte>): MovieEntity {
         var res: MovieEntity = Inflate(arraybuffer).get()
         return res
     }

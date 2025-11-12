@@ -44,7 +44,7 @@ public class Player {
         return this._pageIndex
     }
 
-    public func pageIndex(value: String) {
+    public func pageIndex(value: String): Unit {
         this._pageIndex = value
     }
 
@@ -57,7 +57,7 @@ public class Player {
         return this._pageName
     }
 
-    public func pageName(value: String) {
+    public func pageName(value: String): Unit {
         this._pageName = value
     }
 
@@ -106,7 +106,7 @@ public class Player {
         return this._fillMode
     }
 
-    public func fillMode(value: AnimatorFill) {
+    public func fillMode(value: AnimatorFill): Unit {
         this._fillMode = value
     }
 
@@ -119,7 +119,7 @@ public class Player {
         return this._currentFrame
     }
 
-    public func currentFrame(value: Float64) {
+    public func currentFrame(value: Float64): Unit {
         this._currentFrame = value
     }
 
@@ -150,7 +150,7 @@ public class Player {
         return this._clearsAfterStop
     }
 
-    public func clearsAfterStop(value: Bool) {
+    public func clearsAfterStop(value: Bool): Unit {
         this._clearsAfterStop = value
     }
 
@@ -181,7 +181,7 @@ public class Player {
         return this._pageUpdateMode
     }
 
-    public func pageUpdateMode(value: PageUpdateMode) {
+    public func pageUpdateMode(value: PageUpdateMode): Unit {
         this._pageUpdateMode = value
     }
 
@@ -194,7 +194,7 @@ public class Player {
         return this._autoRelease
     }
 
-    public func autoRelease(value: Bool) {
+    public func autoRelease(value: Bool): Unit {
         this._autoRelease = value
     }
 
@@ -209,7 +209,7 @@ public class Player {
         return this._canvasValue
     }
 
-    public func canvasValue(value: CanvasSizeAndTrans, callback: (CanvasSizeAndTrans) -> Unit) {
+    public func canvasValue(value: CanvasSizeAndTrans, callback: (CanvasSizeAndTrans) -> Unit): Unit {
         this._canvasValue = value
         this.canvasValueCallback = callback
     }
@@ -229,7 +229,7 @@ public class Player {
         return this._parentSize
     }
 
-    public func parentSize(value: Sizes) {
+    public func parentSize(value: Sizes): Unit {
         this._parentSize = value
     }
 
@@ -255,7 +255,7 @@ public class Player {
      * 设置资源
      * @param videoItem
      */
-    public func setVideoItem(videoItem: MovieEntity) {
+    public func setVideoItem(videoItem: MovieEntity): Unit {
         this._currentFrame = 0.0
         this._videoItem = videoItem
         this.clear()
@@ -264,7 +264,7 @@ public class Player {
         this._resize()
     }
 
-    public func setContentMode(contentMode: PLAYER_CONTENT_MODE) {
+    public func setContentMode(contentMode: PLAYER_CONTENT_MODE): Unit {
         this._contentMode = contentMode
         this._update();
         this._resize();
@@ -274,12 +274,12 @@ public class Player {
      * 开始动画
      * @param reverse 是否翻转
      */
-    public func startAnimation(reverse: Bool) {
+    public func startAnimation(reverse: Bool): Unit {
         this.stopAnimation(false);
         this._doStart(Option<SvgaRange>.None, reverse, Option<Float64>.None)
     }
 
-    public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false) {
+    public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false): Unit {
         this.stopAnimation(false);
         this._doStart(range, reverse, Option<Float64>.None)
     }
@@ -287,7 +287,7 @@ public class Player {
     /**
      * 暂停
      */
-    public func pauseAnimation() {
+    public func pauseAnimation(): Unit {
         this._animator?.pause()
         this._renderer?.pauseAudios()
     }
@@ -295,7 +295,7 @@ public class Player {
     /**
      * 继续播放
      */
-    public func playAnimation() {
+    public func playAnimation(): Unit {
         this._animator?.play()
         this._renderer?.playAudios()
     }
@@ -304,7 +304,7 @@ public class Player {
      * 停止动画
      * @param clear 是否清理
      */
-    public func stopAnimation(clears: ?Bool) {
+    public func stopAnimation(clears: ?Bool): Unit {
         this._forwardAnimating = false
         if (this._animator.isSome()) {
             this._animator?.stop()
@@ -318,7 +318,7 @@ public class Player {
         }
     }
 
-    public func clear() {
+    public func clear(): Unit {
         if (let Some(render) <- this._renderer) {
             render.clear()
             render.clearAudios()
@@ -334,7 +334,7 @@ public class Player {
      * @param frame
      * @param andPlay 是否自动播放
      */
-    public func stepToFrame(frame: Float64, andPlay!: Bool = true) {
+    public func stepToFrame(frame: Float64, andPlay!: Bool = true): Unit {
         var src = if (let Some(v) <- this._videoItem) {
             Float64(v.params.frames)
         } else {
@@ -356,7 +356,7 @@ public class Player {
      * @param percentage
      * @param andPlay
      */
-    public func stepToPercentage(percentage: Float64, andPlay: Bool) {
+    public func stepToPercentage(percentage: Float64, andPlay: Bool): Unit {
         var src = if (let Some(v) <- this._videoItem) {
             Float64(v.params.frames)
         } else {
@@ -374,7 +374,7 @@ public class Player {
      * 设置播放次数 播放中修改无效
      * @param loops
      */
-    public func setLoops(loops: Int32) {
+    public func setLoops(loops: Int32): Unit {
         this._loops = if (loops <= 0) {
             0
         } else {
@@ -387,14 +387,14 @@ public class Player {
      * @param curRate
      * 需要在setvideoitem后 startanimation前执行
      */
-    public func setCurRate(curRate: Float64) {
+    public func setCurRate(curRate: Float64): Unit {
         this._speed = curRate
     }
 
     /**
      * 释放资源
      */
-    public func release() {
+    public func release(): Unit {
         this._animator?.release()
         this._animator = None
         this._renderer?.clear()
@@ -410,7 +410,7 @@ public class Player {
         this._videoItem = None
     }
 
-    public func clearDynamicObjects() {
+    public func clearDynamicObjects(): Unit {
         this._dynamicImageTransform.clear()
         this._dynamicText.clear()
     }
@@ -419,7 +419,7 @@ public class Player {
      * 动画完成回调
      * @param callback
      */
-    public func onFinished(callback: () -> Unit) {
+    public func onFinished(callback: () -> Unit): Unit {
         this._onFinished = callback
     }
 
@@ -427,7 +427,7 @@ public class Player {
      * 帧回调
      * @param callback
      */
-    public func onFrame(callback: (Float64) -> Unit) {
+    public func onFrame(callback: (Float64) -> Unit): Unit {
         this._onFrame = callback
     }
 
@@ -435,7 +435,7 @@ public class Player {
      * 百分百回调
      * @param callback
      */
-    public func onPercentage(callback: (Float64) -> Unit) {
+    public func onPercentage(callback: (Float64) -> Unit): Unit {
         this._onPercentage = callback
     }
 
@@ -445,7 +445,7 @@ public class Player {
      * @param forKey 所在位置
      * @param transform 变换参数
      */
-    public func setImage(urlOrResource: ImageSource, forKey: String, transform: ?Transform) {
+    public func setImage(urlOrResource: ImageSource, forKey: String, transform: ?Transform): Unit {
         try {
             this._renderer?.setDynamicImage(urlOrResource, forKey)
         } catch (e: Exception) {
@@ -456,7 +456,7 @@ public class Player {
         }
     }
 
-    public func setImage(urlOrResource: String, forKey: String, transform: ?Transform) {
+    public func setImage(urlOrResource: String, forKey: String, transform: ?Transform): Unit {
         let imageResource = createImageSource(urlOrResource)
         this._renderer?.setDynamicImage(imageResource, forKey)
         if (let Some(v) <- transform) {
@@ -469,7 +469,7 @@ public class Player {
      * @param textORMap 文本参数
      * @param forKey 所在位置
      */
-    public func setText(textORMap: String, forKey: String) {
+    public func setText(textORMap: String, forKey: String): Unit {
         let text = textORMap
         let size = vp2px(14.0.vp)
         let family = "Arial"
@@ -480,7 +480,7 @@ public class Player {
             style: FontStyle.Normal, weight: weight))
     }
 
-    public func setText(textORMap: TextMap, forKey: String) {
+    public func setText(textORMap: TextMap, forKey: String): Unit {
         let size = if (let Some(v) <- textORMap.size) {
             vp2px(v.value)
         } else {

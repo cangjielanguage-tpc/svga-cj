@@ -38,8 +38,8 @@ class MessageEvents {
 
     public init(src: String, key: String, types: String, dir: String) {
         this.src = src
-        this.key = src
-        this.types = src
-        this.dir = src
+        this.key = key
+        this.types = types
+        this.dir = dir
     }
 }

@@ -9,6 +9,7 @@ import std.random.*
 import std.time.DateTime
 import ohos.base.Callback1Argument
 import ohos.base.Callback3ArgumentWithReturn
+import ohos.hilog.Hilog
 
 class SeekDoneCallback <: Callback1Argument<Int32> {
     var src: AVPlayer
@@ -16,6 +17,7 @@ class SeekDoneCallback <: Callback1Argument<Int32> {
         this.src = sc
     }
     public open func invoke(seekDoneTime: Int32): Unit {
+        Hilog.error(10, "svga--", "svga--------------->${seekDoneTime}")
         this.src.play()
     }
 }
@@ -25,7 +27,8 @@ class ErrorCallback <: Callback1Argument<BusinessException> {
     public init(sc: AVPlayer) {
         this.src = sc
     }
-    public open func invoke(e: BusinessException): Unit {
+    public open func invoke(c: BusinessException): Unit {
+        Hilog.error(10, "svga--", "svga--------------->${c.toString()}")
         this.src.reset()
     }
 }
@@ -36,6 +39,7 @@ class StateChangeCallback <: OnAVPlayerStateChangeHandle {
         this.src = sc
     }
     public open func invoke(state: AVPlayerState, reason: StateChangeReason): Unit {
+        Hilog.error(10, "svga--", "svga--------------->${reason.toString()}")
         match (state) {
             case idle => ()
             case initialized => src.player?.prepare()
@@ -105,7 +109,7 @@ public class AVPlayerClass {
     }
 
     // 单曲播放
-    public func play() {
+    public func play(): Unit {
         var states: Array<AVPlayerState> = [AVPlayerState.Prepared, AVPlayerState.Paused, AVPlayerState.Completed]
         if (let Some(v) <- this.player) {
             if (states.contains(v.state)) {
@@ -115,7 +119,7 @@ public class AVPlayerClass {
     }
 
     // 设置进度
-    public func seek(seek: Int32, autoplay!: Bool = true) {
+    public func seek(seek: Int32, autoplay!: Bool = true): Unit {
         var states: Array<AVPlayerState> = [AVPlayerState.Prepared, AVPlayerState.Paused, AVPlayerState.Completed,
             AVPlayerState.Playing]
         if (let Some(v) <- this.player) {
@@ -127,7 +131,7 @@ public class AVPlayerClass {
     }
 
     // 暂停
-    public func pause() {
+    public func pause(): Unit {
         if (let Some(v) <- this.player) {
             if (v.state == AVPlayerState.Playing) {
                 v.pause()
@@ -136,7 +140,7 @@ public class AVPlayerClass {
     }
 
     // 停止
-    public func stop() {
+    public func stop(): Unit {
         var states: Array<AVPlayerState> = [AVPlayerState.Completed, AVPlayerState.Playing, AVPlayerState.Prepared,
             AVPlayerState.Paused]
         if (let Some(v) <- this.player) {
@@ -147,7 +151,7 @@ public class AVPlayerClass {
     }
 
     // 删除
-    public func release() {
+    public func release(): Unit {
         if (let Some(v) <- this.player) {
             v.release()
         }

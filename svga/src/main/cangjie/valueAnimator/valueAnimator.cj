@@ -43,7 +43,7 @@ public class ValueAnimator {
         =>
     }
 
-    public func start(frame: ?Float64, reverse!: Bool = false) {
+    public func start(frame: ?Float64, reverse!: Bool = false): Unit {
         if (this._animator.isNone()) {
             this.resetFlag = (frame.isSome() && frame.getOrThrow() != this.startValue && frame.getOrThrow() <= this
                 .endValue)
@@ -113,11 +113,11 @@ public class ValueAnimator {
         this.onStart()
     }
 
-    public func reverse(currentValue: ?Float64) {
+    public func reverse(currentValue: ?Float64): Unit {
         this.start(currentValue, reverse: true)
     }
 
-    public func release() {
+    public func release(): Unit {
         if (let Some(animator) <- this._animator) {
             animator.finish()
         }
@@ -125,13 +125,13 @@ public class ValueAnimator {
         this._status = AnimatorPlayStatus.INACTIVE
     }
 
-    public func stop() {
+    public func stop(): Unit {
         this._animator?.cancel()
         this._animator = None
         this._status = AnimatorPlayStatus.INACTIVE
     }
 
-    public func pause() {
+    public func pause(): Unit {
         match (this._status) {
             case AnimatorPlayStatus.PLAY =>
                 this._animator?.pause()
@@ -140,7 +140,7 @@ public class ValueAnimator {
         }
     }
 
-    public func play() {
+    public func play(): Unit {
         match (this._status) {
             case AnimatorPlayStatus.FINISH => ()
             case _ =>

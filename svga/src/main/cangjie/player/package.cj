@@ -12,3 +12,4 @@ internal import ohos.file_fs.*
 internal import ohos.matrix4.*
 internal import ohos.ability.*
 internal import kit.UIKit.PromptAction
+internal import ohos.hilog.Hilog

@@ -75,7 +75,7 @@ public class SvgaPlayer {
         this.controller.release()
     }
 
-    public func build() {
+    public func build(): Unit {
         Stack(Alignment.TopStart) {
             Canvas(this.context)
                 .width(canvasWidth)

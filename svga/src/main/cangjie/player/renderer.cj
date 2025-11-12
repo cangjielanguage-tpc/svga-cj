@@ -35,7 +35,7 @@ public class Renderer {
     /**
      * 渲染
      */
-    public func prepare() {
+    public func prepare(): Unit {
         this.lastShape.clear()
 
         this._prepared = false
@@ -107,19 +107,19 @@ public class Renderer {
     /**
      * 暂停
      */
-    public func pauseAudios() {
+    public func pauseAudios(): Unit {
         for (it in this.soundsQueue) {
             it.player.pause()
         }
     }
 
-    public func playAudios() {
+    public func playAudios(): Unit {
         for (it in this.soundsQueue) {
             it.player.play()
         }
     }
 
-    public func setDynamicImage(imageSource: ?ImageSource, forKey: String) {
+    public func setDynamicImage(imageSource: ?ImageSource, forKey: String): Unit {
         if (let Some(imageSource) <- imageSource) {
             this.dynamicImage.add(forKey, imageSource)
             this.handleDynamicImage(imageSource, forKey)
@@ -129,7 +129,7 @@ public class Renderer {
     /**
      * 清空画布
      */
-    public func clear() {
+    public func clear(): Unit {
         this
             .owner
             .context2D()?
@@ -137,7 +137,7 @@ public class Renderer {
                 Int64(this.owner.context2D().getOrThrow().height()))
     }
 
-    public func release() {
+    public func release(): Unit {
         for (it in this.soundsQueue) {
             it.player.release()
         }
@@ -158,14 +158,14 @@ public class Renderer {
         }
     }
 
-    public func clearAudios() {
+    public func clearAudios(): Unit {
         for (it in this.soundsQueue) {
             it.player.stop()
         }
         this.soundsQueue = ArrayList<SoundsItem>()
     }
 
-    public func drawFrame(frame: Float64) {
+    public func drawFrame(frame: Float64): Unit {
         if (this._prepared) {
             this.clear()
             if (this.owner.context2D().isNone()) {
@@ -186,7 +186,7 @@ public class Renderer {
         }
     }
 
-    public func playAudio(frame: Float64) {
+    public func playAudio(frame: Float64): Unit {
         if (this.owner.forwardAnimating()) {
             for (audio in this.owner.videoItem().getOrThrow().audios) {
                 if (this.bitmapCache.size == 0) {
@@ -224,7 +224,7 @@ public class Renderer {
         }
     }
 
-    private func drawSprite(sprite: SpriteEntity, ctx: CanvasRenderingContext2D, _: Float64, index: Int64) {
+    private func drawSprite(sprite: SpriteEntity, ctx: CanvasRenderingContext2D, _: Float64, _: Int64): Unit {
         if (sprite.frames.size == 0) {
             return;
         }

@@ -20,11 +20,11 @@ public class Parser {
      * url: 资源路径
      * success(VideoEntity videoItem)
      */
-    public func load(url: String) {
+    public func load(url: String): ?MovieEntity {
         this.loadViaWorker(url)
     }
 
-    public func loadViaWorker(url: String) {
+    public func loadViaWorker(url: String): ?MovieEntity {
         MockWorker.load(url)
     }
 }

@@ -41,6 +41,7 @@ public class StateController {
     }
 
     func pageUpdateCallback(flag: Bool) {
+        Hilog.error(10, "svga--", "svga-----flag------>${flag}")
         // true 为页面重写显示
         match (this.owner.pageUpdateMode()) {
             case pause =>
@@ -61,6 +62,7 @@ class EventCallback1 <: Callback1Argument<TabContentInfo> {
     }
 
     public open func invoke(val: TabContentInfo): Unit {
+        Hilog.error(10, "svga--", "svga----------->${val.id}")
         con.pageUpdateCallback(true)
     }
 }

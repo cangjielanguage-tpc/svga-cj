@@ -104,8 +104,7 @@ class Index {
 
 在下述版本验证通过：
 
-    IDE: DevEco Studio 5.1.0 Release(Build Version: 5.1.0.828)
-    Cangjie Support Plugin: DevEco Studio-Cangjie Support Plugin 5.1.0.828
+    IDE: DevEco Studio 5.1.1 Release(Build Version: 5.1.1.840)
 
 1. 只支持2.0版本svga资源
 2. 不支持音频动画播放

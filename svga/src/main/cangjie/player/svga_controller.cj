@@ -79,7 +79,7 @@ public class SvgaController {
         return this._player.getOrThrow()
     }
 
-    public func setplayer(value: Player) {
+    public func setplayer(value: Player): Unit {
         this._player = value
         this._player?.setLoops(this.getloops())
         this._player?.pageUpdateMode(this.getpageUpdateMode())
@@ -90,7 +90,7 @@ public class SvgaController {
 
     private var _parser: ?Parser = None
 
-    public func setparser(value: Parser) {
+    public func setparser(value: Parser): Unit {
         this._parser = value
     }
 
@@ -101,7 +101,7 @@ public class SvgaController {
     }
 
     private var _loading: Bool = false
-    public func load(source: String, autoPlay!: Bool = true) {
+    public func load(source: String, autoPlay!: Bool = true): Unit {
         if (this._player.isNone() || this._parser.isNone()) {
             PromptAction.showToast(message: '未初始化完成，请稍后再试')
             return;
@@ -128,126 +128,126 @@ public class SvgaController {
         this._player.getOrThrow().setVideoItem(videoItem)
     }
 
-    public func startAnimation(reverse!: Bool = false) {
+    public func startAnimation(reverse!: Bool = false): Unit {
         if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player.getOrThrow().startAnimation(reverse)
     }
 
-    public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false) {
+    public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false): Unit {
         if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.startAnimationWithRange(range, reverse: reverse)
     }
 
-    public func pauseAnimation() {
+    public func pauseAnimation(): Unit {
         if (this._player.isNone() || this._player.getOrThrow().videoItem().isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.pauseAnimation()
     }
 
-    public func stopAnimation(clears: Bool) {
+    public func stopAnimation(clears: Bool): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.stopAnimation(clears)
     }
 
-    public func setContentMode(mode: PLAYER_CONTENT_MODE) {
+    public func setContentMode(mode: PLAYER_CONTENT_MODE): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setContentMode(mode)
     }
 
-    public func clear() {
+    public func clear(): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.clear()
     }
 
-    public func stepToFrame(frame: Float64, andPlay!: Bool = true) {
+    public func stepToFrame(frame: Float64, andPlay!: Bool = true): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.stepToFrame(frame, andPlay: andPlay)
     }
 
-    public func stepToPercentage(percentage: Float64, andPlay: Bool) {
+    public func stepToPercentage(percentage: Float64, andPlay: Bool): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.stepToPercentage(percentage, andPlay)
     }
 
-    public func setImage(urlOrResource: ImageSource, forKey: String, transform!: ?Transform = None) {
+    public func setImage(urlOrResource: ImageSource, forKey: String, transform!: ?Transform = None): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setImage(urlOrResource, forKey, transform)
     }
 
-    public func setImage(urlOrResource: String, forKey: String, transform!: ?Transform = None) {
+    public func setImage(urlOrResource: String, forKey: String, transform!: ?Transform = None): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setImage(urlOrResource, forKey, transform)
     }
 
-    public func setText(textORMap: String, forKey: String) {
+    public func setText(textORMap: String, forKey: String): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setText(textORMap, forKey)
     }
 
-    public func setText(textORMap: TextMap, forKey: String) {
+    public func setText(textORMap: TextMap, forKey: String): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setText(textORMap, forKey)
     }
 
-    public func clearDynamicObjects() {
+    public func clearDynamicObjects(): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.clearDynamicObjects()
     }
 
-    public func onFinished(callback: () -> Unit) {
+    public func onFinished(callback: () -> Unit): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.onFinished(callback)
     }
 
-    public func onFrame(callback: (Float64) -> Unit) {
+    public func onFrame(callback: (Float64) -> Unit): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.onFrame(callback)
     }
 
-    public func onPercentage(callback: (Float64) -> Unit) {
+    public func onPercentage(callback: (Float64) -> Unit): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.onPercentage(callback)
     }
 
-    public func setLoops(loops: Int32) {
+    public func setLoops(loops: Int32): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
         this._player?.setLoops(loops)
     }
 
-    public func setCurRate(curRate: Float64) {
+    public func setCurRate(curRate: Float64): Unit {
         if (this._player.isNone()) {
             throw Exception('请在资源加载后调用')
         }
@@ -255,7 +255,7 @@ public class SvgaController {
     }
 
     // 回收资源
-    public func release() {
+    public func release(): Unit {
         this._player?.release()
     }
 }
