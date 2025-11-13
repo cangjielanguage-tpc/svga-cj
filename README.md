@@ -42,6 +42,9 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
 ## 使用说明
 
 ### 编译构建
+
+该三方库依赖stdx，请参考[stdx](https://gitcode.com/Cangjie/Cangjie-STDX#%E4%BD%BF%E7%94%A8%E6%8C%87%E5%AF%BC)文档配置`CANGJIE_STDX_PATH`路径
+
 1. 通过module引入
     1. 克隆下载项目
     2. 将svga模块拷贝到应用项目下

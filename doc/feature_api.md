@@ -115,7 +115,7 @@ public class SvgaController {
      * @param autoPlay - 是否自动播放，默认值为true
      *
      */
-    public func load(source: String, autoPlay!: Bool = true)
+    public func load(source: String, autoPlay!: Bool = true): Unit
     
     /**
      * 开始播放动画
@@ -124,8 +124,8 @@ public class SvgaController {
     public func startAnimation(reverse!: Bool = false)
     
     /**
-     * 开始播放动画
-     * 参数 range - SvgaRange类型
+     * 设置指定范围开始播放动画
+     * 参数 range - SvgaRange类型，动画播放的范围
      * 参数 reverse - Bool类型，是否反向播放，设置为true,反向播放，否则相反
      */
     public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false)
@@ -227,8 +227,8 @@ public class SvgaController {
     public func setLoops(loops: Int32)
     
     /**
-     * 设置播放速度
-     * 参数 curRate - Float64类型，播放倍速，这里仅支持正数倍数，其他非法值不保证结果
+     * 设置倍速播放
+     * 参数 curRate - Float64类型,倍速播放 仅开始播放前设置生效
      */
     public func setCurRate(curRate: Float64)
     
@@ -237,6 +237,7 @@ public class SvgaController {
      */
     public func release()
 }
+//控制动画内容在画布中的适配方式
 public enum PLAYER_CONTENT_MODE{
     |AspectFit // 选取长宽里面较大的一个作为依据 填充整个容器
     |Fill // 填充整个容器
@@ -246,7 +247,7 @@ public enum PLAYER_CONTENT_MODE{
     /*判不等*/
     public operator func !=
 }
-	
+//动画播放的范围
 public class SvgaRange{
     /**
     * SvgaRange构造器
