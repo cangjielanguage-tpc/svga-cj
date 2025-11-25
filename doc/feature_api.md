@@ -161,7 +161,7 @@ public class SvgaController {
     
     /**
      * 从指定百分比开始播放
-     * 参数 percentage - Int64类型，视频总帧数百分比
+     * 参数 percentage - Float64类型，视频总帧数百分比
      * 参数 andPlay - Bool类型，设置为true,从指定百分比开始播放，设置false则不播放
      */
     public func stepToPercentage(percentage: Float64, andPlay: Bool)

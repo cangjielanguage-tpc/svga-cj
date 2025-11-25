@@ -70,13 +70,21 @@ public class ValueAnimator {
             )
             this._animator.getOrThrow().setExpectedFrameRateRange(ExpectedFrameRateRange(min: 0, max: 120,
                 expected: Int32(this.FPS)))
+
+            if (reverse) {
+                this._animator.getOrThrow().reverse()
+            } else {
+                this._animator.getOrThrow().play()
+            }
+            this._status = AnimatorPlayStatus.PLAY
+            this.onStart()
         }
-        this._animator.getOrThrow().onframe = {
+        this._animator.getOrThrow().onFrame = {
             frame => if (let Some(function) <- this.onUpdate) {
                 function(frame)
             }
         }
-        this._animator.getOrThrow().onrepeat = {
+        this._animator.getOrThrow().onRepeat = {
             =>
             // 在启动动画时 指定开始位置 在一次结束后要重置动画参数 确保动画能够播放完整
             if (this.resetFlag) {
@@ -98,19 +106,11 @@ public class ValueAnimator {
                 this.resetFlag = false
             }
         }
-        this._animator.getOrThrow().onfinish = {
+        this._animator.getOrThrow().onFinish = {
             =>
             this._status = AnimatorPlayStatus.FINISH
             this.onEnd()
         }
-
-        if (reverse) {
-            this._animator.getOrThrow().reverse()
-        } else {
-            this._animator.getOrThrow().play()
-        }
-        this._status = AnimatorPlayStatus.PLAY
-        this.onStart()
     }
 
     public func reverse(currentValue: ?Float64): Unit {
@@ -118,9 +118,6 @@ public class ValueAnimator {
     }
 
     public func release(): Unit {
-        if (let Some(animator) <- this._animator) {
-            animator.finish()
-        }
         this._animator = None
         this._status = AnimatorPlayStatus.INACTIVE
     }
