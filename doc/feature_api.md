@@ -14,7 +14,7 @@ svga播放器组件
 @Component
 public class SvgaPlayer {
     /* svga rawfile资源路径 */
-    @State
+    @Link
     @Watch[updateSource]
     var url: String = ""
     
@@ -35,12 +35,13 @@ public class SvgaPlayerProps {
 
     /**
      * 构造函数
+     * 参数 pageUpdateMode - 页面跳转时动画处理模式，PageUpdateMode.pause暂停播放(预留参数)
      * 参数 loops - 动画播放次数，默认值为-1
      * 参数 autoRelease - 页面销毁时自动执行清理，默认值为true
      * 参数 clearsAfterStop - 设置是否在停止后释放资源，默认值为true
      * 参数 fillMode - 动画结束时的动画状态，默认值为AnimatorFill.Forwards
      */
-    public init(loops!: Int32 = -1, autoRelease!: Bool = true,
+    public init(pageUpdateMode!: PageUpdateMode = PageUpdateMode.pause, loops!: Int32 = -1, autoRelease!: Bool = true,
         clearsAfterStop!: Bool = true, fillMode!: AnimatorFill = AnimatorFill.Forwards) 
 
 }
@@ -234,6 +235,12 @@ public enum PLAYER_CONTENT_MODE{
     public operator func ==
     /*判不等*/
     public operator func !=
+}
+//页面跳转时动画处理模式
+public enum PageUpdateMode {
+    | pause         //暂停播放
+    | play          //继续播放
+    | release       //释放资源
 }
 //动画播放的范围
 public class SvgaRange{
