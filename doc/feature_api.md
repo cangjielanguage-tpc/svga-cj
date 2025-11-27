@@ -97,18 +97,6 @@ public class SvgaController {
     public func getplayer(): Player
     
     /**
-     * 设置Player动画播放器
-     * 参数 value - Player类型
-     */
-    public func setplayer(value: Player) 
-    
-    /**
-     * 设置Parser动画解析器
-     * 参数 value - Parser类型
-     */
-    public func setparser(value: Parser)
-    
-    /**
      * 加载动画资源
      *
      * @param source - 动画资源的文件路径

@@ -359,6 +359,7 @@ public class Renderer {
         ctx.restore()
     }
 
+    @OverflowWrapping
     private func resetShapeStyles(ctx: CanvasRenderingContext2D, obj: BezierPath) {
         if (obj.styles.isNone()) {
             return

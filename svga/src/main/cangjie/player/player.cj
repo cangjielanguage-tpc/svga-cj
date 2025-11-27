@@ -705,7 +705,7 @@ public class Player {
                     let imageRatio = Float64(imageSize.width) / Float64(imageSize.height);
                     let viewRatio = Float64(targetSize.width) / Float64(targetSize.height);
                     if ((imageRatio >= viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio <=
-                        viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit)) {
+                        viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
                         scaleY = Float64(targetSize.width) / Float64(imageSize.width)
                         scaleX = scaleY
                         translateX = (Float64(targetSize.width) - Float64(imageSize.width) * scaleX) / 2.0

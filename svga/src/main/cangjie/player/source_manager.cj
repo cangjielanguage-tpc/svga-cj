@@ -21,16 +21,8 @@ public class SourceManager {
     }
 
     private func initSourceManager() {
-        spawn {
-            => FileFs.mkdir(this._basePath)
-        }
     }
 
     public func release(): Unit {
-        spawn {
-            => if (FileFs.access(this._basePath)) {
-                FileFs.rmdir(this._basePath)
-            }
-        }
     }
 }
