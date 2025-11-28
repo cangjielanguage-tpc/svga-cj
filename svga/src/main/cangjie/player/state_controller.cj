@@ -27,21 +27,12 @@ public class StateController {
                 => player.animator()?.pause()
             }
         )
-        //        if(let Some(v) <- this.owner.uiContext()) {
-        //            var applicationContext = v.getApplicationContext()
-        //            applicationContext.on(ApplicationContextType.APPLICATION_STATE_CHANGE,this.applicationStateChangeCallback)
-        //        }
     }
 
     func release() {
-        //        if(let Some(v) <- this.owner.uiContext()) {
-        //            var applicationContext = v.getApplicationContext()
-        //            applicationContext.off(ApplicationContextType.APPLICATION_STATE_CHANGE,callback:this.applicationStateChangeCallback)
-        //        }
     }
 
-    func pageUpdateCallback(flag: Bool) {
-        Hilog.error(10, "svga--", "svga-----flag------>${flag}")
+    func pageUpdateCallback(_: Bool) {
         // true 为页面重写显示
         match (this.owner.pageUpdateMode()) {
             case pause =>
@@ -61,8 +52,7 @@ class EventCallback1 <: Callback1Argument<TabContentInfo> {
         this.con = con
     }
 
-    public open func invoke(val: TabContentInfo): Unit {
-        Hilog.error(10, "svga--", "svga----------->${val.id}")
+    public open func invoke(_: TabContentInfo): Unit {
         con.pageUpdateCallback(true)
     }
 }

@@ -24,7 +24,7 @@ class EntryView {
             Column {
                     SvgaPlayer(url: "angel.svga", abilitycontext: globalcontext.getOrThrow(), controller: controller)
             }
-            .width(30.percent)
+            .width(300).aspectRatio(1)
         }
 
     }

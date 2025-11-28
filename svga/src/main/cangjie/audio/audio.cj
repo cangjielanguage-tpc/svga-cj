@@ -16,8 +16,7 @@ class SeekDoneCallback <: Callback1Argument<Int32> {
     public init(sc: AVPlayer) {
         this.src = sc
     }
-    public open func invoke(seekDoneTime: Int32): Unit {
-        Hilog.error(10, "svga--", "svga--------------->${seekDoneTime}")
+    public open func invoke(_: Int32): Unit {
         this.src.play()
     }
 }
@@ -27,8 +26,7 @@ class ErrorCallback <: Callback1Argument<BusinessException> {
     public init(sc: AVPlayer) {
         this.src = sc
     }
-    public open func invoke(c: BusinessException): Unit {
-        Hilog.error(10, "svga--", "svga--------------->${c.toString()}")
+    public open func invoke(_: BusinessException): Unit {
         this.src.reset()
     }
 }
@@ -38,8 +36,7 @@ class StateChangeCallback <: OnAVPlayerStateChangeHandle {
     public init(sc: AVPlayerClass) {
         this.src = sc
     }
-    public open func invoke(state: AVPlayerState, reason: StateChangeReason): Unit {
-        Hilog.error(10, "svga--", "svga--------------->${reason.toString()}")
+    public open func invoke(state: AVPlayerState, _: StateChangeReason): Unit {
         match (state) {
             case idle => ()
             case initialized => src.player?.prepare()

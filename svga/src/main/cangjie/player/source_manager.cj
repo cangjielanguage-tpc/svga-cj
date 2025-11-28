@@ -13,10 +13,9 @@ public class SourceManager {
         return this._basePath
     }
 
-    init(context: Context) {
+    init(_: Context) {
         let m: Random = Random(3)
         this._basePath = "svga" + "${DateTime.now().nanosecond} + ${m.nextUInt64()}"
-        Hilog.error(10, "svga--", "svga----------->${context.tempDir}")
         initSourceManager()
     }
 

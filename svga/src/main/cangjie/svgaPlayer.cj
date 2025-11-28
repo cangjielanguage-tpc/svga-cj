@@ -99,7 +99,6 @@ public class SvgaPlayer {
                         return
                     }
                     if (this.url == "") {
-                        Hilog.error(0, "ERROR", "Address error, please enter the complete sandbox path")
                         return
                     }
                     isReady = true
