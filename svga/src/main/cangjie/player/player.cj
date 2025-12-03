@@ -450,15 +450,18 @@ public class Player {
             this._renderer?.setDynamicImage(urlOrResource, forKey)
         } catch (e: Exception) {
         }
-        this._renderer?.setDynamicImage(urlOrResource, forKey)
         if (let Some(v) <- transform) {
             this._dynamicImageTransform.add(forKey, v)
         }
     }
 
     public func setImage(urlOrResource: String, forKey: String, transform: ?Transform): Unit {
-        let imageResource = createImageSource(urlOrResource)
-        this._renderer?.setDynamicImage(imageResource, forKey)
+        try {
+            let imageResource = createImageSource(urlOrResource)
+            this._renderer?.setDynamicImage(imageResource, forKey)
+        } catch (e: Exception) {
+
+        }
         if (let Some(v) <- transform) {
             this._dynamicImageTransform.add(forKey, v)
         }

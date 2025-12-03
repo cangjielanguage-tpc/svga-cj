@@ -91,6 +91,13 @@ public class SvgaController {
     public func getfillMode(): AnimatorFill
     
     /**
+     * 获取动画处播放模式
+     *
+     * @return PageUpdateMode 类型
+     */
+    public func getpageUpdateMode(): PageUpdateMode
+    
+    /**
      * 获取Player动画播放器
      *
      * @return Player类型
@@ -108,14 +115,14 @@ public class SvgaController {
     
     /**
      * 开始播放动画
-     * 参数 reverse - Bool类型，是否反向播放，设置为true,反向播放，否则相反
+     * 参数 reverse - Bool类型，是否反向播放，默认值为false，设置为true,反向播放，否则相反
      */
     public func startAnimation(reverse!: Bool = false)
     
     /**
      * 设置指定范围开始播放动画
      * 参数 range - SvgaRange类型，动画播放的范围
-     * 参数 reverse - Bool类型，是否反向播放，设置为true,反向播放，否则相反
+     * 参数 reverse - Bool类型，是否反向播放，默认值为false，设置为true,反向播放，否则相反
      */
     public func startAnimationWithRange(range: SvgaRange, reverse!: Bool = false)
     
@@ -144,7 +151,7 @@ public class SvgaController {
     /**
      * 从指定位置开始播放
      * 参数 frame - Float64类型，帧数，从该帧开始播放
-     * 参数 andPlay - Bool类型，跳帧后是否播放，设置为true,正常播放，设置false则不播放
+     * 参数 andPlay - Bool类型，跳帧后是否播放，默认值为true，设置为true,正常播放，设置false则不播放
      */
     public func stepToFrame(frame: Float64, andPlay!: Bool = true)
     
@@ -159,7 +166,7 @@ public class SvgaController {
      * 设置动画播放器中图像内容
      * 参数 urlOrResource - String 类型，图像内容的地址支持resfile文件夹路径
      * 参数 forKey - String 类型，指定文本的标识键
-     * 参数 transform - Transform 类型，对图像进行变换处
+     * 参数 transform - Transform 类型，默认值为None，对图像进行变换处
      */
     public func setImage(urlOrResource: String, forKey: String, transform!: ?Transform = None)
     
@@ -167,7 +174,7 @@ public class SvgaController {
      * 设置动画播放器中图像内容
      * 参数 urlOrResource - ImageSource 类型，图片源类
      * 参数 forKey - String 类型，指定文本的标识键
-     * 参数 transform - Transform 类型，对图像进行变换处
+     * 参数 transform - Transform 类型，默认值为None，对图像进行变换处
      */
     public func setImage(urlOrResource: ImageSource, forKey: String, transform!: ?Transform = None)
     /**
@@ -191,19 +198,19 @@ public class SvgaController {
     public func clearDynamicObjects() 
     
     /**
-     * 动画完成后的回调接口
+     * 设置动画播放完成监听器
      * 参数 callback - 回调接口
      */
     public func onFinished(callback: () -> Unit)
     
     /**
-     * 获取当前播放的帧数回调接口
+     * 设置动画播放帧监听器
      * 参数 callback - 回调接口
      */
-    public func onPercentage(callback: (Float64) -> Unit)
+    public func onFrame(callback: (Float64) -> Unit)
     
     /**
-     * 监听播放进度百分比回调接口
+     * 设置动画播放进度监听器
      * 参数 callback - 回调接口
      */
     public func onPercentage(callback: (Float64) -> Unit)
@@ -276,6 +283,26 @@ public class TextOffset {
     * 参数y - Float64类型，字体的y坐标
     */
     public init(x!: Float64 = 0.0, y!: Float64 = 0.0)
+}
+public class Transform {
+    
+    /**
+    * Transform 构造器
+    * 参数a - Float32类型，水平缩放值
+    * 参数b - Float32类型，水平倾斜值
+    * 参数c - Float32类型，垂直倾斜值
+    * 参数d - Float32类型，垂直缩放值
+    * 参数tx - Float32类型，水平移动值
+    * 参数ty - Float32类型，垂直移动值
+    */
+    public init(
+        a!: Float32 = Float32(.0),
+        b!: Float32 = Float32(.0),
+        c!: Float32 = Float32(.0),
+        d!: Float32 = Float32(.0),
+        tx!: Float32 = Float32(.0),
+        ty!: Float32 = Float32(.0)
+    )
 }
 ```
 
