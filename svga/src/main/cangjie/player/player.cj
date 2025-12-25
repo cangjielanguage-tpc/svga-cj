@@ -660,15 +660,15 @@ public class Player {
             }
             let imageSize: Sizes = Sizes(height: height_imageSize, width: width_imageSize)
             if (targetSize.width >= imageSize.width && targetSize.height >= imageSize.height) {
-                this._canvasValue.width = Float64(targetSize.width)
-                this._canvasValue.height = Float64(targetSize.height)
+                this._canvasValue.width = px2vp(Float64(targetSize.width).px).getOrThrow()
+                this._canvasValue.height = px2vp(Float64(targetSize.height).px).getOrThrow()
                 if (this._contentMode == PLAYER_CONTENT_MODE.Fill) {
                     scaleX = Float64(targetSize.width) / Float64(imageSize.width)
                     scaleY = Float64(targetSize.height) / Float64(imageSize.height)
                 } else if (this._contentMode == PLAYER_CONTENT_MODE.AspectFit || this._contentMode == PLAYER_CONTENT_MODE
                     .AspectFill) {
-                    let imageRatio = imageSize.width / imageSize.height;
-                    let viewRatio = targetSize.width / targetSize.height;
+                    let imageRatio =Float64(imageSize.width) / Float64(imageSize.height)
+                    let viewRatio =Float64( targetSize.width) / Float64(targetSize.height)
                     if ((imageRatio >= viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFit) || (imageRatio <=
                         viewRatio && this._contentMode == PLAYER_CONTENT_MODE.AspectFill)) {
                         scaleY = Float64(targetSize.width) / Float64(imageSize.width)
