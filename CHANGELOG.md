@@ -1,3 +1,7 @@
+## 1.0.2
+
+- 适配 DevEco Studio 5.1.1 Release(5.1.1.851)
+
 ## 1.0.1
 
 - 适配 DevEco Studio 5.1.1 Release(5.1.1.840)
