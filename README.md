@@ -3,9 +3,9 @@
 </div>
 
 <p align="center">
-<img alt="" src="https://img.shields.io/badge/release-v1.0.0-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/release-v1.0.3-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjc-v1.0.2-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v1.1.0-beta.10-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/cjcov-NA-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
@@ -107,7 +107,7 @@ class Index {
 
 在下述版本验证通过：
 
-    IDE: DevEco Studio 5.1.1 Release(Build Version: 5.1.1.851)
+    IDE: DevEco Studio 6.0.2 Release(Build Version: 6.0.2.640)
 
 1. 只支持2.0版本svga资源
 2. 不支持音频动画播放
