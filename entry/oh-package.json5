@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "libark_interop_loader.so": "file:./src/main/cangjie/loader",
-    "cjhybridview": "file:./har/CJHybridView-v1.0.3.har"
+    '@cangjie-tpc/svga': "file:../svga"
   }
 }
+
