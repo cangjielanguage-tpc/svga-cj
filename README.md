@@ -3,9 +3,9 @@
 </div>
 
 <p align="center">
-<img alt="" src="https://img.shields.io/badge/release-v1.0.0-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/release-v2.1.0-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjc-v0.53.18-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v1.1.3-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/cjcov-NA-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
@@ -42,6 +42,9 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
 ## 使用说明
 
 ### 编译构建
+
+该三方库依赖stdx，请参考[stdx](https://gitcode.com/Cangjie/Cangjie-STDX#%E4%BD%BF%E7%94%A8%E6%8C%87%E5%AF%BC)文档配置`CANGJIE_STDX_PATH`路径
+
 1. 通过module引入
     1. 克隆下载项目
     2. 将svga模块拷贝到应用项目下
@@ -52,7 +55,7 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
        "srcPath": "./svga"
        }
        ```
-    4. 修改自身应用 entry 下的 oh-package.json5 文件，在 dependencies 字段添加 "svga": "file:../svga"
+    4. 修改自身应用 entry 下的 oh-package.json5 文件，在 dependencies 字段添加 "@cangjie-tpc/svga": "file:../svga"
        ```json
        {
           "name": "entry",
@@ -61,15 +64,16 @@ svga-cj是一个动画库，它可以解析svga格式的动画，并在移动设
           "main": "",
           "author": "",
           "license": "",
-         "dependencies": {
-             "svga": "file:../svga"
-         }
-       }
+          "dependencies": {
+            "@cangjie-tpc/svga": "file:../svga"
+          }
+        }
        ```
-    5. 修改自身应用 entry/src/main/cangjie 下的 cjpm.toml 文件，在 [dependencies] 字段下添加 svga = {path = "../../../../svga/src/main/cangjie", version = "1.0.0"}
+    5. 修改自身应用 entry/src/main/cangjie 下的 cjpm.toml 文件，在 [dependencies] 字段下添加 svga = {path = "${cangjie_tpc_svga}"}
        ```toml
        [dependencies]
-           svga = {path = "../../../../svga/src/main/cangjie", version = "1.0.0"}
+        [dependencies.svga]
+        path = "${cangjie_tpc_svga}"
        ```
     6. 在项目中使用 import svga.* 引用svga项目
        ```cangjie
@@ -101,10 +105,22 @@ class Index {
 
 ## 约束与限制
 
-在下述版本验证通过：
+ 在下述版本验证通过： 
 
-    DevEco Studio 5.0.2 Release(5.0.7.200) 
-    Cangjie Support Plugin 5.0.7.100
+| 编号 | 依赖构建工具                                 | 版本号    |
+| ---- | -------------------------------------------- | --------- |
+| 1    | **DevEco Studio 6.1.1 Release**              | 6.1.1.280 |
+| 2    | **cjc**                                      | v1.1.3    |
+| 3    | **DevEco Studio-Cangjie Plugin 6.1.1 Beta1** | 6.1.1.280 |
+| 4    | **compatibility-sdk-6.1.1.280**              | 6.1.1.280 |
+
+svga依赖三方库：
+
+| 编号 | 依赖三方库 | 版本号       |
+| ---- | ---------- | ---------    |
+| 1    | stdx       | v1.1.3.1     |
+| 2    | zlib4cj    | v1.2.3-rc.1  |
+| 3    | protobuf4cj| v1.0.3       |
 
 1. 只支持2.0版本svga资源
 2. 不支持音频动画播放

@@ -1,32 +1,31 @@
 package ohos_app_cangjie_entry
 
-import tpc.UIKit.Text
-import tpc.UIKit.Button
-import tpc.UIKit.Column
-import tpc.UIKit.CustomView
-import ohos.state_macro_manage.State
-import ohos.state_macro_manage.Component
-import ohos.state_manage.LocalStorage
-import ohos.state_manage.ObservedProperty
-import ohos.state_manage.SubscriberManager
-import ohos.state_manage.ViewStackProcessor
-import ohos.state_macro_manage.HybridComponentEntry
-import ohos.hybrid_base.CJPageEntry
-import ohos.hybrid_base.HybridComponentBase
-import cj_res_entry.app
-
-@HybridComponentEntry
+import ohos.base.*
+import ohos.component.*
+import ohos.state_manage.*
+import ohos.state_macro_manage.*
+import svga.*
+import svga.player.*
+import ohos.hilog.*
+internal import ohos.ability.AbilityContext
+import ohos.system_date_time.*
+import svga.parser.PLAYER_CONTENT_MODE
+import svga.proto.*
+import ohos.router.Router
+@Entry
 @Component
-class Index {
+class EntryView {
     @State
-    var msg: String = "Hello"
+    var message: String = "Hello World"
+    var controller: SvgaController = SvgaController()
 
     public func build() {
         Column {
-            Text(msg)
-            Button("click to change Text").onClick {
-                => msg = "world"
+            Column {
+                    SvgaPlayer(url: "angel.svga", abilitycontext: globalcontext.getOrThrow(), controller: controller)
             }
+            .width(300).aspectRatio(1)
         }
+
     }
 }
