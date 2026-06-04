@@ -1,8 +1,8 @@
-## 2.1.0
+## 1.3.0
 
 - 适配 DevEco Studio 6.1.1 Release(6.1.1.280)
 
-## 2.0.0
+## 1.2.0
 
 - 适配 DevEco Studio 6.0.2 Release(6.0.2.640)
 
